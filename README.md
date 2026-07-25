@@ -13,14 +13,14 @@ trackio logbooks (linked per paper).
 
 ## Index
 
-| Paper | OpenReview | Claims reproduced | Verdict | Folder |
-|---|---|---|---|---|
-| Deep Flow Networks | [`Z7rhDaBvBo`](https://openreview.net/forum?id=Z7rhDaBvBo) (Spotlight) | 2/2 (4 sub-claims) | **4/4 verified** | [`deep-flow-networks-Z7rhDaBvBo/`](deep-flow-networks-Z7rhDaBvBo/) |
-| Asymptotic optimality of the high-dimensional Gaussian mechanism | [`82Wosp2Iu1`](https://openreview.net/forum?id=82Wosp2Iu1) (Spotlight) | 6 | **11/12** | [`gaussian-mechanism-82Wosp2Iu1/`](gaussian-mechanism-82Wosp2Iu1/) |
-| A studentized spherical-harmonics nonparametric two-sample test | [`QsxpsAu7l1`](https://openreview.net/forum?id=QsxpsAu7l1) | 3 | published | [`spherical-harmonics-two-sample-test-QsxpsAu7l1/`](spherical-harmonics-two-sample-test-QsxpsAu7l1/) |
-| Sharp concentration bounds for bundle-valued statistics on manifolds | [`cspPnNScXa`](https://openreview.net/forum?id=cspPnNScXa) | 2 + control | published (medium) | [`concentration-bounds-bundle-valued-statistics-cspPnNScXa/`](concentration-bounds-bundle-valued-statistics-cspPnNScXa/) |
-| Tackling fake forgetting through uncertainty quantification | [`rjmVJaBpkm`](https://openreview.net/forum?id=rjmVJaBpkm) | 5 (CPU toy) | published (medium) | [`fake-forgetting-uncertainty-rjmVJaBpkm/`](fake-forgetting-uncertainty-rjmVJaBpkm/) |
-| Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | 3/6 (medium) | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) |
+| Paper | OpenReview | Claims reproduced | Verdict | Folder | Trackio Logbook |
+|---|---|---|---|---|---|
+| Deep Flow Networks | [`Z7rhDaBvBo`](https://openreview.net/forum?id=Z7rhDaBvBo) (Spotlight) | 2/2 (4 sub-claims) | **4/4 verified** | [`deep-flow-networks-Z7rhDaBvBo/`](deep-flow-networks-Z7rhDaBvBo/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-deep-flow-networks) |
+| Asymptotic optimality of the high-dimensional Gaussian mechanism | [`82Wosp2Iu1`](https://openreview.net/forum?id=82Wosp2Iu1) (Spotlight) | 6 | **11/12** | [`gaussian-mechanism-82Wosp2Iu1/`](gaussian-mechanism-82Wosp2Iu1/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-asymptotic-optimality-of-the-high-dimensional-gaussian-mechanism-and-improved-low-dimensio) |
+| A studentized spherical-harmonics nonparametric two-sample test | [`QsxpsAu7l1`](https://openreview.net/forum?id=QsxpsAu7l1) | 3 | published | [`spherical-harmonics-two-sample-test-QsxpsAu7l1/`](spherical-harmonics-two-sample-test-QsxpsAu7l1/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-a-studentized-spherical-harmonics-based-nonparametric-two-sample-test-for-compositional-an) |
+| Sharp concentration bounds for bundle-valued statistics on manifolds | [`cspPnNScXa`](https://openreview.net/forum?id=cspPnNScXa) | 2 + control | published (medium) | [`concentration-bounds-bundle-valued-statistics-cspPnNScXa/`](concentration-bounds-bundle-valued-statistics-cspPnNScXa/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-sharp-concentration-bounds-for-bundle-valued-statistics-on-manifolds) |
+| Tackling fake forgetting through uncertainty quantification | [`rjmVJaBpkm`](https://openreview.net/forum?id=rjmVJaBpkm) | 5 (CPU toy) | published (medium) | [`fake-forgetting-uncertainty-rjmVJaBpkm/`](fake-forgetting-uncertainty-rjmVJaBpkm/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-tackling-fake-forgetting-through-uncertainty-quantification) |
+| Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | 3/6 (medium) | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-improved-dynamic-algorithm-for-non-monotone-submodular-maximization-under-cardinality-cons) |
 
 *Verdicts are the challenge judge's scores (verified/falsified = 2 pt, toy =
 1 pt, inconclusive = 0), against the published logbook.*
