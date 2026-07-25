@@ -1,6 +1,6 @@
 # ICML 2026 paper reproductions
 
-Independent reproductions of three ICML 2026 papers, produced for the
+Independent reproductions of five ICML 2026 papers, produced for the
 **[ICML-2026-agent-repro](https://huggingface.co/spaces/ICML-2026-agent-repro/challenge)**
 challenge (Hugging Face × alphaXiv). Each reproduction re-derives the paper's
 central claims from scratch or from the authors' released code, on **CPU only**,
@@ -17,6 +17,8 @@ trackio logbooks (linked per paper).
 |---|---|---|---|---|
 | Deep Flow Networks | [`Z7rhDaBvBo`](https://openreview.net/forum?id=Z7rhDaBvBo) (Spotlight) | 2/2 (4 sub-claims) | **4/4 verified** | [`deep-flow-networks-Z7rhDaBvBo/`](deep-flow-networks-Z7rhDaBvBo/) |
 | Asymptotic optimality of the high-dimensional Gaussian mechanism | [`82Wosp2Iu1`](https://openreview.net/forum?id=82Wosp2Iu1) (Spotlight) | 6 | **11/12** | [`gaussian-mechanism-82Wosp2Iu1/`](gaussian-mechanism-82Wosp2Iu1/) |
+| A studentized spherical-harmonics nonparametric two-sample test | [`QsxpsAu7l1`](https://openreview.net/forum?id=QsxpsAu7l1) | 3 | published | [`spherical-harmonics-two-sample-test-QsxpsAu7l1/`](spherical-harmonics-two-sample-test-QsxpsAu7l1/) |
+| Sharp concentration bounds for bundle-valued statistics on manifolds | [`cspPnNScXa`](https://openreview.net/forum?id=cspPnNScXa) | 2 + control | published (medium) | [`concentration-bounds-bundle-valued-statistics-cspPnNScXa/`](concentration-bounds-bundle-valued-statistics-cspPnNScXa/) |
 | Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | see folder | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) |
 
 *Verdicts are the challenge judge's scores (verified/falsified = 2 pt, toy =
