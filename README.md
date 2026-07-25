@@ -20,7 +20,7 @@ trackio logbooks (linked per paper).
 | A studentized spherical-harmonics nonparametric two-sample test | [`QsxpsAu7l1`](https://openreview.net/forum?id=QsxpsAu7l1) | 3 | published | [`spherical-harmonics-two-sample-test-QsxpsAu7l1/`](spherical-harmonics-two-sample-test-QsxpsAu7l1/) |
 | Sharp concentration bounds for bundle-valued statistics on manifolds | [`cspPnNScXa`](https://openreview.net/forum?id=cspPnNScXa) | 2 + control | published (medium) | [`concentration-bounds-bundle-valued-statistics-cspPnNScXa/`](concentration-bounds-bundle-valued-statistics-cspPnNScXa/) |
 | Tackling fake forgetting through uncertainty quantification | [`rjmVJaBpkm`](https://openreview.net/forum?id=rjmVJaBpkm) | 5 (CPU toy) | published (medium) | [`fake-forgetting-uncertainty-rjmVJaBpkm/`](fake-forgetting-uncertainty-rjmVJaBpkm/) |
-| Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | see folder | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) |
+| Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | 3/6 (medium) | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) |
 
 *Verdicts are the challenge judge's scores (verified/falsified = 2 pt, toy =
 1 pt, inconclusive = 0), against the published logbook.*
