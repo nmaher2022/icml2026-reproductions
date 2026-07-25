@@ -1,0 +1,724 @@
+{
+  "_meta": {
+    "n_train": 2000,
+    "n_forget": 200,
+    "n_retain": 1800,
+    "n_test": 8000,
+    "n_cal": 2000,
+    "args": {
+      "data_dir": "./data",
+      "outdir": "./outputs",
+      "n_per_class": 200,
+      "forget_ratio": 0.1,
+      "cal_size": 2000,
+      "mia_cap": 2000,
+      "batch_size": 32,
+      "workers": 2,
+      "orig_epochs": 40,
+      "rt_epochs": 40,
+      "unlearn_epochs": 8,
+      "learning_rate": 0.05,
+      "unlearn_lr": 0.01,
+      "ft_lr": 0.01,
+      "ga_lr": 0.0001,
+      "delta": 0.01,
+      "cpu_alpha": 0.05,
+      "lamda": 0.5,
+      "alphas": "0.05,0.1",
+      "methods": "GA",
+      "cpu_methods": "",
+      "seed": 10,
+      "device": "cpu",
+      "threads": 8
+    }
+  },
+  "original": {
+    "UA": 0.0,
+    "forget_acc": 1.0,
+    "RA": 0.9966666666666667,
+    "TA": 0.482875,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999484419822693,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.165,
+          "cr": 0.315955766192733,
+          "n_mislabel": 0,
+          "n_in_set": 0,
+          "recover_ratio": 0.0
+        },
+        "test": {
+          "coverage": 0.945,
+          "set_size": 5.434875,
+          "cr": 0.17387704409025045,
+          "n_mislabel": 4137,
+          "n_in_set": 3697,
+          "recover_ratio": 0.8936427362823302
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9995718598365784,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.125,
+          "cr": 0.47058823529411764,
+          "n_mislabel": 0,
+          "n_in_set": 0,
+          "recover_ratio": 0.0
+        },
+        "test": {
+          "coverage": 0.888875,
+          "set_size": 4.160375,
+          "cr": 0.21365261544932848,
+          "n_mislabel": 4137,
+          "n_in_set": 3248,
+          "recover_ratio": 0.7851099830795262
+        }
+      }
+    },
+    "MIA_traditional": 0.96,
+    "MIACR": {
+      "mia_acc": 0.96,
+      "mia_coverage": 0.0,
+      "mia_set_size": 2.0,
+      "miacr": 0.0
+    }
+  },
+  "retrain": {
+    "UA": 0.5349999999999999,
+    "forget_acc": 0.465,
+    "RA": 0.795,
+    "TA": 0.46275,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9980505704879761,
+        "forget": {
+          "coverage": 0.945,
+          "set_size": 5.36,
+          "cr": 0.1763059701492537,
+          "n_mislabel": 107,
+          "n_in_set": 96,
+          "recover_ratio": 0.897196261682243
+        },
+        "test": {
+          "coverage": 0.94225,
+          "set_size": 5.2075,
+          "cr": 0.18094095055208836,
+          "n_mislabel": 4298,
+          "n_in_set": 3836,
+          "recover_ratio": 0.8925081433224755
+        }
+      },
+      "0.1": {
+        "q_hat": 0.992082953453064,
+        "forget": {
+          "coverage": 0.89,
+          "set_size": 4.315,
+          "cr": 0.20625724217844726,
+          "n_mislabel": 107,
+          "n_in_set": 85,
+          "recover_ratio": 0.794392523364486
+        },
+        "test": {
+          "coverage": 0.90075,
+          "set_size": 4.20425,
+          "cr": 0.21424748766129512,
+          "n_mislabel": 4298,
+          "n_in_set": 3504,
+          "recover_ratio": 0.8152629129827826
+        }
+      }
+    },
+    "MIA_traditional": 0.43,
+    "MIACR": {
+      "mia_acc": 0.43,
+      "mia_coverage": 0.03500000000000003,
+      "mia_set_size": 1.965,
+      "miacr": 0.01781170483460561
+    }
+  },
+  "finetune": {
+    "UA": 0.03500000000000003,
+    "forget_acc": 0.965,
+    "RA": 1.0,
+    "TA": 0.49075,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999629855155945,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.71,
+          "cr": 0.2695417789757412,
+          "n_mislabel": 7,
+          "n_in_set": 7,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.947625,
+          "set_size": 5.178375,
+          "cr": 0.18299659642262295,
+          "n_mislabel": 4074,
+          "n_in_set": 3655,
+          "recover_ratio": 0.897152675503191
+        }
+      },
+      "0.1": {
+        "q_hat": 0.999658465385437,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.67,
+          "cr": 0.37453183520599254,
+          "n_mislabel": 7,
+          "n_in_set": 7,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.8915,
+          "set_size": 3.996,
+          "cr": 0.22309809809809808,
+          "n_mislabel": 4074,
+          "n_in_set": 3206,
+          "recover_ratio": 0.7869415807560137
+        }
+      }
+    },
+    "MIA_traditional": 0.83,
+    "MIACR": {
+      "mia_acc": 0.83,
+      "mia_coverage": 0.0,
+      "mia_set_size": 2.0,
+      "miacr": 0.0
+    }
+  },
+  "RL": {
+    "UA": 0.6599999999999999,
+    "forget_acc": 0.34,
+    "RA": 0.9961111111111111,
+    "TA": 0.4415,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9996126294136047,
+        "forget": {
+          "coverage": 0.99,
+          "set_size": 7.205,
+          "cr": 0.13740458015267176,
+          "n_mislabel": 132,
+          "n_in_set": 130,
+          "recover_ratio": 0.9848484848484849
+        },
+        "test": {
+          "coverage": 0.94175,
+          "set_size": 6.67075,
+          "cr": 0.1411760296818199,
+          "n_mislabel": 4468,
+          "n_in_set": 4002,
+          "recover_ratio": 0.8957027752909579
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9982719421386719,
+        "forget": {
+          "coverage": 0.965,
+          "set_size": 5.605,
+          "cr": 0.17216770740410345,
+          "n_mislabel": 132,
+          "n_in_set": 125,
+          "recover_ratio": 0.946969696969697
+        },
+        "test": {
+          "coverage": 0.894125,
+          "set_size": 5.32,
+          "cr": 0.16806860902255638,
+          "n_mislabel": 4468,
+          "n_in_set": 3621,
+          "recover_ratio": 0.8104297224709042
+        }
+      }
+    },
+    "MIA_traditional": 0.15,
+    "MIACR": {
+      "mia_acc": 0.15,
+      "mia_coverage": 0.03500000000000003,
+      "mia_set_size": 1.965,
+      "miacr": 0.01781170483460561
+    }
+  },
+  "ga_plus": {
+    "UA": 0.06999999999999995,
+    "forget_acc": 0.93,
+    "RA": 1.0,
+    "TA": 0.494,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999806880950928,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.95,
+          "cr": 0.2531645569620253,
+          "n_mislabel": 14,
+          "n_in_set": 14,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.948,
+          "set_size": 5.2265,
+          "cr": 0.18138333492777192,
+          "n_mislabel": 4048,
+          "n_in_set": 3632,
+          "recover_ratio": 0.8972332015810277
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9996952414512634,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.58,
+          "cr": 0.38759689922480617,
+          "n_mislabel": 14,
+          "n_in_set": 14,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.886875,
+          "set_size": 3.845125,
+          "cr": 0.2306491986606417,
+          "n_mislabel": 4048,
+          "n_in_set": 3143,
+          "recover_ratio": 0.7764328063241107
+        }
+      }
+    },
+    "MIA_traditional": 0.81,
+    "MIACR": {
+      "mia_acc": 0.81,
+      "mia_coverage": 0.0,
+      "mia_set_size": 2.0,
+      "miacr": 0.0
+    }
+  },
+  "teacher": {
+    "UA": 0.925,
+    "forget_acc": 0.075,
+    "RA": 0.10277777777777777,
+    "TA": 0.10075,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9314683079719543,
+        "forget": {
+          "coverage": 0.885,
+          "set_size": 9.0,
+          "cr": 0.09833333333333333,
+          "n_mislabel": 185,
+          "n_in_set": 162,
+          "recover_ratio": 0.8756756756756757
+        },
+        "test": {
+          "coverage": 0.89925,
+          "set_size": 9.0,
+          "cr": 0.09991666666666667,
+          "n_mislabel": 7194,
+          "n_in_set": 6388,
+          "recover_ratio": 0.8879621907144843
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9129921197891235,
+        "forget": {
+          "coverage": 0.78,
+          "set_size": 8.0,
+          "cr": 0.0975,
+          "n_mislabel": 185,
+          "n_in_set": 141,
+          "recover_ratio": 0.7621621621621621
+        },
+        "test": {
+          "coverage": 0.801,
+          "set_size": 8.0,
+          "cr": 0.100125,
+          "n_mislabel": 7194,
+          "n_in_set": 5602,
+          "recover_ratio": 0.7787044759521824
+        }
+      }
+    },
+    "MIA_traditional": 0.0,
+    "MIACR": {
+      "mia_acc": 0.0,
+      "mia_coverage": 0.06999999999999995,
+      "mia_set_size": 1.815,
+      "miacr": 0.03856749311294763
+    }
+  },
+  "ssd": {
+    "UA": 0.0,
+    "forget_acc": 1.0,
+    "RA": 0.9966666666666667,
+    "TA": 0.482375,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999468326568604,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.19,
+          "cr": 0.31347962382445144,
+          "n_mislabel": 0,
+          "n_in_set": 0,
+          "recover_ratio": 0.0
+        },
+        "test": {
+          "coverage": 0.945,
+          "set_size": 5.431625,
+          "cr": 0.17398108300922835,
+          "n_mislabel": 4141,
+          "n_in_set": 3701,
+          "recover_ratio": 0.8937454721081864
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9995822310447693,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.15,
+          "cr": 0.46511627906976744,
+          "n_mislabel": 0,
+          "n_in_set": 0,
+          "recover_ratio": 0.0
+        },
+        "test": {
+          "coverage": 0.890875,
+          "set_size": 4.191875,
+          "cr": 0.2125242284180707,
+          "n_mislabel": 4141,
+          "n_in_set": 3268,
+          "recover_ratio": 0.7891813571601063
+        }
+      }
+    },
+    "MIA_traditional": 0.96,
+    "MIACR": {
+      "mia_acc": 0.96,
+      "mia_coverage": 0.0,
+      "mia_set_size": 2.0,
+      "miacr": 0.0
+    }
+  },
+  "salun": {
+    "UA": 0.65,
+    "forget_acc": 0.35,
+    "RA": 0.9972222222222222,
+    "TA": 0.4285,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9996471405029297,
+        "forget": {
+          "coverage": 0.995,
+          "set_size": 7.695,
+          "cr": 0.12930474333983105,
+          "n_mislabel": 130,
+          "n_in_set": 129,
+          "recover_ratio": 0.9923076923076923
+        },
+        "test": {
+          "coverage": 0.94825,
+          "set_size": 6.922125,
+          "cr": 0.13698828033299024,
+          "n_mislabel": 4572,
+          "n_in_set": 4158,
+          "recover_ratio": 0.9094488188976378
+        }
+      },
+      "0.1": {
+        "q_hat": 0.998179018497467,
+        "forget": {
+          "coverage": 0.975,
+          "set_size": 6.055,
+          "cr": 0.1610239471511148,
+          "n_mislabel": 130,
+          "n_in_set": 125,
+          "recover_ratio": 0.9615384615384616
+        },
+        "test": {
+          "coverage": 0.894125,
+          "set_size": 5.42,
+          "cr": 0.16496771217712175,
+          "n_mislabel": 4572,
+          "n_in_set": 3725,
+          "recover_ratio": 0.8147419072615923
+        }
+      }
+    },
+    "MIA_traditional": 0.15,
+    "MIACR": {
+      "mia_acc": 0.15,
+      "mia_coverage": 0.06000000000000005,
+      "mia_set_size": 1.94,
+      "miacr": 0.03092783505154642
+    }
+  },
+  "cpu-finetune-l0.0": {
+    "UA": 0.040000000000000036,
+    "forget_acc": 0.96,
+    "RA": 1.0,
+    "TA": 0.488375,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999760389328003,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.88,
+          "cr": 0.2577319587628866,
+          "n_mislabel": 8,
+          "n_in_set": 8,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.947,
+          "set_size": 5.319375,
+          "cr": 0.17802843379156386,
+          "n_mislabel": 4093,
+          "n_in_set": 3669,
+          "recover_ratio": 0.8964085023210359
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9997276067733765,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.71,
+          "cr": 0.36900369003690037,
+          "n_mislabel": 8,
+          "n_in_set": 8,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.88775,
+          "set_size": 4.024625,
+          "cr": 0.2205795571015933,
+          "n_mislabel": 4093,
+          "n_in_set": 3195,
+          "recover_ratio": 0.780601026142194
+        }
+      }
+    },
+    "MIA_traditional": 0.805,
+    "MIACR": {
+      "mia_acc": 0.805,
+      "mia_coverage": 0.0,
+      "mia_set_size": 2.0,
+      "miacr": 0.0
+    }
+  },
+  "cpu-finetune-l0.5": {
+    "UA": 0.345,
+    "forget_acc": 0.655,
+    "RA": 0.9994444444444445,
+    "TA": 0.4745,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999604225158691,
+        "forget": {
+          "coverage": 0.975,
+          "set_size": 4.455,
+          "cr": 0.21885521885521886,
+          "n_mislabel": 69,
+          "n_in_set": 64,
+          "recover_ratio": 0.927536231884058
+        },
+        "test": {
+          "coverage": 0.94325,
+          "set_size": 5.219375,
+          "cr": 0.180720871751886,
+          "n_mislabel": 4204,
+          "n_in_set": 3750,
+          "recover_ratio": 0.8920076117982874
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9996153712272644,
+        "forget": {
+          "coverage": 0.97,
+          "set_size": 3.385,
+          "cr": 0.2865583456425406,
+          "n_mislabel": 69,
+          "n_in_set": 63,
+          "recover_ratio": 0.9130434782608695
+        },
+        "test": {
+          "coverage": 0.88875,
+          "set_size": 4.01775,
+          "cr": 0.22120589882396863,
+          "n_mislabel": 4204,
+          "n_in_set": 3314,
+          "recover_ratio": 0.7882968601332064
+        }
+      }
+    },
+    "MIA_traditional": 0.51,
+    "MIACR": {
+      "mia_acc": 0.51,
+      "mia_coverage": 0.04500000000000004,
+      "mia_set_size": 1.955,
+      "miacr": 0.02301790281329925
+    }
+  },
+  "cpu-RL-l0.0": {
+    "UA": 0.6699999999999999,
+    "forget_acc": 0.33,
+    "RA": 0.9944444444444445,
+    "TA": 0.437375,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9998765587806702,
+        "forget": {
+          "coverage": 0.99,
+          "set_size": 7.54,
+          "cr": 0.1312997347480106,
+          "n_mislabel": 134,
+          "n_in_set": 132,
+          "recover_ratio": 0.9850746268656716
+        },
+        "test": {
+          "coverage": 0.950375,
+          "set_size": 6.9675,
+          "cr": 0.13640114818801577,
+          "n_mislabel": 4501,
+          "n_in_set": 4104,
+          "recover_ratio": 0.9117973783603643
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9993183612823486,
+        "forget": {
+          "coverage": 0.945,
+          "set_size": 5.96,
+          "cr": 0.15855704697986575,
+          "n_mislabel": 134,
+          "n_in_set": 123,
+          "recover_ratio": 0.917910447761194
+        },
+        "test": {
+          "coverage": 0.9035,
+          "set_size": 5.594625,
+          "cr": 0.16149429139575933,
+          "n_mislabel": 4501,
+          "n_in_set": 3729,
+          "recover_ratio": 0.8284825594312375
+        }
+      }
+    },
+    "MIA_traditional": 0.155,
+    "MIACR": {
+      "mia_acc": 0.155,
+      "mia_coverage": 0.05500000000000005,
+      "mia_set_size": 1.945,
+      "miacr": 0.02827763496143961
+    }
+  },
+  "cpu-RL-l0.5": {
+    "UA": 0.905,
+    "forget_acc": 0.095,
+    "RA": 0.9861111111111112,
+    "TA": 0.414,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.99985271692276,
+        "forget": {
+          "coverage": 0.905,
+          "set_size": 7.71,
+          "cr": 0.11738002594033722,
+          "n_mislabel": 181,
+          "n_in_set": 162,
+          "recover_ratio": 0.8950276243093923
+        },
+        "test": {
+          "coverage": 0.9515,
+          "set_size": 7.247,
+          "cr": 0.13129570856906306,
+          "n_mislabel": 4688,
+          "n_in_set": 4300,
+          "recover_ratio": 0.9172354948805461
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9991727471351624,
+        "forget": {
+          "coverage": 0.85,
+          "set_size": 6.295,
+          "cr": 0.13502779984114377,
+          "n_mislabel": 181,
+          "n_in_set": 151,
+          "recover_ratio": 0.8342541436464088
+        },
+        "test": {
+          "coverage": 0.899625,
+          "set_size": 5.787625,
+          "cr": 0.15543940735621262,
+          "n_mislabel": 4688,
+          "n_in_set": 3885,
+          "recover_ratio": 0.8287116040955631
+        }
+      }
+    },
+    "MIA_traditional": 0.04,
+    "MIACR": {
+      "mia_acc": 0.04,
+      "mia_coverage": 0.025000000000000022,
+      "mia_set_size": 1.975,
+      "miacr": 0.012658227848101276
+    }
+  },
+  "GA": {
+    "UA": 0.0050000000000000044,
+    "forget_acc": 0.995,
+    "RA": 0.9961111111111111,
+    "TA": 0.476125,
+    "per_alpha": {
+      "0.05": {
+        "q_hat": 0.9999517798423767,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 3.29,
+          "cr": 0.303951367781155,
+          "n_mislabel": 1,
+          "n_in_set": 1,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.945875,
+          "set_size": 5.465,
+          "cr": 0.17307868252516012,
+          "n_mislabel": 4191,
+          "n_in_set": 3758,
+          "recover_ratio": 0.896683369124314
+        }
+      },
+      "0.1": {
+        "q_hat": 0.9995770454406738,
+        "forget": {
+          "coverage": 1.0,
+          "set_size": 2.19,
+          "cr": 0.4566210045662101,
+          "n_mislabel": 1,
+          "n_in_set": 1,
+          "recover_ratio": 1.0
+        },
+        "test": {
+          "coverage": 0.888375,
+          "set_size": 4.149,
+          "cr": 0.214117859725235,
+          "n_mislabel": 4191,
+          "n_in_set": 3298,
+          "recover_ratio": 0.7869243617275113
+        }
+      }
+    },
+    "MIA_traditional": 0.945,
+    "MIACR": {
+      "mia_acc": 0.945,
+      "mia_coverage": 0.0050000000000000044,
+      "mia_set_size": 1.995,
+      "miacr": 0.002506265664160403
+    }
+  }
+}
