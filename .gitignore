@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.venv-*/
+.trackio/
+*.tar.gz
+posterly/
+poster_embed.html
+poster_preview.*
+*_poster.png

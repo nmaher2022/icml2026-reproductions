@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<!-- Reproduction poster for ICML 2026 #16514 (OpenReview 82Wosp2Iu1).
+     Built from posterly portrait_2col_neutral template (AGPL-3.0, (c) 2026 Ruishuo Chen).
+     Build notes:
+     - Canvas: 24x36in portrait (sparse repro: 3 figures + 1 table + method/scope cards).
+     - Accent #276EC5 derived from the logbook figures' own series blue (#2a78d6),
+       darkened to 5.1:1 white-text contrast; gold secondary kept (cool accent).
+     - No logo / no QR provided: logo-slot and qr-block deleted.
+     - Venue badge kept: venue (ICML 2026) is actually named by the challenge.
+     - Qualifier "[ A Reproduction ]" inline with the title. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asymptotic Optimality of the High-Dimensional Gaussian Mechanism — Reproduction</title>
+
+
+
+<style>
+  @page { size: 24in 36in; margin: 0; }
+
+  :root {
+    /* ===== DESIGN TOKENS ===== */
+    --accent:        #117ACA;
+    --accent-deep:   #0C558D;
+    --accent-light:  #E7F2FA;
+    --accent-soft:   #D4E7F5;
+
+    --gold:          #C9A24A;
+    --gold-soft:     #FFF7E0;
+
+    --text-primary:   #1A1A1A;
+    --text-secondary: #555555;
+    --text-muted:     #888888;
+
+    --bg-page:        #F2F6FA;
+    --bg-card:        #FFFFFF;
+    --bg-card-tint:   #FAFAFB;
+    --bg-emphasis:    var(--accent-light);
+
+    --border-soft:    #D8D8D8;
+    --border-strong:  var(--accent);
+
+    --bg-screen:      #2b2b2b;
+
+    --u: 1.6px;
+
+    --fs-1: calc(9 * var(--u));
+    --fs-2: calc(10 * var(--u));
+    --fs-3: calc(11 * var(--u));
+    --fs-4: calc(12 * var(--u));
+    --fs-5: calc(13 * var(--u));
+    --fs-6: calc(15 * var(--u));
+    --fs-7: calc(16 * var(--u));
+    --fs-8: calc(22 * var(--u));
+    --fs-9: calc(32 * var(--u));
+
+    --font-serif: "Charter", "Source Serif Pro", "Georgia", serif;
+    --font-sans:  "Inter", "Helvetica Neue", sans-serif;
+
+    --shadow-screen: 0 0 60px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 calc(2 * var(--u)) calc(6 * var(--u)) rgba(17, 122, 202, 0.05);
+    --ornament-ink: rgba(17, 122, 202, 0.06);
+    /* ===== END DESIGN TOKENS ===== */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg-screen);
+    font-family: var(--font-serif);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .poster {
+    width: calc(610 * var(--u));
+    height: calc(914 * var(--u));
+    background: var(--bg-page);
+    background-image:
+      radial-gradient(ellipse at top left,    rgba(17, 122, 202, 0.06), transparent 40%),
+      radial-gradient(ellipse at bottom right, rgba(201, 162, 74, 0.05), transparent 50%);
+    margin: 20px auto;
+    padding: calc(10 * var(--u)) calc(12 * var(--u));
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: calc(6 * var(--u));
+    box-shadow: var(--shadow-screen);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .poster::before {
+    content: "";
+    position: absolute; top: 0; left: 0; right: 0;
+    height: calc(8 * var(--u));
+    background: var(--accent);
+  }
+
+  .header {
+    display: grid;
+    grid-template-columns: 1fr minmax(50%, auto) 1fr;
+    align-items: center;
+    gap: calc(14 * var(--u));
+    padding: calc(1 * var(--u)) calc(3 * var(--u)) calc(4 * var(--u));
+    border-bottom: calc(2 * var(--u)) solid var(--accent);
+  }
+
+  .venue-badge {
+    justify-self: start;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-width: calc(80 * var(--u));
+    text-align: center;
+    border-right: calc(1 * var(--u)) solid var(--border-soft);
+    padding-right: calc(10 * var(--u));
+  }
+  .venue-badge .vb-venue {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: var(--fs-8);
+    color: var(--accent-deep);
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+  .venue-badge .vb-year {
+    font-family: var(--font-sans);
+    font-size: var(--fs-4);
+    color: var(--text-secondary);
+    margin-top: calc(3 * var(--u));
+    letter-spacing: 1.2px;
+  }
+  .venue-badge .vb-tag {
+    font-family: var(--font-sans);
+    font-size: var(--fs-2);
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: calc(2 * var(--u));
+    letter-spacing: 1.2px;
+  }
+  .venue-badge.vb-right {
+    justify-self: end;
+    border-right: none;
+    border-left: calc(1 * var(--u)) solid var(--border-soft);
+    padding-right: 0;
+    padding-left: calc(10 * var(--u));
+  }
+
+  .title-block { text-align: center; min-width: 0; }
+  .title {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: var(--fs-8);
+    line-height: 1.05;
+    color: var(--accent-deep);
+    letter-spacing: -0.5px;
+  }
+  .title .accent { color: var(--gold); }
+  .title .qualifier { color: var(--accent); font-weight: 600; font-size: var(--fs-7); white-space: nowrap; }
+  .subtitle {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: var(--fs-4);
+    color: var(--text-secondary);
+    margin-top: calc(2 * var(--u));
+    font-style: italic;
+  }
+  .authors-line {
+    font-family: var(--font-sans);
+    font-size: var(--fs-5);
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: calc(3 * var(--u));
+  }
+  .authors-line .author { margin: 0 calc(4 * var(--u)); }
+  .authors-line sup { font-size: 0.7em; color: var(--accent); }
+  .authors-line .aff {
+    color: var(--text-secondary);
+    font-weight: 400;
+    display: inline;
+    margin-top: calc(2 * var(--u));
+    font-size: var(--fs-3);
+  }
+
+  .right-block {
+    justify-self: end;
+    display: flex; align-items: center;
+    gap: calc(8 * var(--u));
+  }
+
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: calc(12 * var(--u));
+    min-height: 0;
+  }
+  .column {
+    display: flex; flex-direction: column;
+    gap: calc(6 * var(--u));
+    min-height: 0;
+    height: 100%;
+    padding-bottom: calc(4 * var(--u));
+  }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: calc(5 * var(--u));
+    padding: calc(5 * var(--u)) calc(10 * var(--u));
+    border: calc(1 * var(--u)) solid var(--border-soft);
+    box-shadow: var(--shadow-card);
+    position: relative;
+  }
+  .card.tinted    { background: var(--bg-card-tint); }
+  .card.card--compact { padding: calc(3 * var(--u)) calc(7 * var(--u)); }
+  .card.highlight {
+    border-left: calc(6 * var(--u)) solid var(--accent);
+    background: var(--bg-emphasis);
+  }
+
+  .section-title {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: var(--fs-7);
+    color: var(--accent-deep);
+    margin-bottom: calc(3 * var(--u));
+    display: flex; align-items: center;
+    gap: calc(5 * var(--u));
+  }
+  .section-title .st-text { flex: 1; min-width: 0; line-height: 1.18; }
+  .section-title:not(:has(.st-text)) { display: block; line-height: 1.18; }
+  .section-title:not(:has(.st-text)) .num { float: left; margin-right: calc(5 * var(--u)); }
+  .section-title .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: calc(24 * var(--u)); height: calc(24 * var(--u));
+    background: var(--accent); color: white;
+    border-radius: 50%;
+    font-size: var(--fs-6); font-weight: 700;
+    flex-shrink: 0;
+  }
+  .section-title .tag-key {
+    color: var(--accent-deep);
+    font-size: var(--fs-4);
+  }
+
+  .body-text, .card p, .card li {
+    font-family: var(--font-serif);
+    font-size: var(--fs-4);
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+  .card ul, .card ol { padding-left: calc(20 * var(--u)); }
+  .card li { margin-bottom: calc(1.5 * var(--u)); }
+
+  .keyword       { color: var(--accent); font-weight: 700; }
+  .keyword-gold  { color: var(--gold);   font-weight: 700; }
+  .highlight-text {
+    background: var(--bg-emphasis);
+    padding: 0 calc(3 * var(--u));
+    border-radius: calc(2 * var(--u));
+  }
+
+  .eqn {
+    background: var(--bg-emphasis);
+    border-left: calc(3 * var(--u)) solid var(--accent);
+    padding: calc(4 * var(--u)) calc(10 * var(--u));
+    margin: calc(4 * var(--u)) 0;
+    font-size: var(--fs-5);
+    overflow-x: hidden;
+  }
+  .eqn--large { font-size: calc(var(--fs-5) * 1.25); }
+  .eqn .label {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: var(--fs-2);
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: calc(2 * var(--u));
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .callout {
+    background: var(--accent);
+    color: white;
+    padding: calc(4 * var(--u)) calc(8 * var(--u));
+    border-radius: calc(4 * var(--u));
+    font-size: var(--fs-4);
+    margin: calc(4 * var(--u)) 0;
+  }
+  .callout strong { color: var(--gold-soft); }
+  .callout.gold {
+    background: var(--gold);
+    color: var(--accent-deep);
+  }
+  .callout.gold strong { color: var(--accent-deep); }
+
+  .figure { margin: calc(2 * var(--u)) 0; text-align: center; }
+  .figure img:not([class*="w-"]) { width: 100%; }
+  .figure--wide img { width: 100%; }
+  .figure img {
+    border-radius: calc(4 * var(--u));
+    border: calc(1 * var(--u)) solid var(--border-soft);
+    background: white;
+  }
+  .figure .caption {
+    font-family: var(--font-sans);
+    font-size: var(--fs-3);
+    color: var(--text-secondary);
+    margin-top: calc(3 * var(--u));
+    line-height: 1.3;
+    text-align: left;
+  }
+  .figure .caption strong { color: var(--accent-deep); }
+
+  .fig-wrap::after { content: ""; display: table; clear: both; }
+  .ff-fig {
+    float: right;
+    width: 48%; max-width: 58%; min-width: 38%;
+    margin: calc(1 * var(--u)) 0 calc(3 * var(--u)) calc(11 * var(--u));
+    text-align: center;
+  }
+  .ff-fig.left {
+    float: left;
+    margin: calc(1 * var(--u)) calc(11 * var(--u)) calc(3 * var(--u)) 0;
+  }
+  .ff-fig img {
+    display: block;
+    width: 100%;
+    border-radius: calc(4 * var(--u));
+    border: calc(1 * var(--u)) solid var(--border-soft);
+    background: white;
+  }
+  .ff-fig .caption {
+    font-family: var(--font-sans);
+    font-size: var(--fs-3);
+    color: var(--text-secondary);
+    margin-top: calc(3 * var(--u));
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: var(--fs-4);
+    margin-top: calc(3 * var(--u));
+  }
+  .result-table th, .result-table td {
+    padding: calc(2 * var(--u)) calc(4 * var(--u));
+    text-align: center;
+    border-bottom: calc(1 * var(--u)) solid var(--border-soft);
+  }
+  .result-table thead th {
+    background: var(--accent); color: white;
+    font-weight: 600; font-size: var(--fs-3);
+  }
+  .result-table tbody tr.group-row td {
+    background: var(--bg-emphasis); font-weight: 700;
+    text-align: left;
+    color: var(--accent-deep);
+    padding-left: calc(8 * var(--u));
+    border-bottom: calc(2 * var(--u)) solid var(--accent);
+  }
+  .result-table tbody tr.ours td { background: var(--gold-soft); font-weight: 700; }
+  .result-table tbody tr.ours td:first-child { color: var(--accent-deep); }
+  .result-table .method { text-align: left; padding-left: calc(8 * var(--u)); }
+  .result-table .best { color: var(--accent); font-weight: 700; }
+  .result-table .ref, .result-table .ref td { color: var(--text-muted); }
+
+  .keybox {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(4 * var(--u));
+    margin: calc(4 * var(--u)) 0 0;
+  }
+  .keybox .kb-item {
+    background: var(--bg-emphasis);
+    border-top: calc(2 * var(--u)) solid var(--accent);
+    padding: calc(3 * var(--u));
+    text-align: center;
+    display: flex; flex-direction: column; justify-content: center;
+    border-radius: 0 0 calc(3 * var(--u)) calc(3 * var(--u));
+  }
+  .kb-item .kb-num {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    font-size: var(--fs-7);
+    color: var(--accent);
+    line-height: 1;
+  }
+  .kb-item .kb-label {
+    font-family: var(--font-sans);
+    font-size: var(--fs-2);
+    color: var(--text-secondary);
+    margin-top: calc(2 * var(--u));
+    line-height: 1.15;
+  }
+
+  .footer {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: calc(2 * var(--u)) calc(10 * var(--u));
+    padding-top: calc(8 * var(--u));
+    border-top: calc(1 * var(--u)) solid var(--border-soft);
+    font-family: var(--font-sans);
+    font-size: var(--fs-4);
+    color: var(--text-muted);
+  }
+  .footer .repo { color: var(--accent); font-weight: 600; overflow-wrap: anywhere; }
+  .footer .method-name { color: var(--accent-deep); }
+
+  .ornament {
+    position: absolute;
+    right: calc(18 * var(--u));
+    bottom: calc(18 * var(--u));
+    font-family: var(--font-sans);
+    font-size: var(--fs-9);
+    color: var(--ornament-ink);
+    font-weight: 900;
+    letter-spacing: 4px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .equation-stack { margin: calc(2 * var(--u)) 0; }
+  .equation-stack .eqn { margin: calc(2 * var(--u)) 0; padding: calc(2 * var(--u)) calc(8 * var(--u)); }
+
+  .flow-strip { display: flex; align-items: stretch; gap: calc(1.5 * var(--u)); margin: calc(3 * var(--u)) 0; }
+  .flow-strip .step {
+    flex: 1; background: var(--accent-light);
+    border: 1px solid var(--accent-soft); border-radius: calc(2 * var(--u));
+    padding: calc(2 * var(--u)) calc(2.5 * var(--u));
+    text-align: center; font-size: var(--fs-2); line-height: 1.25;
+  }
+  .flow-strip .step .step-name {
+    display: block; font-family: var(--font-sans); font-weight: 700;
+    font-size: var(--fs-1); color: var(--accent-deep);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: calc(1 * var(--u));
+  }
+  .flow-strip .step--final { border-top: calc(1.5 * var(--u)) solid var(--gold); background: var(--gold-soft); }
+  .flow-strip .arrow {
+    align-self: center; color: var(--accent);
+    font-family: var(--font-sans); font-weight: 700; font-size: var(--fs-4);
+    flex: 0 0 auto;
+  }
+
+  ol.algo { padding-left: calc(16 * var(--u)); }
+  ol.algo li { margin-bottom: calc(1.5 * var(--u)); font-size: var(--fs-3); line-height: 1.3; }
+
+  .body-grid > .column { min-width: 0; }
+  .card { min-width: 0; }
+  .eqn mjx-container > svg { max-width: 100%; height: auto; }
+
+  .fs-1 { font-size: var(--fs-1); }
+  .fs-2 { font-size: var(--fs-2); }
+  .fs-3 { font-size: var(--fs-3); }
+  .fs-4 { font-size: var(--fs-4); }
+  .fs-5 { font-size: var(--fs-5); }
+  .fs-6 { font-size: var(--fs-6); }
+  .fs-7 { font-size: var(--fs-7); }
+  .fs-8 { font-size: var(--fs-8); }
+  .fs-9 { font-size: var(--fs-9); }
+
+  .mt-1 { margin-top: calc(1 * var(--u)); }
+  .mt-2 { margin-top: calc(2 * var(--u)); }
+  .mt-3 { margin-top: calc(3 * var(--u)); }
+  .mt-4 { margin-top: calc(4 * var(--u)); }
+  .mt-5 { margin-top: calc(5 * var(--u)); }
+  .mt-6 { margin-top: calc(6 * var(--u)); }
+
+  .mb-1 { margin-bottom: calc(1 * var(--u)); }
+  .mb-2 { margin-bottom: calc(2 * var(--u)); }
+  .mb-3 { margin-bottom: calc(3 * var(--u)); }
+  .mb-4 { margin-bottom: calc(4 * var(--u)); }
+
+  .w-45  { width: 45%; }
+  .w-50  { width: 50%; }
+  .w-55  { width: 55%; }
+  .w-60  { width: 60%; }
+  .w-65  { width: 65%; }
+  .w-70  { width: 70%; }
+  .w-75  { width: 75%; }
+  .w-80  { width: 80%; }
+  .w-85  { width: 85%; }
+  .w-90  { width: 90%; }
+  .w-95  { width: 95%; }
+  .w-100 { width: 100%; }
+
+  .text-secondary { color: var(--text-secondary); }
+  .text-muted     { color: var(--text-muted); }
+  .nowrap         { white-space: nowrap; }
+  .text-center    { text-align: center; }
+  .card.pbx-1     { padding-bottom: calc(11 * var(--u)); }
+  .card.pby-1     { padding-bottom: calc(13.5 * var(--u)); }
+  .pbx-0          { padding-bottom: 0; }
+
+  @media print {
+    html, body { background: white; }
+    .poster { margin: 0; box-shadow: none; width: 24in; height: 36in; page-break-after: avoid; }
+    :root { --u: 1mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="poster" data-measure-role="poster">
+
+  <!-- =========================== HEADER =========================== -->
+  <header class="header" data-measure-role="header">
+    <div class="venue-badge">
+      <div class="vb-venue">ICML</div>
+      <div class="vb-year">2026</div>
+      <div class="vb-tag">REPRODUCTION &middot; #16514</div>
+    </div>
+
+    <div class="title-block">
+      <h1 class="title">Asymptotic Optimality of the High-Dimensional Gaussian Mechanism <span class="qualifier">[&nbsp;A&nbsp;Reproduction&nbsp;]</span></h1>
+      <div class="subtitle">Wei, Bienstock &amp; Polychroniadou (JPMorgan AI Research), ICML 2026 Spotlight &mdash; independent from-scratch numerical audit (no official code exists).</div>
+      <div class="authors-line">
+        <span class="author">nmaher (Claude&nbsp;Fable&nbsp;5 agent)<sup>&#9993;</sup></span> &middot;
+        <span class="aff">HF &times; alphaXiv Reproducibility&nbsp;Challenge</span>
+      </div>
+    </div>
+
+    <div class="venue-badge vb-right">
+      <div class="vb-venue">6/6</div>
+      <div class="vb-year">CLAIMS REPRODUCED</div>
+      <div class="vb-tag">2 EXACTLY</div>
+    </div>
+  </header>
+
+  <!-- ============================ BODY ============================ -->
+  <div class="body-grid" data-measure-role="body">
+
+    <!-- ============ COLUMN 1 ============ -->
+    <div class="column" data-measure-role="column">
+
+      <div class="card highlight card--compact" data-measure-role="card" data-logbook-target="executive-summary" data-logbook-label="Executive summary">
+        <div class="section-title"><span class="num">1</span><span class="st-text">Scope &amp; method</span></div>
+        <p class="body-text">
+          The paper proves the <span class="keyword">Gaussian mechanism is asymptotically optimal</span> among
+          additive-noise DP mechanisms as T&#8594;&infin; (&delta;&nbsp;&le;&nbsp;&delta;&#8902;), and builds the
+          <span class="highlight-text">SGG family</span> that beats both Gaussian and &#8467;&#8322; in low dimensions.
+          No official code: every formula re-implemented from scratch, validated to 2e&#8722;5 against closed forms
+          and Monte&nbsp;Carlo.
+        </p>
+        <div class="eqn mt-2 text-center"><strong>&delta;(&epsilon;) = E<sub>R,W</sub>[(1 &#8722; e<sup>&epsilon;&#8722;Z(R,W)</sup>)<sub>+</sub>]</strong>,&nbsp;&nbsp;X = RU,&nbsp;&nbsp;R ~ GGamma(&alpha;,&beta;,p)</div>
+      </div>
+
+      <div class="card card--compact" data-measure-role="card" data-logbook-target="claim-1-gaussian-mechanism-is-asymptotically-optimal-among-additive-noise-mechanisms-theorem-3-1" data-logbook-label="Claim 1 evidence">
+        <div class="section-title"><span class="num">2</span><span class="st-text">Thm 3.1 &mdash; optimality is asymptotic&nbsp;<span class="tag-key">&#9733; KEY</span></span></div>
+        <div class="figure">
+          <img src="claim1_gauss_fig_poster.png" data-source="paper" data-asset-id="claim1" class="w-70" alt="Competitor delta ratio converges to 1 as T grows">
+          <div class="caption">
+            Competitors at the <strong>exact Gaussian MSE budget</strong> (&epsilon;=1, &delta;=10&#8315;&sup3;):
+            low-T improvements are real, but the advantage <strong>halves per doubling of T</strong> &mdash;
+            exactly the theorem&rsquo;s liminf&nbsp;statement.
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--compact pbx-1" data-measure-role="card">
+        <div class="section-title"><span class="num">3</span><span class="st-text">Reproduction scorecard</span></div>
+        <table class="result-table">
+          <thead>
+            <tr><th class="method">Claim</th><th>Check</th><th>Result</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">C1 Thm 3.1</td><td>margin &#8594; 0 as T&#8594;&infin;</td><td class="best">&#8722;100% &#8594; &#8722;3.6% @T=256</td></tr>
+            <tr><td class="method">C2 Lem 3.3</td><td>MSE kept, &delta; improved</td><td class="best">all &epsilon;, 2&ndash;4&times;</td></tr>
+            <tr><td class="method">C3 SGG family</td><td>Gauss + &#8467;&#8322; cases</td><td class="best">machine precision</td></tr>
+            <tr class="ours"><td class="method">C5 Table 2</td><td>7 &delta;&#8902; values</td><td class="best">all 6 decimals</td></tr>
+            <tr><td class="method">C6 Alg 7</td><td>FFT vs closed form / MC</td><td class="best">&le;1.5e&#8722;3 / z&le;1.1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ============ COLUMN 2 ============ -->
+    <div class="column" data-measure-role="column">
+
+      <div class="card card--compact" data-measure-role="card" data-logbook-target="claim-4-sgg-mechanisms-cut-mse-by-up-to-15-percent-in-low-dimensions-figure-2" data-logbook-label="Claims 4+5 evidence">
+        <div class="section-title"><span class="num">4</span><span class="st-text">Fig. 2 &amp; Table 2 reproduced</span></div>
+        <div class="figure">
+          <img src="claim45_gauss_fig_poster.png" data-source="paper" data-asset-id="claim45" class="w-70" alt="Figure 2 and Table 2 vs our audit">
+          <div class="caption">
+            <strong>Left:</strong> T=2 replicates to 3 s.f. <strong>including p*&nbsp;=&nbsp;1.37</strong>
+            (15.6%/362.9 vs paper 15.5%/364); shrinkage with T confirmed.
+            <strong>Right:</strong> all seven &delta;&#8902; thresholds match every
+            printed&nbsp;decimal&nbsp;of&nbsp;Table&nbsp;2.
+          </div>
+        </div>
+      </div>
+
+      <div class="card card--compact" data-measure-role="card" data-logbook-target="claim-6-tight-fft-based-composition-for-the-l2-mechanism-section-4-4" data-logbook-label="Claim 6 evidence">
+        <div class="section-title"><span class="num">5</span><span class="st-text">Tight composition (open question of Joseph et al.)</span></div>
+        <div class="figure">
+          <img src="claim6_gauss_fig_poster.png" data-source="paper" data-asset-id="claim6" class="w-70" alt="Composition accountant tightness">
+          <div class="caption">
+            From-scratch PRV+FFT accountant matches the closed-form Gaussian ladder (~1e&#8722;5, k&le;16) and
+            &#8467;&#8322; Monte-Carlo (|z|&le;1.1); certifies 4-step &#8467;&#8322; at &delta;=5e&#8722;5 vs
+            1.9e&#8722;2 basic &mdash; <strong>~380&times;&nbsp;tighter</strong>.
+          </div>
+        </div>
+      </div>
+
+      <div class="card highlight card--compact pby-1" data-measure-role="card" data-logbook-target="conclusion" data-logbook-label="Conclusion">
+        <div class="section-title"><span class="num">6</span><span class="st-text">Takeaways&nbsp;<span class="tag-key fs-3">&#9733;</span></span></div>
+        <ul>
+          <li><strong>6/6 claims reproduce; two exactly</strong> &mdash; Table 2 to all decimals, Fig.&nbsp;2&rsquo;s T=2 point to 3&nbsp;s.f.</li>
+          <li><strong>Precision matters:</strong> float64 fails for &delta;&#8902; at &epsilon;&ge;4 &mdash; 50-digit arithmetic&nbsp;required.</li>
+          <li><strong>&alpha; &le; T&#8722;1 is load-bearing:</strong> beyond that range the privacy loss simply loses&nbsp;monotonicity.</li>
+        </ul>
+        <div class="callout gold mt-1">
+          <strong>In one sentence:</strong> the Gaussian&rsquo;s high-dimensional crown and the SGG low-dimensional
+          upsets both check out &mdash; in ~12 min of pure CPU&nbsp;numerics.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ============================ FOOTER ============================ -->
+  <div class="footer" data-measure-role="footer">
+    <div>
+      <strong class="method-name">GAUSSIAN MECHANISM AUDIT</strong> &middot; ICML 2026 Reproducibility Challenge &middot;
+      CPU-only, ~12&nbsp;min, $0 compute &middot; paper: <span class="repo">arxiv.org/abs/2606.08681</span>
+    </div>
+    <div>
+      Logbook: <span class="repo">hf.co/spaces/nmaher/repro-asymptotic-optimality-of-the-high-dimensional-gaussian-mechanism-...</span>
+    </div>
+  </div>
+
+  <div class="ornament">REPRO &middot; 82Wosp2Iu1</div>
+
+</div>
+
+</body>
+</html>
