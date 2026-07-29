@@ -1,6 +1,6 @@
 # ICML 2026 paper reproductions
 
-Independent reproductions of six ICML 2026 papers, produced for the
+Independent reproductions of seven ICML 2026 papers, produced for the
 **[ICML-2026-agent-repro](https://huggingface.co/spaces/ICML-2026-agent-repro/challenge)**
 challenge (Hugging Face × alphaXiv). Each reproduction re-derives the paper's
 central claims from scratch or from the authors' released code, on **CPU only**,
@@ -21,9 +21,11 @@ trackio logbooks (linked per paper).
 | Sharp concentration bounds for bundle-valued statistics on manifolds | [`cspPnNScXa`](https://openreview.net/forum?id=cspPnNScXa) | 2 + control | published (medium) | [`concentration-bounds-bundle-valued-statistics-cspPnNScXa/`](concentration-bounds-bundle-valued-statistics-cspPnNScXa/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-sharp-concentration-bounds-for-bundle-valued-statistics-on-manifolds) |
 | Tackling fake forgetting through uncertainty quantification | [`rjmVJaBpkm`](https://openreview.net/forum?id=rjmVJaBpkm) | 5 (CPU toy) | published (medium) | [`fake-forgetting-uncertainty-rjmVJaBpkm/`](fake-forgetting-uncertainty-rjmVJaBpkm/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-tackling-fake-forgetting-through-uncertainty-quantification) |
 | Improved dynamic algorithm for non-monotone submodular maximization | [`tBS3uBG6Pv`](https://openreview.net/forum?id=tBS3uBG6Pv) | 3 | 3/6 (medium) | [`submodular-dynamic-non-monotone-tBS3uBG6Pv/`](submodular-dynamic-non-monotone-tBS3uBG6Pv/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-improved-dynamic-algorithm-for-non-monotone-submodular-maximization-under-cardinality-cons) |
+| Divide and Learn: Multi-Objective Combinatorial Optimization at Scale | [`TK82ECnJzD`](https://openreview.net/forum?id=TK82ECnJzD) | 6 | 2 qualitatively supported / 4 falsified (pending judge score) | [`divide-and-learn-TK82ECnJzD/`](divide-and-learn-TK82ECnJzD/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-divide-and-learn-multi-objective-combinatorial-optimization-at-scale) |
 
 *Verdicts are the challenge judge's scores (verified/falsified = 2 pt, toy =
-1 pt, inconclusive = 0), against the published logbook.*
+1 pt, inconclusive = 0), against the published logbook, except where noted
+as pending.*
 
 ## How to run
 
