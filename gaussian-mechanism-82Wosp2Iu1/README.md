@@ -5,6 +5,7 @@
   [`82Wosp2Iu1`](https://openreview.net/forum?id=82Wosp2Iu1), Spotlight)
 - **Upstream code:** none released — everything here is from scratch
 - **Verdict:** **11/12** · CPU-only (~12 min)
+- **Trackio Logbook (full write-up):** https://huggingface.co/spaces/nmaher/repro-asymptotic-optimality-of-the-high-dimensional-gaussian-mechanism-and-improved-low-dimensio
 
 A from-scratch differential-privacy library (`sgg_lib.py`, pure
 `numpy`/`scipy`/`mpmath`) implementing the hockey-stick divergence δ(ε), the

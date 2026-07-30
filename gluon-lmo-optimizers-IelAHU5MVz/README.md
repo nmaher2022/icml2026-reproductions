@@ -10,6 +10,7 @@
   toy-verified (qualitative pattern holds at reduced scale, with named
   caveats), 1 refuted at toy scale, 1 refuted as a claim-extraction error
   unrelated to the paper's actual content. CPU-only, no torch/GPU.
+- **Trackio Logbook (full write-up):** https://huggingface.co/spaces/nmaher/repro-from-muon-to-gluon-bridging-theory-and-practice-of-lmo-based-optimizers-for-llms
 
 Gluon is a framework that recovers Muon, unScion, layer-wise normalized-GD,
 and layer-wise signGD as special cases of one layer-wise LMO (linear

@@ -3,6 +3,7 @@
 - **Paper:** Deep Flow Networks (OpenReview [`Z7rhDaBvBo`](https://openreview.net/forum?id=Z7rhDaBvBo), Spotlight)
 - **Upstream code:** `github.com/ayfous/deep-flow-networks` @ `242af8e` (MIT)
 - **Verdict:** **4/4 verified** · CPU-only
+- **Trackio Logbook (full write-up):** https://huggingface.co/spaces/nmaher/repro-deep-flow-networks
 
 ## Claims reproduced
 
