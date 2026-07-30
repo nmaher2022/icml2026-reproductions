@@ -1,0 +1,31 @@
+{
+  "space": "Regional-Discrete-toy",
+  "seed": 43,
+  "run": 1,
+  "method": "DCMMethod",
+  "n_nodes": 5,
+  "n_queries": 3,
+  "run_error_mean": 0.0,
+  "run_error_std": 0.0,
+  "errors": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "run_failures_mean": 0.0,
+  "run_failure_rate": 0.0,
+  "failures_all": [
+    0,
+    0,
+    0
+  ],
+  "run_runtime_mean": 0.3368231796581919,
+  "run_runtime_std": 0.16407831763949576,
+  "runtimes": [
+    0.568731166946236,
+    0.22769234899897128,
+    0.21404602302936837
+  ],
+  "run_total_time": 1.0107400529668666,
+  "num_tries": 3
+}

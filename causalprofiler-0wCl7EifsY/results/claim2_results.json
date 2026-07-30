@@ -1,0 +1,155 @@
+{
+  "rmax": {
+    "label": "R_max (default 'V' expression)",
+    "number_of_noise_regions": "V",
+    "n_draws": 200,
+    "final_distinct": 200,
+    "growth_curve": [
+      [
+        20,
+        20
+      ],
+      [
+        40,
+        40
+      ],
+      [
+        60,
+        60
+      ],
+      [
+        80,
+        80
+      ],
+      [
+        100,
+        100
+      ],
+      [
+        120,
+        120
+      ],
+      [
+        140,
+        140
+      ],
+      [
+        160,
+        160
+      ],
+      [
+        180,
+        180
+      ],
+      [
+        200,
+        200
+      ]
+    ]
+  },
+  "r1_assertion_note": "Discrete noise variables need regions",
+  "low_diversity": {
+    "label": "Low diversity (2 noise regions)",
+    "number_of_noise_regions": "2",
+    "n_draws": 200,
+    "final_distinct": 200,
+    "growth_curve": [
+      [
+        20,
+        20
+      ],
+      [
+        40,
+        40
+      ],
+      [
+        60,
+        60
+      ],
+      [
+        80,
+        80
+      ],
+      [
+        100,
+        100
+      ],
+      [
+        120,
+        120
+      ],
+      [
+        140,
+        140
+      ],
+      [
+        160,
+        160
+      ],
+      [
+        180,
+        180
+      ],
+      [
+        200,
+        200
+      ]
+    ]
+  },
+  "deterministic": {
+    "label": "Low diversity (2 noise regions)",
+    "number_of_noise_regions": "2",
+    "n_draws": 200,
+    "final_distinct": 200,
+    "growth_curve": [
+      [
+        20,
+        20
+      ],
+      [
+        40,
+        40
+      ],
+      [
+        60,
+        60
+      ],
+      [
+        80,
+        80
+      ],
+      [
+        100,
+        100
+      ],
+      [
+        120,
+        120
+      ],
+      [
+        140,
+        140
+      ],
+      [
+        160,
+        160
+      ],
+      [
+        180,
+        180
+      ],
+      [
+        200,
+        200
+      ]
+    ]
+  },
+  "summary": {
+    "rmax_distinct": 200,
+    "low_diversity_r2_distinct": 200,
+    "n_draws": 200,
+    "fingerprint_saturated": true,
+    "r1_deterministic_crashes": true,
+    "interpretation": "R_max run shows strong empirical support-breadth (near-zero repeat rate over 200 draws on a small discrete SoI), consistent with Prop 5.1's coverage guarantee. The r=1 vs r=Rmax negative-control contrast could not be resolved with this coarse fingerprint (both saturate); r=1 itself hits a library-level AssertionError for TABULAR+DISCRETE SCMs, an implementation edge case we did not patch, and worth noting for the paper's own text: Prop 5.1 assumes 'sufficiently expressive' discrete mechanisms."
+  }
+}

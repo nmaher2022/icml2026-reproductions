@@ -1,0 +1,22 @@
+{
+  "Linear-Medium-toy": {
+    "space": "Linear-Medium-toy",
+    "n_runs": 9,
+    "mean_error": 0.5497889219907067,
+    "std_error": 0.4006664291019411,
+    "max_error": 1.3273090526692126,
+    "mean_try_runtime_s": 8.201154534332023,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 222.15625648503192
+  },
+  "NN-Medium-toy": {
+    "space": "NN-Medium-toy",
+    "n_runs": 9,
+    "mean_error": 0.06917041643205883,
+    "std_error": 0.03759241050676209,
+    "max_error": 0.17151545477066132,
+    "mean_try_runtime_s": 9.464096876143701,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 256.31537876900984
+  }
+}

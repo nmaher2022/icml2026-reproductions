@@ -1,0 +1,31 @@
+{
+  "space": "NN-Medium-toy",
+  "seed": 44,
+  "run": 2,
+  "method": "VACAMethod",
+  "n_nodes": 5,
+  "n_queries": 3,
+  "run_error_mean": 0.07008271456270286,
+  "run_error_std": 0.017245897537877305,
+  "errors": [
+    0.07454280799826798,
+    0.0886183161068929,
+    0.04708701958294771
+  ],
+  "run_failures_mean": 0.0,
+  "run_failure_rate": 0.0,
+  "failures_all": [
+    0,
+    0,
+    0
+  ],
+  "run_runtime_mean": 9.11483649732933,
+  "run_runtime_std": 10.945037926497838,
+  "runtimes": [
+    24.593456995964516,
+    1.3791886430117302,
+    1.371863853011746
+  ],
+  "run_total_time": 27.34490306698717,
+  "num_tries": 3
+}

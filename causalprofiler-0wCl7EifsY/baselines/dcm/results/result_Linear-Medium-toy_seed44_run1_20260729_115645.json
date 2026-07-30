@@ -1,0 +1,31 @@
+{
+  "space": "Linear-Medium-toy",
+  "seed": 44,
+  "run": 1,
+  "method": "DCMMethod",
+  "n_nodes": 6,
+  "n_queries": 3,
+  "run_error_mean": 0.40159508841665476,
+  "run_error_std": 0.039304377919923694,
+  "errors": [
+    0.456107156784809,
+    0.3837505890265172,
+    0.36492751943863805
+  ],
+  "run_failures_mean": 0.0,
+  "run_failure_rate": 0.0,
+  "failures_all": [
+    0,
+    0,
+    0
+  ],
+  "run_runtime_mean": 1.156915034012248,
+  "run_runtime_std": 0.5296747570489576,
+  "runtimes": [
+    1.9058326000231318,
+    0.7692319600027986,
+    0.795680542010814
+  ],
+  "run_total_time": 3.4710089639993384,
+  "num_tries": 3
+}

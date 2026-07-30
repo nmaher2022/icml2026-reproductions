@@ -1,0 +1,41 @@
+{
+  "continuous_linear_ate": {
+    "space": "continuous_linear_ate",
+    "n_runs": 9,
+    "mean_error": 0.0844320511838729,
+    "std_error": 0.0746953080415703,
+    "mean_failure_rate": 0.0,
+    "std_failure_rate": 0.0,
+    "fit_stats": {
+      "fits_attempted": 9,
+      "fits_failed": 0,
+      "fits_ok": 9
+    }
+  },
+  "regional_discrete_tabular_ate": {
+    "space": "regional_discrete_tabular_ate",
+    "n_runs": 9,
+    "mean_error": 0.19907253740245923,
+    "std_error": 0.11626579204936634,
+    "mean_failure_rate": 0.0,
+    "std_failure_rate": 0.0,
+    "fit_stats": {
+      "fits_attempted": 9,
+      "fits_failed": 0,
+      "fits_ok": 9
+    }
+  },
+  "regional_discrete_tabular_conditional": {
+    "space": "regional_discrete_tabular_conditional",
+    "n_runs": 9,
+    "mean_error": 0.21857181360957675,
+    "std_error": 0.14375736109745177,
+    "mean_failure_rate": 0.007407407407407408,
+    "std_failure_rate": 0.020951312035156964,
+    "fit_stats": {
+      "fits_attempted": 9,
+      "fits_failed": 0,
+      "fits_ok": 9
+    }
+  }
+}

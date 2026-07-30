@@ -1,0 +1,57 @@
+{
+  "structure": {
+    "n_regions_requested": 4,
+    "exogenous_report": [
+      {
+        "name": "U_X1",
+        "n_thresholds": 3,
+        "num_discrete_values": 4,
+        "thresholds_sorted": true,
+        "thresholds_in_unit_interval": true
+      },
+      {
+        "name": "U_X2",
+        "n_thresholds": 3,
+        "num_discrete_values": 4,
+        "thresholds_sorted": true,
+        "thresholds_in_unit_interval": true
+      },
+      {
+        "name": "U_X3",
+        "n_thresholds": 3,
+        "num_discrete_values": 4,
+        "thresholds_sorted": true,
+        "thresholds_in_unit_interval": true
+      },
+      {
+        "name": "U_X4",
+        "n_thresholds": 3,
+        "num_discrete_values": 4,
+        "thresholds_sorted": true,
+        "thresholds_in_unit_interval": true
+      }
+    ],
+    "structure_ok": true
+  },
+  "diversity_vs_regions": {
+    "results": [
+      {
+        "n_regions": 2,
+        "n_distinct_values_seen": 2
+      },
+      {
+        "n_regions": 3,
+        "n_distinct_values_seen": 3
+      },
+      {
+        "n_regions": 4,
+        "n_distinct_values_seen": 4
+      },
+      {
+        "n_regions": 6,
+        "n_distinct_values_seen": 6
+      }
+    ],
+    "monotonic_nondecreasing": true
+  }
+}

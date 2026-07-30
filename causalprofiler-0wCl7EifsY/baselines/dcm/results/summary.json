@@ -1,0 +1,44 @@
+{
+  "Linear-Medium-toy": {
+    "space": "Linear-Medium-toy",
+    "n_runs": 9,
+    "mean_error": 0.20574356366974733,
+    "std_error": 0.1901082012192381,
+    "max_error": 0.6954108950099201,
+    "mean_try_runtime_s": 0.8888896361566838,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 24.10896744200727,
+    "n_retrains": 9,
+    "n_retrain_failures": 0,
+    "n_estimate_calls": 81,
+    "n_estimate_failures": 0
+  },
+  "Regional-Discrete-toy": {
+    "space": "Regional-Discrete-toy",
+    "n_runs": 9,
+    "mean_error": 0.06415002990995845,
+    "std_error": 0.18144368465060584,
+    "max_error": 0.5773502691896261,
+    "mean_try_runtime_s": 0.7546231192666002,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 23.39569398202002,
+    "n_retrains": 9,
+    "n_retrain_failures": 0,
+    "n_estimate_calls": 81,
+    "n_estimate_failures": 0
+  },
+  "NN-Medium-toy": {
+    "space": "NN-Medium-toy",
+    "n_runs": 9,
+    "mean_error": 0.05467241196920481,
+    "std_error": 0.021823340040020036,
+    "max_error": 0.1002403773488758,
+    "mean_try_runtime_s": 0.7541607273332948,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 20.506811789993662,
+    "n_retrains": 9,
+    "n_retrain_failures": 0,
+    "n_estimate_calls": 81,
+    "n_estimate_failures": 0
+  }
+}

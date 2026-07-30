@@ -1,0 +1,204 @@
+{
+  "L1_generation": {
+    "label": "L1 (observational/conditional)",
+    "query_type": "QueryType.CONDITIONAL",
+    "runs": [
+      {
+        "run": 0,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CONDITIONAL"
+        ],
+        "sample_target": 0.8660287081339713
+      },
+      {
+        "run": 1,
+        "n_vars": 6,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CONDITIONAL"
+        ],
+        "sample_target": 0.6690140845070423
+      },
+      {
+        "run": 2,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CONDITIONAL"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 3,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CONDITIONAL"
+        ],
+        "sample_target": 0.9122807017543859
+      },
+      {
+        "run": 4,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CONDITIONAL"
+        ],
+        "sample_target": 0.7681159420289853
+      }
+    ],
+    "all_finite": true
+  },
+  "L2_generation": {
+    "label": "L2 (interventional, ATE)",
+    "query_type": "QueryType.ATE",
+    "runs": [
+      {
+        "run": 0,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.ATE"
+        ],
+        "sample_target": 0.23199999999999998
+      },
+      {
+        "run": 1,
+        "n_vars": 6,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.ATE"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 2,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.ATE"
+        ],
+        "sample_target": -0.04800000000000004
+      },
+      {
+        "run": 3,
+        "n_vars": 6,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.ATE"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 4,
+        "n_vars": 6,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.ATE"
+        ],
+        "sample_target": 0.0
+      }
+    ],
+    "all_finite": true
+  },
+  "L3_generation": {
+    "label": "L3 (counterfactual, Ctf-TE)",
+    "query_type": "QueryType.CTF_TE",
+    "runs": [
+      {
+        "run": 0,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CTF_TE"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 1,
+        "n_vars": 6,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CTF_TE"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 2,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CTF_TE"
+        ],
+        "sample_target": 0.6916167664670657
+      },
+      {
+        "run": 3,
+        "n_vars": 4,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CTF_TE"
+        ],
+        "sample_target": 0.0
+      },
+      {
+        "run": 4,
+        "n_vars": 5,
+        "n_samples": 500,
+        "n_queries": 5,
+        "n_finite_targets": 5,
+        "query_types_seen": [
+          "QueryType.CTF_TE"
+        ],
+        "sample_target": 0.0
+      }
+    ],
+    "all_finite": true
+  },
+  "L1_markov": {
+    "n_tested": 19,
+    "n_pass": 19,
+    "n_skipped": 0,
+    "pass_rate": 1.0
+  },
+  "L2_ate_sensitivity": {
+    "n_queries_total": 24,
+    "n_connected": 9,
+    "n_nonzero_given_connected": 9,
+    "distinct_targets_given_connected": 9
+  },
+  "L3_determinism": {
+    "n_queries": 3,
+    "n_finite": 3
+  }
+}

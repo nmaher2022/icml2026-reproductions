@@ -1,0 +1,11 @@
+baselines/*/venv*/
+baselines/*/*.egg-info/
+baselines/vaca/VACA/
+baselines/vaca/smoke_run*/
+baselines/vaca/Data/
+baselines/vaca/tasks/_live_task_*.json
+baselines/vaca/tasks/test_nn*.json
+baselines/causalnf/causal-flows/
+baselines/dcm/DiffusionBasedCausalModels/
+__pycache__/
+*.pyc

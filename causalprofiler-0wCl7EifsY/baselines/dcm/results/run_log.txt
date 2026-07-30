@@ -1,0 +1,111 @@
+
+=== Linear-Medium-toy ===
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:01<00:01,  1.53it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:01<00:01,  1.53it/s]Fitting causal mechanism of node X3:  60%|██████    | 3/5 [00:01<00:00,  2.25it/s]Fitting causal mechanism of node X4:  60%|██████    | 3/5 [00:01<00:00,  2.25it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:01<00:00,  3.09it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:01<00:00,  3.09it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:01<00:00,  3.88it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:01<00:00,  2.92it/s]
+  Linear-Medium-toy_seed42_run0 try0: nodes=5 queries=3 error=0.0606 failed=0/3 time=2.23s
+  Linear-Medium-toy_seed42_run0 try1: nodes=5 queries=3 error=0.0201 failed=0/3 time=0.48s
+  Linear-Medium-toy_seed42_run0 try2: nodes=5 queries=3 error=0.0261 failed=0/3 time=0.50s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  33%|███▎      | 2/6 [00:00<00:00, 15.04it/s]Fitting causal mechanism of node X3:  33%|███▎      | 2/6 [00:00<00:00, 15.04it/s]Fitting causal mechanism of node X4:  33%|███▎      | 2/6 [00:00<00:00, 15.04it/s]Fitting causal mechanism of node X4:  67%|██████▋   | 4/6 [00:00<00:00,  9.65it/s]Fitting causal mechanism of node X5:  67%|██████▋   | 4/6 [00:00<00:00,  9.65it/s]Fitting causal mechanism of node X6:  67%|██████▋   | 4/6 [00:00<00:00,  9.65it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  8.84it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  9.36it/s]
+  Linear-Medium-toy_seed42_run1 try0: nodes=6 queries=3 error=0.1164 failed=0/3 time=1.06s
+  Linear-Medium-toy_seed42_run1 try1: nodes=6 queries=3 error=0.0590 failed=0/3 time=0.47s
+  Linear-Medium-toy_seed42_run1 try2: nodes=6 queries=3 error=0.0444 failed=0/3 time=0.43s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  50%|█████     | 3/6 [00:00<00:00, 22.27it/s]Fitting causal mechanism of node X4:  50%|█████     | 3/6 [00:00<00:00, 22.27it/s]Fitting causal mechanism of node X5:  50%|█████     | 3/6 [00:00<00:00, 22.27it/s]Fitting causal mechanism of node X6:  50%|█████     | 3/6 [00:00<00:00, 22.27it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00, 10.95it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00, 11.85it/s]
+  Linear-Medium-toy_seed42_run2 try0: nodes=6 queries=3 error=0.1489 failed=0/3 time=1.04s
+  Linear-Medium-toy_seed42_run2 try1: nodes=6 queries=3 error=0.0452 failed=0/3 time=0.68s
+  Linear-Medium-toy_seed42_run2 try2: nodes=6 queries=3 error=0.0485 failed=0/3 time=0.63s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:00<00:00, 12.82it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:00<00:00, 12.82it/s]Fitting causal mechanism of node X4:  40%|████      | 2/5 [00:00<00:00, 12.82it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  8.29it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  8.29it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  7.63it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  8.15it/s]
+  Linear-Medium-toy_seed43_run0 try0: nodes=5 queries=3 error=0.1039 failed=0/3 time=1.12s
+  Linear-Medium-toy_seed43_run0 try1: nodes=5 queries=3 error=0.2081 failed=0/3 time=0.54s
+  Linear-Medium-toy_seed43_run0 try2: nodes=5 queries=3 error=0.1688 failed=0/3 time=0.58s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:00<00:00,  7.40it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:00<00:00,  7.40it/s]Fitting causal mechanism of node X3:  60%|██████    | 3/5 [00:00<00:00,  5.99it/s]Fitting causal mechanism of node X4:  60%|██████    | 3/5 [00:00<00:00,  5.99it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  5.89it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  5.89it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  5.68it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  5.93it/s]
+  Linear-Medium-toy_seed43_run1 try0: nodes=5 queries=3 error=0.5746 failed=0/3 time=1.57s
+  Linear-Medium-toy_seed43_run1 try1: nodes=5 queries=3 error=0.6954 failed=0/3 time=0.84s
+  Linear-Medium-toy_seed43_run1 try2: nodes=5 queries=3 error=0.5218 failed=0/3 time=0.68s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:00<00:00, 10.02it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:00<00:00, 10.02it/s]Fitting causal mechanism of node X4:  40%|████      | 2/5 [00:00<00:00, 10.02it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  6.70it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  6.70it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.22it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.62it/s]
+  Linear-Medium-toy_seed43_run2 try0: nodes=5 queries=3 error=0.0755 failed=0/3 time=1.26s
+  Linear-Medium-toy_seed43_run2 try1: nodes=5 queries=3 error=0.1120 failed=0/3 time=0.46s
+  Linear-Medium-toy_seed43_run2 try2: nodes=5 queries=3 error=0.0510 failed=0/3 time=0.61s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  50%|█████     | 3/6 [00:00<00:00, 20.06it/s]Fitting causal mechanism of node X4:  50%|█████     | 3/6 [00:00<00:00, 20.06it/s]Fitting causal mechanism of node X5:  50%|█████     | 3/6 [00:00<00:00, 20.06it/s]Fitting causal mechanism of node X6:  50%|█████     | 3/6 [00:00<00:00, 20.06it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  9.17it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  9.98it/s]
+  Linear-Medium-toy_seed44_run0 try0: nodes=6 queries=3 error=0.0777 failed=0/3 time=1.25s
+  Linear-Medium-toy_seed44_run0 try1: nodes=6 queries=3 error=0.0356 failed=0/3 time=1.02s
+  Linear-Medium-toy_seed44_run0 try2: nodes=6 queries=3 error=0.1000 failed=0/3 time=0.80s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  33%|███▎      | 2/6 [00:00<00:00, 12.19it/s]Fitting causal mechanism of node X3:  33%|███▎      | 2/6 [00:00<00:00, 12.19it/s]Fitting causal mechanism of node X4:  33%|███▎      | 2/6 [00:00<00:00, 12.19it/s]Fitting causal mechanism of node X4:  67%|██████▋   | 4/6 [00:00<00:00,  6.15it/s]Fitting causal mechanism of node X5:  67%|██████▋   | 4/6 [00:00<00:00,  6.15it/s]Fitting causal mechanism of node X5:  83%|████████▎ | 5/6 [00:00<00:00,  5.45it/s]Fitting causal mechanism of node X6:  83%|████████▎ | 5/6 [00:00<00:00,  5.45it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  5.66it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  6.03it/s]
+  Linear-Medium-toy_seed44_run1 try0: nodes=6 queries=3 error=0.4561 failed=0/3 time=1.91s
+  Linear-Medium-toy_seed44_run1 try1: nodes=6 queries=3 error=0.3838 failed=0/3 time=0.77s
+  Linear-Medium-toy_seed44_run1 try2: nodes=6 queries=3 error=0.3649 failed=0/3 time=0.80s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:00<00:00, 10.03it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:00<00:00, 10.03it/s]Fitting causal mechanism of node X4:  40%|████      | 2/5 [00:00<00:00, 10.03it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  7.64it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  7.64it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  7.11it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  7.47it/s]
+  Linear-Medium-toy_seed44_run2 try0: nodes=5 queries=3 error=0.3666 failed=0/3 time=1.20s
+  Linear-Medium-toy_seed44_run2 try1: nodes=5 queries=3 error=0.3628 failed=0/3 time=0.53s
+  Linear-Medium-toy_seed44_run2 try2: nodes=5 queries=3 error=0.3273 failed=0/3 time=0.56s
+
+=== Regional-Discrete-toy ===
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  60%|██████    | 3/5 [00:00<00:00, 11.36it/s]Fitting causal mechanism of node X4:  60%|██████    | 3/5 [00:00<00:00, 11.36it/s]Fitting causal mechanism of node X5:  60%|██████    | 3/5 [00:00<00:00, 11.36it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.27it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.82it/s]
+  Regional-Discrete-toy_seed42_run0 try0: nodes=5 queries=3 error=0.0000 failed=0/3 time=1.32s
+  Regional-Discrete-toy_seed42_run0 try1: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.58s
+  Regional-Discrete-toy_seed42_run0 try2: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.60s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  50%|█████     | 3/6 [00:00<00:00, 11.45it/s]Fitting causal mechanism of node X4:  50%|█████     | 3/6 [00:00<00:00, 11.45it/s]Fitting causal mechanism of node X5:  50%|█████     | 3/6 [00:00<00:00, 11.45it/s]Fitting causal mechanism of node X5:  83%|████████▎ | 5/6 [00:00<00:00,  6.14it/s]Fitting causal mechanism of node X6:  83%|████████▎ | 5/6 [00:00<00:00,  6.14it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:01<00:00,  5.37it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:01<00:00,  6.00it/s]
+  Regional-Discrete-toy_seed42_run1 try0: nodes=6 queries=3 error=0.5774 failed=0/3 time=1.78s
+  Regional-Discrete-toy_seed42_run1 try1: nodes=6 queries=3 error=0.5774 failed=0/3 time=0.90s
+  Regional-Discrete-toy_seed42_run1 try2: nodes=6 queries=3 error=0.5774 failed=0/3 time=0.66s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X4:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X4:  67%|██████▋   | 4/6 [00:00<00:00, 22.82it/s]Fitting causal mechanism of node X5:  67%|██████▋   | 4/6 [00:00<00:00, 22.82it/s]Fitting causal mechanism of node X6:  67%|██████▋   | 4/6 [00:00<00:00, 22.82it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00, 11.85it/s]
+  Regional-Discrete-toy_seed42_run2 try0: nodes=6 queries=3 error=0.0000 failed=0/3 time=1.09s
+  Regional-Discrete-toy_seed42_run2 try1: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.64s
+  Regional-Discrete-toy_seed42_run2 try2: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.70s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  60%|██████    | 3/5 [00:00<00:00,  9.46it/s]Fitting causal mechanism of node X5:  60%|██████    | 3/5 [00:00<00:00,  9.46it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  6.50it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  6.50it/s]Fitting causal mechanism of node X4: 100%|██████████| 5/5 [00:00<00:00,  5.33it/s]Fitting causal mechanism of node X4: 100%|██████████| 5/5 [00:00<00:00,  6.00it/s]
+  Regional-Discrete-toy_seed43_run0 try0: nodes=5 queries=3 error=0.0000 failed=0/3 time=1.52s
+  Regional-Discrete-toy_seed43_run0 try1: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.62s
+  Regional-Discrete-toy_seed43_run0 try2: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.65s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X4:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  80%|████████  | 4/5 [00:00<00:00, 22.06it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00, 22.06it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00, 15.34it/s]
+  Regional-Discrete-toy_seed43_run1 try0: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.57s
+  Regional-Discrete-toy_seed43_run1 try1: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.23s
+  Regional-Discrete-toy_seed43_run1 try2: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.21s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X5:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X3:  80%|████████  | 4/5 [00:00<00:00, 30.74it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00, 30.74it/s]Fitting causal mechanism of node X4: 100%|██████████| 5/5 [00:00<00:00, 19.67it/s]
+  Regional-Discrete-toy_seed43_run2 try0: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.50s
+  Regional-Discrete-toy_seed43_run2 try1: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.26s
+  Regional-Discrete-toy_seed43_run2 try2: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.27s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X3:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  50%|█████     | 3/6 [00:00<00:00, 23.46it/s]Fitting causal mechanism of node X6:  50%|█████     | 3/6 [00:00<00:00, 23.46it/s]Fitting causal mechanism of node X4:  50%|█████     | 3/6 [00:00<00:00, 23.46it/s]Fitting causal mechanism of node X5:  50%|█████     | 3/6 [00:00<00:00, 23.46it/s]Fitting causal mechanism of node X5: 100%|██████████| 6/6 [00:00<00:00, 10.49it/s]Fitting causal mechanism of node X5: 100%|██████████| 6/6 [00:00<00:00, 11.43it/s]
+  Regional-Discrete-toy_seed44_run0 try0: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.99s
+  Regional-Discrete-toy_seed44_run0 try1: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.55s
+  Regional-Discrete-toy_seed44_run0 try2: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.47s
+Fitting causal models:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/6 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  33%|███▎      | 2/6 [00:00<00:00,  9.70it/s]Fitting causal mechanism of node X5:  33%|███▎      | 2/6 [00:00<00:00,  9.70it/s]Fitting causal mechanism of node X5:  50%|█████     | 3/6 [00:00<00:00,  7.69it/s]Fitting causal mechanism of node X3:  50%|█████     | 3/6 [00:00<00:00,  7.69it/s]Fitting causal mechanism of node X3:  67%|██████▋   | 4/6 [00:00<00:00,  7.29it/s]Fitting causal mechanism of node X4:  67%|██████▋   | 4/6 [00:00<00:00,  7.29it/s]Fitting causal mechanism of node X4:  83%|████████▎ | 5/6 [00:00<00:00,  6.92it/s]Fitting causal mechanism of node X6:  83%|████████▎ | 5/6 [00:00<00:00,  6.92it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  6.46it/s]Fitting causal mechanism of node X6: 100%|██████████| 6/6 [00:00<00:00,  7.00it/s]
+  Regional-Discrete-toy_seed44_run1 try0: nodes=6 queries=3 error=0.0000 failed=0/3 time=1.45s
+  Regional-Discrete-toy_seed44_run1 try1: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.54s
+  Regional-Discrete-toy_seed44_run1 try2: nodes=6 queries=3 error=0.0000 failed=0/3 time=0.60s
+Fitting causal models:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X1:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:   0%|          | 0/5 [00:00<?, ?it/s]Fitting causal mechanism of node X2:  40%|████      | 2/5 [00:00<00:00, 10.70it/s]Fitting causal mechanism of node X3:  40%|████      | 2/5 [00:00<00:00, 10.70it/s]Fitting causal mechanism of node X4:  40%|████      | 2/5 [00:00<00:00, 10.70it/s]Fitting causal mechanism of node X4:  80%|████████  | 4/5 [00:00<00:00,  6.70it/s]Fitting causal mechanism of node X5:  80%|████████  | 4/5 [00:00<00:00,  6.70it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.12it/s]Fitting causal mechanism of node X5: 100%|██████████| 5/5 [00:00<00:00,  6.58it/s]
+  Regional-Discrete-toy_seed44_run2 try0: nodes=5 queries=3 error=0.0000 failed=0/3 time=1.28s
+  Regional-Discrete-toy_seed44_run2 try1: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.65s
+  Regional-Discrete-toy_seed44_run2 try2: nodes=5 queries=3 error=0.0000 failed=0/3 time=0.74s
+
+
+=== FINAL SUMMARY ===
+{
+  "Linear-Medium-toy": {
+    "space": "Linear-Medium-toy",
+    "n_runs": 9,
+    "mean_error": 0.20574356366974733,
+    "std_error": 0.1901082012192381,
+    "max_error": 0.6954108950099201,
+    "mean_try_runtime_s": 0.8888896361566838,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 24.10896744200727,
+    "n_retrains": 9,
+    "n_retrain_failures": 0,
+    "n_estimate_calls": 81,
+    "n_estimate_failures": 0
+  },
+  "Regional-Discrete-toy": {
+    "space": "Regional-Discrete-toy",
+    "n_runs": 9,
+    "mean_error": 0.06415002990995845,
+    "std_error": 0.18144368465060584,
+    "max_error": 0.5773502691896261,
+    "mean_try_runtime_s": 0.7546231192666002,
+    "failure_rate_pct": 0.0,
+    "total_wall_time_s": 23.39569398202002,
+    "n_retrains": 9,
+    "n_retrain_failures": 0,
+    "n_estimate_calls": 81,
+    "n_estimate_failures": 0
+  }
+}
+
+GRAND TOTAL WALL TIME: 47.5s

@@ -1,0 +1,245 @@
+[
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 42,
+    "run": 0,
+    "method": "CausalNFMethod",
+    "num_nodes": 6,
+    "num_queries": 5,
+    "gen_time_s": 0.09720104996813461,
+    "run_error_mean": 0.4913393984978384,
+    "run_error_std": 0.009186194539513564,
+    "errors": [
+      0.4835487734850906,
+      0.5042379813328065,
+      0.48623144067561813
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.46767659566830844,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 42,
+    "run": 1,
+    "method": "CausalNFMethod",
+    "num_nodes": 6,
+    "num_queries": 5,
+    "gen_time_s": 0.11981523095164448,
+    "run_error_mean": 0.04365105555399418,
+    "run_error_std": 0.008281755448629007,
+    "errors": [
+      0.033382660376889875,
+      0.053663906166841066,
+      0.043906600118251586
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.4175439289926241,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 42,
+    "run": 2,
+    "method": "CausalNFMethod",
+    "num_nodes": 4,
+    "num_queries": 5,
+    "gen_time_s": 0.06066008098423481,
+    "run_error_mean": 0.19350215850570787,
+    "run_error_std": 0.0114027458890659,
+    "errors": [
+      0.2034419450889212,
+      0.19952928311560725,
+      0.17753524731259523
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.3387515423043321,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 43,
+    "run": 0,
+    "method": "CausalNFMethod",
+    "num_nodes": 4,
+    "num_queries": 5,
+    "gen_time_s": 0.062253206968307495,
+    "run_error_mean": 0.15340329182818477,
+    "run_error_std": 0.007958459259002917,
+    "errors": [
+      0.15345606722376917,
+      0.16312387913467105,
+      0.14362992912611408
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.35195862598872435,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 43,
+    "run": 1,
+    "method": "CausalNFMethod",
+    "num_nodes": 5,
+    "num_queries": 5,
+    "gen_time_s": 0.0782604250125587,
+    "run_error_mean": 0.15259684409409913,
+    "run_error_std": 0.003742964816215905,
+    "errors": [
+      0.15492704414980052,
+      0.14731564103079703,
+      0.1555478471016998
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.4311123783506143,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 43,
+    "run": 2,
+    "method": "CausalNFMethod",
+    "num_nodes": 4,
+    "num_queries": 5,
+    "gen_time_s": 0.07494059001328424,
+    "run_error_mean": 0.11435654028374224,
+    "run_error_std": 0.010349480677852192,
+    "errors": [
+      0.12468735157696931,
+      0.10021208240598244,
+      0.11817018686827499
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.4394960773449081,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 44,
+    "run": 0,
+    "method": "CausalNFMethod",
+    "num_nodes": 5,
+    "num_queries": 5,
+    "gen_time_s": 0.07671831001061946,
+    "run_error_mean": 0.3788676343194377,
+    "run_error_std": 0.02611698443596751,
+    "errors": [
+      0.40389741942482454,
+      0.3898745977144894,
+      0.34283088581899923
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.45198038100109744,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 44,
+    "run": 1,
+    "method": "CausalNFMethod",
+    "num_nodes": 5,
+    "num_queries": 5,
+    "gen_time_s": 0.0985790150007233,
+    "run_error_mean": 0.35239830214247836,
+    "run_error_std": 0.04237290289875713,
+    "errors": [
+      0.34239830294585955,
+      0.30623000723968125,
+      0.4085665962418943
+    ],
+    "run_failures_mean": 0.3333333333333333,
+    "run_failures_std": 0.4714045207910317,
+    "failures_all": [
+      0,
+      0,
+      1
+    ],
+    "run_failure_rate_mean": 0.06666666666666667,
+    "run_runtime_mean": 0.46086714731063694,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  },
+  {
+    "space": "regional_discrete_tabular_conditional",
+    "seed": 44,
+    "run": 2,
+    "method": "CausalNFMethod",
+    "num_nodes": 4,
+    "num_queries": 5,
+    "gen_time_s": 0.09449246496660635,
+    "run_error_mean": 0.0870310972607079,
+    "run_error_std": 0.004763817713879676,
+    "errors": [
+      0.08366074922434184,
+      0.09376815255242986,
+      0.08366439000535202
+    ],
+    "run_failures_mean": 0.0,
+    "run_failures_std": 0.0,
+    "failures_all": [
+      0,
+      0,
+      0
+    ],
+    "run_failure_rate_mean": 0.0,
+    "run_runtime_mean": 0.6028396110244406,
+    "num_tries": 3,
+    "num_queries_per_try": 5
+  }
+]

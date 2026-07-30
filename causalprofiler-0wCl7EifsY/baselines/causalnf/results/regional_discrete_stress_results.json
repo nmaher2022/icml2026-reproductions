@@ -1,0 +1,68 @@
+{
+  "per_run": [
+    {
+      "seed": 42,
+      "run": 0,
+      "num_nodes": 6,
+      "num_queries": 5,
+      "run_error_mean": 0.298292803565034,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    },
+    {
+      "seed": 42,
+      "run": 1,
+      "num_nodes": 4,
+      "num_queries": 5,
+      "run_error_mean": 0.5448574662438745,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    },
+    {
+      "seed": 43,
+      "run": 0,
+      "num_nodes": 4,
+      "num_queries": 5,
+      "run_error_mean": 0.35971478519621725,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    },
+    {
+      "seed": 43,
+      "run": 1,
+      "num_nodes": 6,
+      "num_queries": 5,
+      "run_error_mean": 0.4617597751553102,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    },
+    {
+      "seed": 44,
+      "run": 0,
+      "num_nodes": 5,
+      "num_queries": 5,
+      "run_error_mean": 0.5729988600691953,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    },
+    {
+      "seed": 44,
+      "run": 1,
+      "num_nodes": 5,
+      "num_queries": 5,
+      "run_error_mean": 0.6268216213613109,
+      "run_failures_mean": 0.0,
+      "run_failure_rate_mean": 0.0
+    }
+  ],
+  "aggregate": {
+    "mean_error": 0.4774075519318237,
+    "mean_failure_rate": 0.0,
+    "n_runs": 6,
+    "fit_stats": {
+      "fits_attempted": 6,
+      "fits_failed": 0,
+      "fits_ok": 6
+    }
+  }
+}
