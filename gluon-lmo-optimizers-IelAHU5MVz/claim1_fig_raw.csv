@@ -1,0 +1,9 @@
+special_case,max,count
+muon,0.0,80
+normalized_gd,8.881784197001252e-16,60
+signgd,0.0,60
+unscion_cnn_bias,1.7763568394002505e-15,60
+unscion_cnn_conv,2.220446049250313e-16,60
+unscion_cnn_head,0.0,60
+unscion_llm_block,8.881784197001252e-16,80
+unscion_llm_embed,0.0,60

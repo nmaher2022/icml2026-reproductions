@@ -1,0 +1,521 @@
+special_case,seed,shape,t,max_abs_diff,pass
+muon,0,"(8, 12)",0.01,0.0,True
+muon,0,"(8, 12)",0.1,0.0,True
+muon,0,"(8, 12)",1.0,0.0,True
+muon,0,"(8, 12)",3.7,0.0,True
+muon,1,"(8, 12)",0.01,0.0,True
+muon,1,"(8, 12)",0.1,0.0,True
+muon,1,"(8, 12)",1.0,0.0,True
+muon,1,"(8, 12)",3.7,0.0,True
+muon,2,"(8, 12)",0.01,0.0,True
+muon,2,"(8, 12)",0.1,0.0,True
+muon,2,"(8, 12)",1.0,0.0,True
+muon,2,"(8, 12)",3.7,0.0,True
+muon,3,"(8, 12)",0.01,0.0,True
+muon,3,"(8, 12)",0.1,0.0,True
+muon,3,"(8, 12)",1.0,0.0,True
+muon,3,"(8, 12)",3.7,0.0,True
+muon,4,"(8, 12)",0.01,0.0,True
+muon,4,"(8, 12)",0.1,0.0,True
+muon,4,"(8, 12)",1.0,0.0,True
+muon,4,"(8, 12)",3.7,0.0,True
+muon,0,"(16, 16)",0.01,0.0,True
+muon,0,"(16, 16)",0.1,0.0,True
+muon,0,"(16, 16)",1.0,0.0,True
+muon,0,"(16, 16)",3.7,0.0,True
+muon,1,"(16, 16)",0.01,0.0,True
+muon,1,"(16, 16)",0.1,0.0,True
+muon,1,"(16, 16)",1.0,0.0,True
+muon,1,"(16, 16)",3.7,0.0,True
+muon,2,"(16, 16)",0.01,0.0,True
+muon,2,"(16, 16)",0.1,0.0,True
+muon,2,"(16, 16)",1.0,0.0,True
+muon,2,"(16, 16)",3.7,0.0,True
+muon,3,"(16, 16)",0.01,0.0,True
+muon,3,"(16, 16)",0.1,0.0,True
+muon,3,"(16, 16)",1.0,0.0,True
+muon,3,"(16, 16)",3.7,0.0,True
+muon,4,"(16, 16)",0.01,0.0,True
+muon,4,"(16, 16)",0.1,0.0,True
+muon,4,"(16, 16)",1.0,0.0,True
+muon,4,"(16, 16)",3.7,0.0,True
+muon,0,"(6, 10)",0.01,0.0,True
+muon,0,"(6, 10)",0.1,0.0,True
+muon,0,"(6, 10)",1.0,0.0,True
+muon,0,"(6, 10)",3.7,0.0,True
+muon,1,"(6, 10)",0.01,0.0,True
+muon,1,"(6, 10)",0.1,0.0,True
+muon,1,"(6, 10)",1.0,0.0,True
+muon,1,"(6, 10)",3.7,0.0,True
+muon,2,"(6, 10)",0.01,0.0,True
+muon,2,"(6, 10)",0.1,0.0,True
+muon,2,"(6, 10)",1.0,0.0,True
+muon,2,"(6, 10)",3.7,0.0,True
+muon,3,"(6, 10)",0.01,0.0,True
+muon,3,"(6, 10)",0.1,0.0,True
+muon,3,"(6, 10)",1.0,0.0,True
+muon,3,"(6, 10)",3.7,0.0,True
+muon,4,"(6, 10)",0.01,0.0,True
+muon,4,"(6, 10)",0.1,0.0,True
+muon,4,"(6, 10)",1.0,0.0,True
+muon,4,"(6, 10)",3.7,0.0,True
+muon,0,"(12, 6)",0.01,0.0,True
+muon,0,"(12, 6)",0.1,0.0,True
+muon,0,"(12, 6)",1.0,0.0,True
+muon,0,"(12, 6)",3.7,0.0,True
+muon,1,"(12, 6)",0.01,0.0,True
+muon,1,"(12, 6)",0.1,0.0,True
+muon,1,"(12, 6)",1.0,0.0,True
+muon,1,"(12, 6)",3.7,0.0,True
+muon,2,"(12, 6)",0.01,0.0,True
+muon,2,"(12, 6)",0.1,0.0,True
+muon,2,"(12, 6)",1.0,0.0,True
+muon,2,"(12, 6)",3.7,0.0,True
+muon,3,"(12, 6)",0.01,0.0,True
+muon,3,"(12, 6)",0.1,0.0,True
+muon,3,"(12, 6)",1.0,0.0,True
+muon,3,"(12, 6)",3.7,0.0,True
+muon,4,"(12, 6)",0.01,0.0,True
+muon,4,"(12, 6)",0.1,0.0,True
+muon,4,"(12, 6)",1.0,0.0,True
+muon,4,"(12, 6)",3.7,0.0,True
+unscion_llm_block,0,"(8, 12)",0.01,0.0,True
+unscion_llm_block,0,"(8, 12)",0.1,0.0,True
+unscion_llm_block,0,"(8, 12)",1.0,2.220446049250313e-16,True
+unscion_llm_block,0,"(8, 12)",3.7,0.0,True
+unscion_llm_block,1,"(8, 12)",0.01,0.0,True
+unscion_llm_block,1,"(8, 12)",0.1,0.0,True
+unscion_llm_block,1,"(8, 12)",1.0,2.220446049250313e-16,True
+unscion_llm_block,1,"(8, 12)",3.7,0.0,True
+unscion_llm_block,2,"(8, 12)",0.01,0.0,True
+unscion_llm_block,2,"(8, 12)",0.1,0.0,True
+unscion_llm_block,2,"(8, 12)",1.0,2.220446049250313e-16,True
+unscion_llm_block,2,"(8, 12)",3.7,0.0,True
+unscion_llm_block,3,"(8, 12)",0.01,0.0,True
+unscion_llm_block,3,"(8, 12)",0.1,0.0,True
+unscion_llm_block,3,"(8, 12)",1.0,2.220446049250313e-16,True
+unscion_llm_block,3,"(8, 12)",3.7,0.0,True
+unscion_llm_block,4,"(8, 12)",0.01,0.0,True
+unscion_llm_block,4,"(8, 12)",0.1,0.0,True
+unscion_llm_block,4,"(8, 12)",1.0,4.440892098500626e-16,True
+unscion_llm_block,4,"(8, 12)",3.7,0.0,True
+unscion_llm_block,0,"(16, 16)",0.01,0.0,True
+unscion_llm_block,0,"(16, 16)",0.1,0.0,True
+unscion_llm_block,0,"(16, 16)",1.0,0.0,True
+unscion_llm_block,0,"(16, 16)",3.7,0.0,True
+unscion_llm_block,1,"(16, 16)",0.01,0.0,True
+unscion_llm_block,1,"(16, 16)",0.1,0.0,True
+unscion_llm_block,1,"(16, 16)",1.0,0.0,True
+unscion_llm_block,1,"(16, 16)",3.7,0.0,True
+unscion_llm_block,2,"(16, 16)",0.01,0.0,True
+unscion_llm_block,2,"(16, 16)",0.1,0.0,True
+unscion_llm_block,2,"(16, 16)",1.0,0.0,True
+unscion_llm_block,2,"(16, 16)",3.7,0.0,True
+unscion_llm_block,3,"(16, 16)",0.01,0.0,True
+unscion_llm_block,3,"(16, 16)",0.1,0.0,True
+unscion_llm_block,3,"(16, 16)",1.0,0.0,True
+unscion_llm_block,3,"(16, 16)",3.7,0.0,True
+unscion_llm_block,4,"(16, 16)",0.01,0.0,True
+unscion_llm_block,4,"(16, 16)",0.1,0.0,True
+unscion_llm_block,4,"(16, 16)",1.0,0.0,True
+unscion_llm_block,4,"(16, 16)",3.7,0.0,True
+unscion_llm_block,0,"(6, 10)",0.01,0.0,True
+unscion_llm_block,0,"(6, 10)",0.1,2.220446049250313e-16,True
+unscion_llm_block,0,"(6, 10)",1.0,0.0,True
+unscion_llm_block,0,"(6, 10)",3.7,4.440892098500626e-16,True
+unscion_llm_block,1,"(6, 10)",0.01,2.168404344971009e-19,True
+unscion_llm_block,1,"(6, 10)",0.1,1.1102230246251565e-16,True
+unscion_llm_block,1,"(6, 10)",1.0,0.0,True
+unscion_llm_block,1,"(6, 10)",3.7,4.440892098500626e-16,True
+unscion_llm_block,2,"(6, 10)",0.01,0.0,True
+unscion_llm_block,2,"(6, 10)",0.1,2.220446049250313e-16,True
+unscion_llm_block,2,"(6, 10)",1.0,0.0,True
+unscion_llm_block,2,"(6, 10)",3.7,4.440892098500626e-16,True
+unscion_llm_block,3,"(6, 10)",0.01,8.673617379884035e-19,True
+unscion_llm_block,3,"(6, 10)",0.1,1.3877787807814457e-17,True
+unscion_llm_block,3,"(6, 10)",1.0,0.0,True
+unscion_llm_block,3,"(6, 10)",3.7,8.881784197001252e-16,True
+unscion_llm_block,4,"(6, 10)",0.01,1.734723475976807e-18,True
+unscion_llm_block,4,"(6, 10)",0.1,5.551115123125783e-17,True
+unscion_llm_block,4,"(6, 10)",1.0,0.0,True
+unscion_llm_block,4,"(6, 10)",3.7,4.440892098500626e-16,True
+unscion_llm_block,0,"(12, 6)",0.01,1.1102230246251565e-16,True
+unscion_llm_block,0,"(12, 6)",0.1,1.3877787807814457e-17,True
+unscion_llm_block,0,"(12, 6)",1.0,2.220446049250313e-16,True
+unscion_llm_block,0,"(12, 6)",3.7,0.0,True
+unscion_llm_block,1,"(12, 6)",0.01,6.938893903907228e-18,True
+unscion_llm_block,1,"(12, 6)",0.1,2.7755575615628914e-17,True
+unscion_llm_block,1,"(12, 6)",1.0,2.220446049250313e-16,True
+unscion_llm_block,1,"(12, 6)",3.7,0.0,True
+unscion_llm_block,2,"(12, 6)",0.01,5.551115123125783e-17,True
+unscion_llm_block,2,"(12, 6)",0.1,1.1102230246251565e-16,True
+unscion_llm_block,2,"(12, 6)",1.0,2.220446049250313e-16,True
+unscion_llm_block,2,"(12, 6)",3.7,0.0,True
+unscion_llm_block,3,"(12, 6)",0.01,0.0,True
+unscion_llm_block,3,"(12, 6)",0.1,1.1102230246251565e-16,True
+unscion_llm_block,3,"(12, 6)",1.0,2.220446049250313e-16,True
+unscion_llm_block,3,"(12, 6)",3.7,0.0,True
+unscion_llm_block,4,"(12, 6)",0.01,4.440892098500626e-16,True
+unscion_llm_block,4,"(12, 6)",0.1,5.551115123125783e-17,True
+unscion_llm_block,4,"(12, 6)",1.0,2.220446049250313e-16,True
+unscion_llm_block,4,"(12, 6)",3.7,0.0,True
+unscion_llm_embed,0,"(12, 20)",0.01,0.0,True
+unscion_llm_embed,0,"(12, 20)",0.1,0.0,True
+unscion_llm_embed,0,"(12, 20)",1.0,0.0,True
+unscion_llm_embed,0,"(12, 20)",3.7,0.0,True
+unscion_llm_embed,1,"(12, 20)",0.01,0.0,True
+unscion_llm_embed,1,"(12, 20)",0.1,0.0,True
+unscion_llm_embed,1,"(12, 20)",1.0,0.0,True
+unscion_llm_embed,1,"(12, 20)",3.7,0.0,True
+unscion_llm_embed,2,"(12, 20)",0.01,0.0,True
+unscion_llm_embed,2,"(12, 20)",0.1,0.0,True
+unscion_llm_embed,2,"(12, 20)",1.0,0.0,True
+unscion_llm_embed,2,"(12, 20)",3.7,0.0,True
+unscion_llm_embed,3,"(12, 20)",0.01,0.0,True
+unscion_llm_embed,3,"(12, 20)",0.1,0.0,True
+unscion_llm_embed,3,"(12, 20)",1.0,0.0,True
+unscion_llm_embed,3,"(12, 20)",3.7,0.0,True
+unscion_llm_embed,4,"(12, 20)",0.01,0.0,True
+unscion_llm_embed,4,"(12, 20)",0.1,0.0,True
+unscion_llm_embed,4,"(12, 20)",1.0,0.0,True
+unscion_llm_embed,4,"(12, 20)",3.7,0.0,True
+unscion_llm_embed,0,"(16, 16)",0.01,0.0,True
+unscion_llm_embed,0,"(16, 16)",0.1,0.0,True
+unscion_llm_embed,0,"(16, 16)",1.0,0.0,True
+unscion_llm_embed,0,"(16, 16)",3.7,0.0,True
+unscion_llm_embed,1,"(16, 16)",0.01,0.0,True
+unscion_llm_embed,1,"(16, 16)",0.1,0.0,True
+unscion_llm_embed,1,"(16, 16)",1.0,0.0,True
+unscion_llm_embed,1,"(16, 16)",3.7,0.0,True
+unscion_llm_embed,2,"(16, 16)",0.01,0.0,True
+unscion_llm_embed,2,"(16, 16)",0.1,0.0,True
+unscion_llm_embed,2,"(16, 16)",1.0,0.0,True
+unscion_llm_embed,2,"(16, 16)",3.7,0.0,True
+unscion_llm_embed,3,"(16, 16)",0.01,0.0,True
+unscion_llm_embed,3,"(16, 16)",0.1,0.0,True
+unscion_llm_embed,3,"(16, 16)",1.0,0.0,True
+unscion_llm_embed,3,"(16, 16)",3.7,0.0,True
+unscion_llm_embed,4,"(16, 16)",0.01,0.0,True
+unscion_llm_embed,4,"(16, 16)",0.1,0.0,True
+unscion_llm_embed,4,"(16, 16)",1.0,0.0,True
+unscion_llm_embed,4,"(16, 16)",3.7,0.0,True
+unscion_llm_embed,0,"(30, 8)",0.01,0.0,True
+unscion_llm_embed,0,"(30, 8)",0.1,0.0,True
+unscion_llm_embed,0,"(30, 8)",1.0,0.0,True
+unscion_llm_embed,0,"(30, 8)",3.7,0.0,True
+unscion_llm_embed,1,"(30, 8)",0.01,0.0,True
+unscion_llm_embed,1,"(30, 8)",0.1,0.0,True
+unscion_llm_embed,1,"(30, 8)",1.0,0.0,True
+unscion_llm_embed,1,"(30, 8)",3.7,0.0,True
+unscion_llm_embed,2,"(30, 8)",0.01,0.0,True
+unscion_llm_embed,2,"(30, 8)",0.1,0.0,True
+unscion_llm_embed,2,"(30, 8)",1.0,0.0,True
+unscion_llm_embed,2,"(30, 8)",3.7,0.0,True
+unscion_llm_embed,3,"(30, 8)",0.01,0.0,True
+unscion_llm_embed,3,"(30, 8)",0.1,0.0,True
+unscion_llm_embed,3,"(30, 8)",1.0,0.0,True
+unscion_llm_embed,3,"(30, 8)",3.7,0.0,True
+unscion_llm_embed,4,"(30, 8)",0.01,0.0,True
+unscion_llm_embed,4,"(30, 8)",0.1,0.0,True
+unscion_llm_embed,4,"(30, 8)",1.0,0.0,True
+unscion_llm_embed,4,"(30, 8)",3.7,0.0,True
+normalized_gd,0,"(8,)",0.01,0.0,True
+normalized_gd,0,"(8,)",0.1,0.0,True
+normalized_gd,0,"(8,)",1.0,0.0,True
+normalized_gd,0,"(8,)",3.7,4.440892098500626e-16,True
+normalized_gd,1,"(8,)",0.01,0.0,True
+normalized_gd,1,"(8,)",0.1,0.0,True
+normalized_gd,1,"(8,)",1.0,0.0,True
+normalized_gd,1,"(8,)",3.7,2.220446049250313e-16,True
+normalized_gd,2,"(8,)",0.01,0.0,True
+normalized_gd,2,"(8,)",0.1,0.0,True
+normalized_gd,2,"(8,)",1.0,0.0,True
+normalized_gd,2,"(8,)",3.7,4.440892098500626e-16,True
+normalized_gd,3,"(8,)",0.01,0.0,True
+normalized_gd,3,"(8,)",0.1,0.0,True
+normalized_gd,3,"(8,)",1.0,0.0,True
+normalized_gd,3,"(8,)",3.7,8.881784197001252e-16,True
+normalized_gd,4,"(8,)",0.01,0.0,True
+normalized_gd,4,"(8,)",0.1,0.0,True
+normalized_gd,4,"(8,)",1.0,0.0,True
+normalized_gd,4,"(8,)",3.7,4.440892098500626e-16,True
+normalized_gd,0,"(16,)",0.01,0.0,True
+normalized_gd,0,"(16,)",0.1,0.0,True
+normalized_gd,0,"(16,)",1.0,0.0,True
+normalized_gd,0,"(16,)",3.7,1.1102230246251565e-16,True
+normalized_gd,1,"(16,)",0.01,0.0,True
+normalized_gd,1,"(16,)",0.1,2.7755575615628914e-17,True
+normalized_gd,1,"(16,)",1.0,0.0,True
+normalized_gd,1,"(16,)",3.7,4.440892098500626e-16,True
+normalized_gd,2,"(16,)",0.01,0.0,True
+normalized_gd,2,"(16,)",0.1,0.0,True
+normalized_gd,2,"(16,)",1.0,0.0,True
+normalized_gd,2,"(16,)",3.7,4.440892098500626e-16,True
+normalized_gd,3,"(16,)",0.01,0.0,True
+normalized_gd,3,"(16,)",0.1,0.0,True
+normalized_gd,3,"(16,)",1.0,0.0,True
+normalized_gd,3,"(16,)",3.7,1.1102230246251565e-16,True
+normalized_gd,4,"(16,)",0.01,0.0,True
+normalized_gd,4,"(16,)",0.1,0.0,True
+normalized_gd,4,"(16,)",1.0,0.0,True
+normalized_gd,4,"(16,)",3.7,4.440892098500626e-16,True
+normalized_gd,0,"(32,)",0.01,0.0,True
+normalized_gd,0,"(32,)",0.1,0.0,True
+normalized_gd,0,"(32,)",1.0,0.0,True
+normalized_gd,0,"(32,)",3.7,8.881784197001252e-16,True
+normalized_gd,1,"(32,)",0.01,0.0,True
+normalized_gd,1,"(32,)",0.1,1.1102230246251565e-16,True
+normalized_gd,1,"(32,)",1.0,0.0,True
+normalized_gd,1,"(32,)",3.7,2.220446049250313e-16,True
+normalized_gd,2,"(32,)",0.01,0.0,True
+normalized_gd,2,"(32,)",0.1,0.0,True
+normalized_gd,2,"(32,)",1.0,0.0,True
+normalized_gd,2,"(32,)",3.7,4.440892098500626e-16,True
+normalized_gd,3,"(32,)",0.01,0.0,True
+normalized_gd,3,"(32,)",0.1,0.0,True
+normalized_gd,3,"(32,)",1.0,0.0,True
+normalized_gd,3,"(32,)",3.7,2.220446049250313e-16,True
+normalized_gd,4,"(32,)",0.01,0.0,True
+normalized_gd,4,"(32,)",0.1,8.673617379884035e-19,True
+normalized_gd,4,"(32,)",1.0,0.0,True
+normalized_gd,4,"(32,)",3.7,2.220446049250313e-16,True
+signgd,0,"(8,)",0.01,0.0,True
+signgd,0,"(8,)",0.1,0.0,True
+signgd,0,"(8,)",1.0,0.0,True
+signgd,0,"(8,)",3.7,0.0,True
+signgd,1,"(8,)",0.01,0.0,True
+signgd,1,"(8,)",0.1,0.0,True
+signgd,1,"(8,)",1.0,0.0,True
+signgd,1,"(8,)",3.7,0.0,True
+signgd,2,"(8,)",0.01,0.0,True
+signgd,2,"(8,)",0.1,0.0,True
+signgd,2,"(8,)",1.0,0.0,True
+signgd,2,"(8,)",3.7,0.0,True
+signgd,3,"(8,)",0.01,0.0,True
+signgd,3,"(8,)",0.1,0.0,True
+signgd,3,"(8,)",1.0,0.0,True
+signgd,3,"(8,)",3.7,0.0,True
+signgd,4,"(8,)",0.01,0.0,True
+signgd,4,"(8,)",0.1,0.0,True
+signgd,4,"(8,)",1.0,0.0,True
+signgd,4,"(8,)",3.7,0.0,True
+signgd,0,"(16,)",0.01,0.0,True
+signgd,0,"(16,)",0.1,0.0,True
+signgd,0,"(16,)",1.0,0.0,True
+signgd,0,"(16,)",3.7,0.0,True
+signgd,1,"(16,)",0.01,0.0,True
+signgd,1,"(16,)",0.1,0.0,True
+signgd,1,"(16,)",1.0,0.0,True
+signgd,1,"(16,)",3.7,0.0,True
+signgd,2,"(16,)",0.01,0.0,True
+signgd,2,"(16,)",0.1,0.0,True
+signgd,2,"(16,)",1.0,0.0,True
+signgd,2,"(16,)",3.7,0.0,True
+signgd,3,"(16,)",0.01,0.0,True
+signgd,3,"(16,)",0.1,0.0,True
+signgd,3,"(16,)",1.0,0.0,True
+signgd,3,"(16,)",3.7,0.0,True
+signgd,4,"(16,)",0.01,0.0,True
+signgd,4,"(16,)",0.1,0.0,True
+signgd,4,"(16,)",1.0,0.0,True
+signgd,4,"(16,)",3.7,0.0,True
+signgd,0,"(32,)",0.01,0.0,True
+signgd,0,"(32,)",0.1,0.0,True
+signgd,0,"(32,)",1.0,0.0,True
+signgd,0,"(32,)",3.7,0.0,True
+signgd,1,"(32,)",0.01,0.0,True
+signgd,1,"(32,)",0.1,0.0,True
+signgd,1,"(32,)",1.0,0.0,True
+signgd,1,"(32,)",3.7,0.0,True
+signgd,2,"(32,)",0.01,0.0,True
+signgd,2,"(32,)",0.1,0.0,True
+signgd,2,"(32,)",1.0,0.0,True
+signgd,2,"(32,)",3.7,0.0,True
+signgd,3,"(32,)",0.01,0.0,True
+signgd,3,"(32,)",0.1,0.0,True
+signgd,3,"(32,)",1.0,0.0,True
+signgd,3,"(32,)",3.7,0.0,True
+signgd,4,"(32,)",0.01,0.0,True
+signgd,4,"(32,)",0.1,0.0,True
+signgd,4,"(32,)",1.0,0.0,True
+signgd,4,"(32,)",3.7,0.0,True
+unscion_cnn_bias,0,"(8,)",0.01,0.0,True
+unscion_cnn_bias,0,"(8,)",0.1,0.0,True
+unscion_cnn_bias,0,"(8,)",1.0,0.0,True
+unscion_cnn_bias,0,"(8,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,1,"(8,)",0.01,0.0,True
+unscion_cnn_bias,1,"(8,)",0.1,0.0,True
+unscion_cnn_bias,1,"(8,)",1.0,2.220446049250313e-16,True
+unscion_cnn_bias,1,"(8,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,2,"(8,)",0.01,0.0,True
+unscion_cnn_bias,2,"(8,)",0.1,2.7755575615628914e-17,True
+unscion_cnn_bias,2,"(8,)",1.0,2.7755575615628914e-17,True
+unscion_cnn_bias,2,"(8,)",3.7,4.440892098500626e-16,True
+unscion_cnn_bias,3,"(8,)",0.01,0.0,True
+unscion_cnn_bias,3,"(8,)",0.1,0.0,True
+unscion_cnn_bias,3,"(8,)",1.0,2.220446049250313e-16,True
+unscion_cnn_bias,3,"(8,)",3.7,1.1102230246251565e-16,True
+unscion_cnn_bias,4,"(8,)",0.01,0.0,True
+unscion_cnn_bias,4,"(8,)",0.1,2.7755575615628914e-17,True
+unscion_cnn_bias,4,"(8,)",1.0,1.1102230246251565e-16,True
+unscion_cnn_bias,4,"(8,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,0,"(16,)",0.01,0.0,True
+unscion_cnn_bias,0,"(16,)",0.1,5.551115123125783e-17,True
+unscion_cnn_bias,0,"(16,)",1.0,0.0,True
+unscion_cnn_bias,0,"(16,)",3.7,4.440892098500626e-16,True
+unscion_cnn_bias,1,"(16,)",0.01,0.0,True
+unscion_cnn_bias,1,"(16,)",0.1,2.7755575615628914e-17,True
+unscion_cnn_bias,1,"(16,)",1.0,0.0,True
+unscion_cnn_bias,1,"(16,)",3.7,1.7763568394002505e-15,True
+unscion_cnn_bias,2,"(16,)",0.01,0.0,True
+unscion_cnn_bias,2,"(16,)",0.1,5.551115123125783e-17,True
+unscion_cnn_bias,2,"(16,)",1.0,0.0,True
+unscion_cnn_bias,2,"(16,)",3.7,1.7763568394002505e-15,True
+unscion_cnn_bias,3,"(16,)",0.01,0.0,True
+unscion_cnn_bias,3,"(16,)",0.1,5.551115123125783e-17,True
+unscion_cnn_bias,3,"(16,)",1.0,0.0,True
+unscion_cnn_bias,3,"(16,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,4,"(16,)",0.01,0.0,True
+unscion_cnn_bias,4,"(16,)",0.1,0.0,True
+unscion_cnn_bias,4,"(16,)",1.0,0.0,True
+unscion_cnn_bias,4,"(16,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,0,"(32,)",0.01,0.0,True
+unscion_cnn_bias,0,"(32,)",0.1,2.220446049250313e-16,True
+unscion_cnn_bias,0,"(32,)",1.0,4.440892098500626e-16,True
+unscion_cnn_bias,0,"(32,)",3.7,1.7763568394002505e-15,True
+unscion_cnn_bias,1,"(32,)",0.01,3.469446951953614e-18,True
+unscion_cnn_bias,1,"(32,)",0.1,1.1102230246251565e-16,True
+unscion_cnn_bias,1,"(32,)",1.0,4.440892098500626e-16,True
+unscion_cnn_bias,1,"(32,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,2,"(32,)",0.01,0.0,True
+unscion_cnn_bias,2,"(32,)",0.1,1.1102230246251565e-16,True
+unscion_cnn_bias,2,"(32,)",1.0,2.220446049250313e-16,True
+unscion_cnn_bias,2,"(32,)",3.7,8.881784197001252e-16,True
+unscion_cnn_bias,3,"(32,)",0.01,0.0,True
+unscion_cnn_bias,3,"(32,)",0.1,2.7755575615628914e-17,True
+unscion_cnn_bias,3,"(32,)",1.0,2.220446049250313e-16,True
+unscion_cnn_bias,3,"(32,)",3.7,1.7763568394002505e-15,True
+unscion_cnn_bias,4,"(32,)",0.01,1.734723475976807e-18,True
+unscion_cnn_bias,4,"(32,)",0.1,0.0,True
+unscion_cnn_bias,4,"(32,)",1.0,4.440892098500626e-16,True
+unscion_cnn_bias,4,"(32,)",3.7,8.881784197001252e-16,True
+unscion_cnn_conv,0,"(8, 36)",0.01,0.0,True
+unscion_cnn_conv,0,"(8, 36)",0.1,1.3877787807814457e-17,True
+unscion_cnn_conv,0,"(8, 36)",1.0,0.0,True
+unscion_cnn_conv,0,"(8, 36)",3.7,0.0,True
+unscion_cnn_conv,1,"(8, 36)",0.01,0.0,True
+unscion_cnn_conv,1,"(8, 36)",0.1,1.1102230246251565e-16,True
+unscion_cnn_conv,1,"(8, 36)",1.0,0.0,True
+unscion_cnn_conv,1,"(8, 36)",3.7,0.0,True
+unscion_cnn_conv,2,"(8, 36)",0.01,0.0,True
+unscion_cnn_conv,2,"(8, 36)",0.1,3.469446951953614e-18,True
+unscion_cnn_conv,2,"(8, 36)",1.0,0.0,True
+unscion_cnn_conv,2,"(8, 36)",3.7,0.0,True
+unscion_cnn_conv,3,"(8, 36)",0.01,0.0,True
+unscion_cnn_conv,3,"(8, 36)",0.1,1.734723475976807e-18,True
+unscion_cnn_conv,3,"(8, 36)",1.0,0.0,True
+unscion_cnn_conv,3,"(8, 36)",3.7,0.0,True
+unscion_cnn_conv,4,"(8, 36)",0.01,0.0,True
+unscion_cnn_conv,4,"(8, 36)",0.1,2.7755575615628914e-17,True
+unscion_cnn_conv,4,"(8, 36)",1.0,0.0,True
+unscion_cnn_conv,4,"(8, 36)",3.7,0.0,True
+unscion_cnn_conv,0,"(16, 72)",0.01,3.469446951953614e-18,True
+unscion_cnn_conv,0,"(16, 72)",0.1,1.1102230246251565e-16,True
+unscion_cnn_conv,0,"(16, 72)",1.0,0.0,True
+unscion_cnn_conv,0,"(16, 72)",3.7,0.0,True
+unscion_cnn_conv,1,"(16, 72)",0.01,0.0,True
+unscion_cnn_conv,1,"(16, 72)",0.1,2.220446049250313e-16,True
+unscion_cnn_conv,1,"(16, 72)",1.0,0.0,True
+unscion_cnn_conv,1,"(16, 72)",3.7,0.0,True
+unscion_cnn_conv,2,"(16, 72)",0.01,2.7755575615628914e-17,True
+unscion_cnn_conv,2,"(16, 72)",0.1,5.551115123125783e-17,True
+unscion_cnn_conv,2,"(16, 72)",1.0,0.0,True
+unscion_cnn_conv,2,"(16, 72)",3.7,0.0,True
+unscion_cnn_conv,3,"(16, 72)",0.01,0.0,True
+unscion_cnn_conv,3,"(16, 72)",0.1,2.220446049250313e-16,True
+unscion_cnn_conv,3,"(16, 72)",1.0,0.0,True
+unscion_cnn_conv,3,"(16, 72)",3.7,0.0,True
+unscion_cnn_conv,4,"(16, 72)",0.01,1.734723475976807e-18,True
+unscion_cnn_conv,4,"(16, 72)",0.1,1.1102230246251565e-16,True
+unscion_cnn_conv,4,"(16, 72)",1.0,0.0,True
+unscion_cnn_conv,4,"(16, 72)",3.7,0.0,True
+unscion_cnn_conv,0,"(6, 75)",0.01,0.0,True
+unscion_cnn_conv,0,"(6, 75)",0.1,5.551115123125783e-17,True
+unscion_cnn_conv,0,"(6, 75)",1.0,1.1102230246251565e-16,True
+unscion_cnn_conv,0,"(6, 75)",3.7,2.220446049250313e-16,True
+unscion_cnn_conv,1,"(6, 75)",0.01,0.0,True
+unscion_cnn_conv,1,"(6, 75)",0.1,0.0,True
+unscion_cnn_conv,1,"(6, 75)",1.0,5.551115123125783e-17,True
+unscion_cnn_conv,1,"(6, 75)",3.7,2.220446049250313e-16,True
+unscion_cnn_conv,2,"(6, 75)",0.01,0.0,True
+unscion_cnn_conv,2,"(6, 75)",0.1,5.551115123125783e-17,True
+unscion_cnn_conv,2,"(6, 75)",1.0,2.220446049250313e-16,True
+unscion_cnn_conv,2,"(6, 75)",3.7,2.220446049250313e-16,True
+unscion_cnn_conv,3,"(6, 75)",0.01,0.0,True
+unscion_cnn_conv,3,"(6, 75)",0.1,0.0,True
+unscion_cnn_conv,3,"(6, 75)",1.0,2.220446049250313e-16,True
+unscion_cnn_conv,3,"(6, 75)",3.7,1.1102230246251565e-16,True
+unscion_cnn_conv,4,"(6, 75)",0.01,0.0,True
+unscion_cnn_conv,4,"(6, 75)",0.1,0.0,True
+unscion_cnn_conv,4,"(6, 75)",1.0,1.1102230246251565e-16,True
+unscion_cnn_conv,4,"(6, 75)",3.7,2.220446049250313e-16,True
+unscion_cnn_head,0,"(12, 20)",0.01,0.0,True
+unscion_cnn_head,0,"(12, 20)",0.1,0.0,True
+unscion_cnn_head,0,"(12, 20)",1.0,0.0,True
+unscion_cnn_head,0,"(12, 20)",3.7,0.0,True
+unscion_cnn_head,1,"(12, 20)",0.01,0.0,True
+unscion_cnn_head,1,"(12, 20)",0.1,0.0,True
+unscion_cnn_head,1,"(12, 20)",1.0,0.0,True
+unscion_cnn_head,1,"(12, 20)",3.7,0.0,True
+unscion_cnn_head,2,"(12, 20)",0.01,0.0,True
+unscion_cnn_head,2,"(12, 20)",0.1,0.0,True
+unscion_cnn_head,2,"(12, 20)",1.0,0.0,True
+unscion_cnn_head,2,"(12, 20)",3.7,0.0,True
+unscion_cnn_head,3,"(12, 20)",0.01,0.0,True
+unscion_cnn_head,3,"(12, 20)",0.1,0.0,True
+unscion_cnn_head,3,"(12, 20)",1.0,0.0,True
+unscion_cnn_head,3,"(12, 20)",3.7,0.0,True
+unscion_cnn_head,4,"(12, 20)",0.01,0.0,True
+unscion_cnn_head,4,"(12, 20)",0.1,0.0,True
+unscion_cnn_head,4,"(12, 20)",1.0,0.0,True
+unscion_cnn_head,4,"(12, 20)",3.7,0.0,True
+unscion_cnn_head,0,"(16, 16)",0.01,0.0,True
+unscion_cnn_head,0,"(16, 16)",0.1,0.0,True
+unscion_cnn_head,0,"(16, 16)",1.0,0.0,True
+unscion_cnn_head,0,"(16, 16)",3.7,0.0,True
+unscion_cnn_head,1,"(16, 16)",0.01,0.0,True
+unscion_cnn_head,1,"(16, 16)",0.1,0.0,True
+unscion_cnn_head,1,"(16, 16)",1.0,0.0,True
+unscion_cnn_head,1,"(16, 16)",3.7,0.0,True
+unscion_cnn_head,2,"(16, 16)",0.01,0.0,True
+unscion_cnn_head,2,"(16, 16)",0.1,0.0,True
+unscion_cnn_head,2,"(16, 16)",1.0,0.0,True
+unscion_cnn_head,2,"(16, 16)",3.7,0.0,True
+unscion_cnn_head,3,"(16, 16)",0.01,0.0,True
+unscion_cnn_head,3,"(16, 16)",0.1,0.0,True
+unscion_cnn_head,3,"(16, 16)",1.0,0.0,True
+unscion_cnn_head,3,"(16, 16)",3.7,0.0,True
+unscion_cnn_head,4,"(16, 16)",0.01,0.0,True
+unscion_cnn_head,4,"(16, 16)",0.1,0.0,True
+unscion_cnn_head,4,"(16, 16)",1.0,0.0,True
+unscion_cnn_head,4,"(16, 16)",3.7,0.0,True
+unscion_cnn_head,0,"(30, 8)",0.01,0.0,True
+unscion_cnn_head,0,"(30, 8)",0.1,0.0,True
+unscion_cnn_head,0,"(30, 8)",1.0,0.0,True
+unscion_cnn_head,0,"(30, 8)",3.7,0.0,True
+unscion_cnn_head,1,"(30, 8)",0.01,0.0,True
+unscion_cnn_head,1,"(30, 8)",0.1,0.0,True
+unscion_cnn_head,1,"(30, 8)",1.0,0.0,True
+unscion_cnn_head,1,"(30, 8)",3.7,0.0,True
+unscion_cnn_head,2,"(30, 8)",0.01,0.0,True
+unscion_cnn_head,2,"(30, 8)",0.1,0.0,True
+unscion_cnn_head,2,"(30, 8)",1.0,0.0,True
+unscion_cnn_head,2,"(30, 8)",3.7,0.0,True
+unscion_cnn_head,3,"(30, 8)",0.01,0.0,True
+unscion_cnn_head,3,"(30, 8)",0.1,0.0,True
+unscion_cnn_head,3,"(30, 8)",1.0,0.0,True
+unscion_cnn_head,3,"(30, 8)",3.7,0.0,True
+unscion_cnn_head,4,"(30, 8)",0.01,0.0,True
+unscion_cnn_head,4,"(30, 8)",0.1,0.0,True
+unscion_cnn_head,4,"(30, 8)",1.0,0.0,True
+unscion_cnn_head,4,"(30, 8)",3.7,0.0,True
