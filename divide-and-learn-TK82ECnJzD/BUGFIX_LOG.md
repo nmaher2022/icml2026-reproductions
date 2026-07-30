@@ -479,3 +479,78 @@ Separately, this reproduction's own from-scratch HW-SW proxy (Round 3,
 `results/claim6_hwsw_proxy.csv`) falsifies the *qualitative* direction
 regardless of which percentage is used: D&L-TS is last of 3 methods at
 T=150 in our reconstruction, not ahead of any baseline by any percentage.
+
+## Round 4 (2026-07-30, independent re-audit ahead of falsification submission)
+
+Fresh line-by-line read of every implementation file (`dl/core.py`,
+`dl/synthetic.py`, `dl/hwsw_proxy.py`, `experiments/moco_domains.py`,
+`experiments/moco_baselines.py`, `experiments/moco_metrics.py`) and all 7
+driver scripts, specifically looking for anything Rounds 1-3 missed, per
+the user's "triple check, try different angles" instruction for a Best
+Falsification submission. **No new bug found that reverses any of the six
+claim verdicts.** Four minor items noted for completeness, none of which
+change a verdict:
+
+12. **(Not a bug, design approximation)** `update_experts`'s EXP3/FTRL
+    importance weight `pi = N[i,a] / N[i].sum()` is computed *after*
+    `state.N[i, a] += 1` for this round, i.e. using the post-increment
+    count rather than the selection-probability distribution that actually
+    produced the pick. This slightly inflates `pi` (denominator), which
+    slightly *deflates* `reward_hat`/`loss_hat` — a small, consistent bias
+    toward under-crediting reward, not a sign error. Effect shrinks as N
+    grows; already an approximation the docstring flags ("pi_{t,i}(x_i)
+    approximated by the empirical visit frequency"). Not worth re-running
+    over.
+
+13. **(Compute-accounting inefficiency, not a verdict-changing bug)**
+    `local_refine` evaluates `reward_fn(x)` on the pre-perturbation
+    solution to decide accept/reject, and then `run_dl`'s main loop calls
+    `reward_fn(x)` again immediately afterward for the round's official
+    reward — re-evaluating the same `x` twice when `local_refine` rejects
+    the perturbation. This adds ~1 redundant oracle call per
+    `local_every`-th round to D&L's own measured eval count (e.g. ~20 of
+    ~140 calls at T=100, local_every=5). Since Claim 4's compute-efficiency
+    sub-claim is already decisively falsified in the *other* direction
+    (D&L uses ~4.2x MORE oracle evals than BO, not 90-99% less), this
+    redundancy makes D&L's measured cost marginally *worse* than a
+    maximally tight implementation would show — i.e. it does not manufacture
+    the falsification, if anything a tighter implementation would narrow
+    the gap slightly (not close it).
+
+14. **(Methodological asymmetry, flagged as a caveat on the NSGA-II
+    comparison specifically)** In Claims 4-5 (`run_moco.py`), NSGA-II runs
+    ONE population-based optimization per instance and returns up to
+    `pop_size` (40) Pareto-front points, while D&L, D&L-TS, WS-heuristic,
+    and BO are all restricted to exactly `n_weights` (12) points — one per
+    scalarization weight, by construction of the weight-sweep pattern the
+    paper's own Algorithm 1 uses. More archive points generally yields
+    higher measured hypervolume independent of per-point solution quality,
+    so NSGA-II has a structural resolution advantage unrelated to search
+    quality. This does **not** affect the paper's actual claim under
+    test — D&L vs. "specialized solvers" (WS-heuristic, same 12-point
+    grid) and D&L vs. BO (same 12-point grid) are both apples-to-apples —
+    but NSGA-II's "beats D&L" result, used as supporting/ancillary evidence
+    in the writeup, should be presented with this caveat rather than as an
+    equally-fair comparison.
+
+15. **(Pre-existing, already-disclosed approximation, re-confirmed)**
+    `SyntheticEnv.optimal_expected()` (Claims 1-3's regret/quality
+    denominator) uses a per-position-argmax proxy that ignores the
+    coupling term, confirmed via brute force at n=10 to underestimate the
+    true joint optimum by ~2.9% (0.7416 vs 0.7203, logged already in
+    `rerun_logs/full_rerun.log`). This means Claim 3's "fraction of
+    optimum" numbers are computed against a slightly-too-low denominator
+    (mild overestimate of the true fraction). At the scale of the gaps
+    actually being reported (mixture 0.71 vs UCB-only 0.88, a 17-point
+    gap), a 2-3% denominator shift does not change any qualitative
+    conclusion.
+
+**Conclusion: the existing six-claim verdict set (2 qualitatively
+supported, 4 falsified) survives this fourth, independent adversarial
+pass.** Combined with Rounds 1-3's ten confirmed-and-fixed real bugs, the
+primary-source paper-verification pass, and this round's four
+non-verdict-changing caveats, this reproduction has now been checked from
+several different angles (implementation correctness, fairness of
+baseline comparisons, paper-citation accuracy, and an independent
+line-by-line adversarial re-read) without finding grounds to walk back any
+of the four falsified claims.
