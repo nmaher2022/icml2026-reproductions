@@ -1,0 +1,72 @@
+========== CONFIGURATION 0 ==========
+{
+    "network": "binarybayesianmlp",
+    "network_params": {
+        "layers": [
+            784,
+            100,
+            10
+        ],
+        "temperature": 1,
+        "activation_fn": "reversebinarygate"
+    },
+    "optimizer": "bimu",
+    "optimizer_params": {
+        "likelihood_multiplier": 12.3,
+        "kl_multiplier": 4.72,
+        "lr_max": 0.017,
+        "N": 6100,
+        "lr": 81.76
+    },
+    "task": "permutedmnist",
+    "task_params": {
+        "dataset_normalisation": "standardised"
+    },
+    "n_tasks": 1,
+    "epochs": 1,
+    "train_batch_size": 1,
+    "test_batch_size": 100,
+    "seed": 0,
+    "n_train_samples": 5,
+    "n_test_samples": 5,
+    "max_parallel_permutation": 100
+}
+========================================
+Training on permutedmnist
+Tasks:   0%|          | 0/1 [00:00<?, ?it/s]
+Epochs:   0%|          | 0/1 [00:00<?, ?it/s][A
+
+Splits:   0%|          | 0/1 [00:00<?, ?it/s][A[ATask 1/1 - Epoch 1/1:   0%|          | 0/1 [00:01<?, ?it/s]                                                           
+                                             [A
+
+                                             [A[ATask 1/1 - Epoch 1/1:   0%|          | 0/1 [06:49<?, ?it/s]
+Epochs:   0%|          | 0/1 [06:49<?, ?it/s][A
+
+Splits:   0%|          | 0/1 [06:48<?, ?it/s][A[A                                                           
+                                             [A
+
+                                             [A[ATask 1/1 - Epoch 1/1:   0%|          | 0/1 [06:49<?, ?it/s]
+Epochs:   0%|          | 0/1 [06:49<?, ?it/s][A
+
+Splits:   0%|          | 0/1 [06:48<?, ?it/s][A[A                                                           
+                                             [A
+
+                                             [A[ATask 1/1 - Epoch 1/1:   0%|          | 0/1 [06:49<?, ?it/s]
+Epochs:   0%|          | 0/1 [06:49<?, ?it/s][A
+
+Splits:   0%|          | 0/1 [06:48<?, ?it/s][A[A                                                           
+                                             [A
+
+                                             [A[ATask 1/1 - Epoch 1/1:   0%|          | 0/1 [06:49<?, ?it/s]
+Epochs:   0%|          | 0/1 [06:49<?, ?it/s][A
+
+Splits:   0%|          | 0/1 [06:48<?, ?it/s][A[A
+
+Splits: 100%|██████████| 1/1 [06:48<00:00, 408.58s/it][A[ASplits: 100%|██████████| 1/1 [06:48<00:00, 408.58s/it]
+
+Epochs: 100%|██████████| 1/1 [06:49<00:00, 409.94s/it][AEpochs: 100%|██████████| 1/1 [06:49<00:00, 409.94s/it]
+Task 1/1 - Epoch 1/1: 100%|██████████| 1/1 [06:49<00:00, 409.94s/it]Task 1/1 - Epoch 1/1: 100%|██████████| 1/1 [06:49<00:00, 409.94s/it]
+======== Test ========
+94.54%
+
+Loss: 0.5378 - N_iterations: 60000 - AVG Test acc: 94.54%

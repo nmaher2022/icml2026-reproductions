@@ -1,0 +1,26 @@
+diff --git a/main.py b/main.py
+index bb936ba..927c382 100644
+--- a/main.py
++++ b/main.py
+@@ -87,7 +87,7 @@ TRAIN_ACC = args.train_accuracy
+ EXTRACT_UNCERTAINTIES_FULL = args.extract_uncertainties_full
+ 
+ # set the device
+-jax.config.update("jax_platform_name", "gpu")
++jax.config.update("jax_platform_name", "cpu")
+ 
+ if __name__ == "__main__":
+     # Create a timestamp
+diff --git a/utils/gpuLoading.py b/utils/gpuLoading.py
+index 98a804d..b6a1b78 100755
+--- a/utils/gpuLoading.py
++++ b/utils/gpuLoading.py
+@@ -689,7 +689,7 @@ class GPULoading:
+     def openloris(self, *args, **kwargs):
+         if not os.path.exists("datasets"):
+             os.makedirs("datasets", exist_ok=True)
+-        dataset = OpenLORIS(root="datasets")
++        dataset = OpenLORIS(root="datasets", device=self.device)
+         dataset.download_dataset(*args, **kwargs)
+         return dataset.get_dataset(*args, **kwargs)
+ 

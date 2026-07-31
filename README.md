@@ -1,6 +1,6 @@
 # ICML 2026 paper reproductions
 
-Independent reproductions of nine ICML 2026 papers, produced for the
+Independent reproductions of ten ICML 2026 papers, produced for the
 **[ICML-2026-agent-repro](https://huggingface.co/spaces/ICML-2026-agent-repro/challenge)**
 challenge (Hugging Face × alphaXiv). Each reproduction re-derives the paper's
 central claims from scratch or from the authors' released code, on **CPU only**,
@@ -24,6 +24,7 @@ trackio logbooks (linked per paper).
 | Divide and Learn: Multi-Objective Combinatorial Optimization at Scale | [`TK82ECnJzD`](https://openreview.net/forum?id=TK82ECnJzD) | 6 | 2 qualitatively supported / 4 falsified (pending judge score) | [`divide-and-learn-TK82ECnJzD/`](divide-and-learn-TK82ECnJzD/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-divide-and-learn-multi-objective-combinatorial-optimization-at-scale) |
 | CausalProfiler: Generating Synthetic Benchmarks for Rigorous and Transparent Evaluation of Causal ML | [`0wCl7EifsY`](https://openreview.net/forum?id=0wCl7EifsY) | 5 | mostly confirmed (1/2/5 confirmed; 3/4 partially confirmed) | [`causalprofiler-0wCl7EifsY/`](causalprofiler-0wCl7EifsY/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-causalprofiler-generating-synthetic-benchmarks-for-rigorous-and-transparent-evaluation-of) |
 | From Muon to Gluon: Bridging Theory and Practice of LMO-based Optimizers for LLMs | [`IelAHU5MVz`](https://openreview.net/forum?id=IelAHU5MVz) | 6 | mixed (1 verified; 2/3/4 toy-verified; 5 refuted at toy scale; 6 refuted — claim-extraction error) | [`gluon-lmo-optimizers-IelAHU5MVz/`](gluon-lmo-optimizers-IelAHU5MVz/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-from-muon-to-gluon-bridging-theory-and-practice-of-lmo-based-optimizers-for-llms) |
+| Active Continual Learning with Metaplastic Binary Bayesian Neural Networks | [`SPZd0HVyiS`](https://openreview.net/forum?id=SPZd0HVyiS) | 5 (2 toy-verified/mixed; 3 blocked by data access) | mixed (2/3 toy-scale mixed; 1/4/5 blocked — dataset access) | [`active-continual-learning-bimu-SPZd0HVyiS/`](active-continual-learning-bimu-SPZd0HVyiS/) | [HF Space](https://huggingface.co/spaces/nmaher/repro-active-continual-learning-with-metaplastic-binary-bayesian-neural-networks) |
 
 *Verdicts are the challenge judge's scores (verified/falsified = 2 pt, toy =
 1 pt, inconclusive = 0), against the published logbook, except where noted
