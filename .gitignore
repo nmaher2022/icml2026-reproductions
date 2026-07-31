@@ -32,3 +32,7 @@ top100_candidates.md
 top100_verified.csv
 top100removed.md
 unreproduced_3plus_claims_cpu.md
+*_feasibility_review.md
+
+# downloaded candidate-paper PDFs (scratch, re-fetchable from OpenReview/arXiv)
+/*.pdf
