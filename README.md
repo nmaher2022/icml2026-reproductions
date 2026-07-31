@@ -30,6 +30,14 @@ trackio logbooks (linked per paper).
 1 pt, inconclusive = 0), against the published logbook, except where noted
 as pending.*
 
+## Harness
+
+The workflow behind these reproductions (paper acquisition, briefing, smoketest-before-scale,
+self-audit, honest verdicts, logbook/poster, GitHub mirror) is packaged as a reusable skill at
+[`.agents/skills/repro-harness/`](.agents/skills/repro-harness/). Its design rationale, build
+status, and audit process live in [`harness-testing/`](harness-testing/) — that folder tracks the
+pipeline itself, not any one paper's claims.
+
 ## How to run
 
 The audit scripts carry their dependencies inline (PEP-723 headers), so no
