@@ -1,0 +1,3 @@
+activation,n_reps,mean_Tn,reject_rate_raw,reject_rate_pruned,ks_pvalue
+Tanh,30,81.48937339782715,0.03333333333333333,0.1,1.4659358745438202e-07
+Identity_unbounded,30,10.56976854801178,0.0,0.0,0.0

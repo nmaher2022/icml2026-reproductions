@@ -1,0 +1,65 @@
+Claim 5 ablation: Tanh (bounded, satisfies Assumption 4.1) vs Identity (unbounded, violates it) under H0. d=10, d_z=3, N=1000, 30 reps each.
+[  23.1s] Tanh rep 1/30: T_n=94.844 T_n_pruned=94.803 E_val=1.000
+[  50.5s] Tanh rep 2/30: T_n=55.597 T_n_pruned=55.584 E_val=1.000
+[  77.3s] Tanh rep 3/30: T_n=169.434 T_n_pruned=169.434 E_val=1.000
+[ 104.8s] Tanh rep 4/30: T_n=93.464 T_n_pruned=93.459 E_val=1.000
+[ 131.6s] Tanh rep 5/30: T_n=87.473 T_n_pruned=87.464 E_val=1.000
+[ 158.7s] Tanh rep 6/30: T_n=68.624 T_n_pruned=68.622 E_val=1.000
+[ 187.9s] Tanh rep 7/30: T_n=60.048 T_n_pruned=60.048 E_val=1.000
+[ 222.3s] Tanh rep 8/30: T_n=62.024 T_n_pruned=62.023 E_val=1.000
+[ 254.2s] Tanh rep 9/30: T_n=98.052 T_n_pruned=98.015 E_val=1.000
+[ 279.6s] Tanh rep 10/30: T_n=93.320 T_n_pruned=93.319 E_val=1.000
+[ 304.9s] Tanh rep 11/30: T_n=73.833 T_n_pruned=73.831 E_val=1.000
+[ 328.8s] Tanh rep 12/30: T_n=101.920 T_n_pruned=101.913 E_val=1.000
+[ 352.5s] Tanh rep 13/30: T_n=67.523 T_n_pruned=67.521 E_val=1.000
+[ 376.1s] Tanh rep 14/30: T_n=51.267 T_n_pruned=51.267 E_val=1.000
+[ 400.4s] Tanh rep 15/30: T_n=87.606 T_n_pruned=87.599 E_val=1.000
+[ 424.2s] Tanh rep 16/30: T_n=80.103 T_n_pruned=80.098 E_val=1.000
+[ 447.6s] Tanh rep 17/30: T_n=74.213 T_n_pruned=74.176 E_val=1.000
+[ 471.1s] Tanh rep 18/30: T_n=50.888 T_n_pruned=50.876 E_val=1.000
+[ 494.7s] Tanh rep 19/30: T_n=76.654 T_n_pruned=76.631 E_val=1.000
+[ 518.1s] Tanh rep 20/30: T_n=91.563 T_n_pruned=91.558 E_val=1.000
+[ 541.7s] Tanh rep 21/30: T_n=93.499 T_n_pruned=93.266 E_val=1.000
+[ 565.6s] Tanh rep 22/30: T_n=76.200 T_n_pruned=76.199 E_val=1.000
+[ 588.6s] Tanh rep 23/30: T_n=73.130 T_n_pruned=73.128 E_val=1.000
+[ 610.9s] Tanh rep 24/30: T_n=76.282 T_n_pruned=76.265 E_val=1.000
+[ 631.7s] Tanh rep 25/30: T_n=110.584 T_n_pruned=110.583 E_val=1.000
+[ 652.8s] Tanh rep 26/30: T_n=55.781 T_n_pruned=55.777 E_val=1.000
+[ 671.6s] Tanh rep 27/30: T_n=70.767 T_n_pruned=70.762 E_val=1.000
+[ 691.2s] Tanh rep 28/30: T_n=115.014 T_n_pruned=115.014 E_val=1.000
+[ 713.8s] Tanh rep 29/30: T_n=52.856 T_n_pruned=52.847 E_val=1.000
+[ 737.3s] Tanh rep 30/30: T_n=82.118 T_n_pruned=82.110 E_val=1.000
+  -> Tanh: Type I error raw=0.033 pruned=0.100 (nominal 0.05), mean T_n=81.49 (chi2(100) mean=100), KS p=0.000
+[  22.2s] Identity_unbounded rep 1/30: T_n=3.943 T_n_pruned=3.943 E_val=1.000
+[  44.1s] Identity_unbounded rep 2/30: T_n=7.806 T_n_pruned=7.806 E_val=1.000
+[  64.8s] Identity_unbounded rep 3/30: T_n=8.996 T_n_pruned=8.996 E_val=1.000
+[  85.4s] Identity_unbounded rep 4/30: T_n=6.554 T_n_pruned=6.554 E_val=1.000
+[ 107.9s] Identity_unbounded rep 5/30: T_n=11.384 T_n_pruned=11.384 E_val=1.000
+[ 129.8s] Identity_unbounded rep 6/30: T_n=13.563 T_n_pruned=13.563 E_val=1.000
+[ 150.8s] Identity_unbounded rep 7/30: T_n=11.542 T_n_pruned=11.542 E_val=1.000
+[ 170.4s] Identity_unbounded rep 8/30: T_n=11.548 T_n_pruned=11.548 E_val=1.000
+[ 191.4s] Identity_unbounded rep 9/30: T_n=13.187 T_n_pruned=13.187 E_val=1.000
+[ 211.6s] Identity_unbounded rep 10/30: T_n=17.118 T_n_pruned=17.118 E_val=1.000
+[ 230.8s] Identity_unbounded rep 11/30: T_n=9.365 T_n_pruned=9.365 E_val=1.000
+[ 248.2s] Identity_unbounded rep 12/30: T_n=11.861 T_n_pruned=11.861 E_val=1.000
+[ 268.7s] Identity_unbounded rep 13/30: T_n=11.567 T_n_pruned=11.567 E_val=1.000
+[ 291.2s] Identity_unbounded rep 14/30: T_n=5.757 T_n_pruned=5.757 E_val=1.000
+[ 312.5s] Identity_unbounded rep 15/30: T_n=12.101 T_n_pruned=12.101 E_val=1.000
+[ 334.8s] Identity_unbounded rep 16/30: T_n=7.477 T_n_pruned=7.477 E_val=1.000
+[ 355.8s] Identity_unbounded rep 17/30: T_n=5.889 T_n_pruned=5.889 E_val=1.000
+[ 377.8s] Identity_unbounded rep 18/30: T_n=13.921 T_n_pruned=13.921 E_val=1.000
+[ 398.3s] Identity_unbounded rep 19/30: T_n=10.200 T_n_pruned=10.200 E_val=1.000
+[ 420.3s] Identity_unbounded rep 20/30: T_n=6.478 T_n_pruned=6.478 E_val=1.000
+[ 439.1s] Identity_unbounded rep 21/30: T_n=13.363 T_n_pruned=13.363 E_val=1.000
+[ 457.7s] Identity_unbounded rep 22/30: T_n=7.588 T_n_pruned=7.588 E_val=1.000
+[ 475.4s] Identity_unbounded rep 23/30: T_n=18.717 T_n_pruned=18.717 E_val=1.000
+[ 496.3s] Identity_unbounded rep 24/30: T_n=9.435 T_n_pruned=9.435 E_val=1.000
+[ 517.7s] Identity_unbounded rep 25/30: T_n=16.144 T_n_pruned=16.144 E_val=1.000
+[ 538.9s] Identity_unbounded rep 26/30: T_n=7.179 T_n_pruned=7.179 E_val=1.000
+[ 556.7s] Identity_unbounded rep 27/30: T_n=15.180 T_n_pruned=15.180 E_val=1.000
+[ 575.2s] Identity_unbounded rep 28/30: T_n=7.638 T_n_pruned=7.638 E_val=1.000
+[ 595.5s] Identity_unbounded rep 29/30: T_n=15.059 T_n_pruned=15.059 E_val=1.000
+[ 616.4s] Identity_unbounded rep 30/30: T_n=6.534 T_n_pruned=6.534 E_val=1.000
+  -> Identity_unbounded: Type I error raw=0.000 pruned=0.000 (nominal 0.05), mean T_n=10.57 (chi2(100) mean=100), KS p=0.000
+
+Wrote claim5_raw.csv, claim5_summary.csv
