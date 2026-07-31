@@ -16,29 +16,40 @@ logbook, `.agents/skills/hf-cli/` for Hub auth/downloads, `posterly/` for the ex
 poster. This skill owns the steps *around* those — selection, paper acquisition, briefing,
 running, auditing, and the GitHub mirror.
 
-## Step 0 — Acquire the paper (hard gate — do not skip)
+## Step 0 — Acquire the paper (hard gate — run as a subagent, do not skip)
 
 Every claim you verify or refute must trace back to the paper's actual text, not to a
-pre-extracted `claims.json` string, an abstract, or your own memory of the paper. Source priority:
+pre-extracted `claims.json` string, an abstract, or your own memory of the paper.
 
-1. **OpenReview submission PDF** (`https://openreview.net/forum?id=<orid>`) is the primary
-   source — it is the exact version the challenge's claims were extracted against, and may be a
-   camera-ready revision that postdates the arXiv listing (added ablations, changed numbers,
-   reworded claims).
-2. If an arXiv version also exists, fetch it and **diff the two** for anything you plan to cite as
-   a claim: same numbers, same table entries, same wording. If they disagree, say so explicitly
-   in the briefing (see `paper_acquisition.md` for a worked example) and treat OpenReview as
-   authoritative for the challenge.
-3. **If OpenReview access fails** — PDF requires auth, `WebFetch` is blocked, the forum page
-   won't render, rate-limited, whatever — **stop and use `AskUserQuestion` to ask the user to
-   download the PDF manually** (or point you at a local path). Do not silently fall back to an
-   abstract, a `claims.json` snippet, or the arXiv preprint alone and proceed as if that's
-   equivalent. This applies even in autonomous/background operation: a blocked paper download is
-   a stop-and-ask condition, not a skip-and-continue one.
-4. Save the acquired PDF into the working reproduction folder (or record its path) so later
-   audit/verdict steps can re-check exact claim wording against the source directly.
+**Run this step in a subagent** (`Agent` tool, `subagent_type: general-purpose`, foreground —
+Step 2 needs its result before it can start). PDF text, WebFetch noise, and retry attempts belong
+in the subagent's context, not the main agent's. Give the subagent the paper's OpenReview id (and
+title) and this exact order of operations:
 
-Full detail and the concrete ask-the-user prompt: `paper_acquisition.md`.
+1. **Try the OpenReview submission PDF first** (`https://openreview.net/forum?id=<orid>`,
+   PDF at `https://openreview.net/pdf?id=<orid>`). This is the primary source — it is the exact
+   version the challenge's claims were extracted against, and may be a camera-ready revision that
+   postdates the arXiv listing (added ablations, changed numbers, reworded claims).
+2. **If OpenReview is blocked** (auth wall, `WebFetch`/`curl` blocked, 403/bot-challenge, forum
+   page won't render, rate-limited, whatever), **fall back to arXiv**: use the arXiv id if known,
+   otherwise search by title.
+3. **If the arXiv paper also can't be read completely** — importantly, check that the
+   **methodology appendix, if the paper has one, is present and readable**, not just the main
+   body — **exit the process**. Stop immediately: do not fall back to a `claims.json` string or
+   an abstract and proceed as if that's equivalent, and do not pause to ask the user mid-task.
+   Return a clear failure report (which source failed, why, what was/wasn't readable) to the main
+   agent.
+4. **On success**, save the acquired PDF(s) into the working reproduction folder and, if both
+   OpenReview and arXiv versions were fetched, diff them for anything about to be cited as a
+   claim (same numbers, same table entries, same wording) — note any divergence in the briefing
+   and treat OpenReview as authoritative.
+
+**The main agent must treat a Step 0 failure report as a hard stop for this paper** — report the
+failure to the user directly and do not continue to Step 1+. (This supersedes the older
+stop-and-`AskUserQuestion` behavior: acquisition failure now ends the attempt rather than pausing
+for a manually-supplied PDF.)
+
+Full detail: `paper_acquisition.md`.
 
 ## Invoking this skill
 

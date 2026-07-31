@@ -9,6 +9,20 @@ BayesBiNN baseline," but the paper's own Table 1 runs BayesBiNN with `Task bound
 extracted claim string didn't match the paper's actual experimental setup). Reading the source PDF
 is the only way to catch that class of error before it propagates into a false verdict.
 
+## Run this as a subagent
+
+Spawn it with the `Agent` tool, `subagent_type: general-purpose`, run in the **foreground**
+(`run_in_background: false`) — Step 2 (the briefing) can't start until acquisition either succeeds
+or the whole attempt is aborted, so the main agent needs the result synchronously. The point of
+delegating is context isolation: PDF text, failed `WebFetch`/`curl` attempts, and retries all pile
+up fast, and none of it needs to sit in the main agent's context once a clean PDF path (or a
+failure report) comes back.
+
+Brief the subagent with: the paper title, the OpenReview id, an arXiv id if already known, the
+working reproduction folder path to save into, and the exact order of operations below (don't
+paraphrase it — the appendix check in step 3 is the part most likely to get silently skipped if
+summarized).
+
 ## Order of operations
 
 1. **Try OpenReview first.**
@@ -21,10 +35,32 @@ is the only way to catch that class of error before it propagates into a false v
    `<working-folder>/paper-openreview-<orid>.pdf`, so later steps can re-read specific sections
    without re-fetching.
 
-2. **If an arXiv id is known or discoverable** (from the OpenReview page, the challenge metadata,
-   or a web search), fetch that too and save it alongside, e.g.
-   `<working-folder>/paper-arxiv-<id>.pdf`. Spot-check the claims you're about to work on against
-   both:
+2. **If OpenReview is blocked** (auth wall, `WebFetch` errors out, forum page won't render, PDF
+   link 404s/rate-limits, bot-challenge/403 on either the web UI or the API — this has been a
+   confirmed hard constraint in this environment before, don't burn more than one or two retries
+   on it) — **fall back to arXiv**. Use a known arXiv id if the OpenReview page (or challenge
+   metadata) surfaced one; otherwise search by title:
+   ```
+   https://export.arxiv.org/api/query?search_query=ti:"<exact title>"
+   ```
+   Fetch and save the PDF, e.g. `<working-folder>/paper-arxiv-<id>.pdf`.
+
+3. **Check the arXiv paper is completely readable — specifically the methodology appendix, if
+   the paper has one.** A paper that only fully renders its main body but truncates, drops, or
+   garbles the appendix where the actual method/algorithm/hyperparameters live is *not* a usable
+   source — the briefing and audit steps need that detail. If the arXiv version is unreadable, or
+   readable only in part (missing/garbled appendix in particular), **exit the process
+   immediately**:
+   - Do not fall back to `claims.json` text or the abstract and proceed as if that's equivalent.
+   - Do not pause with `AskUserQuestion` to ask for a manually-supplied PDF — this step no longer
+     has a stop-and-ask branch. Acquisition either succeeds cleanly from OpenReview or arXiv, or
+     the attempt ends here.
+   - Return a short, specific failure report to the main agent: which source(s) were tried, what
+     failed at each (blocked/404/rate-limited/incomplete), and — if arXiv partially rendered —
+     exactly what was missing (e.g. "Appendix B [hyperparameters] present but Appendix C
+     [proof of Theorem 2] truncated after page 14").
+
+4. **If both sources are readable**, spot-check the claims you're about to work on against both:
    - Same headline numbers in the relevant table?
    - Same experimental setting (dataset split, baseline configuration, hyperparameters) named in
      the claim?
@@ -33,31 +69,17 @@ is the only way to catch that class of error before it propagates into a false v
    in `PAPER_BRIEFING.md` and treat the **OpenReview version as authoritative** — it's what the
    challenge is actually scoring against.
 
-3. **If OpenReview access fails** (auth wall, `WebFetch` errors out, forum page won't render,
-   PDF link 404s/rate-limits, etc.), do not substitute the arXiv version silently and do not
-   proceed on the claims.json text alone. Stop and ask:
-
-   ```
-   AskUserQuestion({
-     questions: [{
-       question: "I can't reach the OpenReview PDF for <orid> (<error summary>). The paper's
-         actual text is the source of the claims I'd be verifying, so I don't want to proceed
-         from a paraphrase alone. Could you download the PDF (openreview.net/pdf?id=<orid>) and
-         drop it somewhere I can read, or paste a path if you already have it?",
-       header: "Paper access",
-       options: [
-         {label: "I'll download it now", description: "Pause and wait; tell me the path once it's saved."},
-         {label: "Use the arXiv version instead", description: "Proceed on arXiv only, with a note that OpenReview-specific revisions couldn't be checked."},
-         {label: "Proceed on claims.json text only", description: "Not recommended — flag every verdict as based on the extracted claim string, not the source paper."}
-       ],
-       multiSelect: false
-     }]
-   })
-   ```
-   If the user picks a fallback option, record that choice explicitly in `PAPER_BRIEFING.md` and
-   carry the caveat into every affected claim's verdict (e.g. "verified against the arXiv v1 text;
-   OpenReview camera-ready revisions, if any, not cross-checked").
-
-4. Once you have a readable PDF (local file), use the `Read` tool directly on it (it handles PDFs,
+5. Once you have a readable PDF (local file), use the `Read` tool directly on it (it handles PDFs,
    `pages` param for long ones) rather than re-summarizing from web search snippets — the audit
    steps later need exact wording, table numbers, and equation numbers.
+
+## What the main agent does with the result
+
+A **success** result from the subagent is: the local PDF path(s) it saved, and — if both sources
+were fetched — any noted OpenReview/arXiv divergence. Proceed to Step 1/2 using that path.
+
+A **failure** result is a hard stop for this paper, not a degrade-and-continue. Report the failure
+to the user directly (which source(s) failed and why) and do not proceed to Step 1+ for this
+paper. Pick a different candidate, or wait for the user to supply a PDF directly before retrying
+Step 0 — but that's a new decision made by the user in a later turn, not an in-task pause built
+into this step.
