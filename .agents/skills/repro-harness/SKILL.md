@@ -140,6 +140,13 @@ instructions instead). Add a row to the top-level README's Index table. Direct-c
 no PR workflow in this repo. Confirm with the user before pushing (push is not auto-authorized by
 this skill).
 
+**Before cloning anything**, run `git remote -v` in the current working directory. If it already
+points at the target monorepo, work in place (`scripts/scaffold_reproduction.py add` with no
+`--repo-path`, since omitting it auto-detects the repo root) instead of cloning a fresh copy
+elsewhere. A redundant clone caused a real divergence during the `nPzckCXmHE` reproduction — see
+`harness-testing/audits/nPzckCXmHE.md` — where the working repo ended up behind the just-pushed
+commit with an orphaned, uncommitted duplicate folder that collided on the next `git pull`.
+
 Use `scripts/scaffold_reproduction.py` for the mechanical part of this step:
 
 ```bash

@@ -205,9 +205,17 @@ def gate_raw_results_present(folder: Path) -> dict:
             return gate("raw_results_present", "soft", "PASS", f"Non-empty results found under {d.relative_to(folder)}/.")
     if result_dirs:
         return gate("raw_results_present", "soft", "WARN", "results/-like directory exists but appears empty.")
+    # Most reproductions in this repo don't use a results/ subfolder at all -- raw CSV/log/JSON
+    # outputs sit flat at the folder root instead (see harness-testing/audits/nPzckCXmHE.md).
+    # Only checking for a results/ dir false-warns on that (the majority) convention.
+    flat_hits = [p for p in folder.glob("*") if p.is_file() and p.suffix.lower() in (".csv", ".log", ".json")
+                 and p.stat().st_size > 0]
+    if flat_hits:
+        return gate("raw_results_present", "soft", "PASS",
+                     f"Non-empty raw result files found at folder root (e.g. {flat_hits[0].name}).")
     return gate("raw_results_present", "soft", "WARN",
-                 "No results/-like directory found -- fine for a pure derivation/math reproduction, "
-                 "otherwise raw outputs may be missing.")
+                 "No results/-like directory and no *.csv/*.log/*.json files at the folder root -- "
+                 "fine for a pure derivation/math reproduction, otherwise raw outputs may be missing.")
 
 
 def gate_no_vendored_code(folder: Path) -> dict:

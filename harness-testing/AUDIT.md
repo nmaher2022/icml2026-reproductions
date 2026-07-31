@@ -29,7 +29,7 @@ that's Tier 2. Gates and what they look for:
 | `verdict_vocabulary` | The folder README's verdict section uses the four-term vocabulary (VERIFIED / TOY-VERIFIED / REFUTED / BLOCKED) or a clearly equivalent labeling — flags prose verdicts that don't map cleanly to one of the four | soft |
 | `blocked_claims_disclosed` | Every claim labeled blocked/not-attempted has a stated reason (not just "blocked") | hard |
 | `index_row_present` | The top-level README's Index table has a row whose folder-link column points at this folder | hard |
-| `raw_results_present` | A `results/`-equivalent directory contains actual data files, not just an empty stub | soft |
+| `raw_results_present` | A `results/`-equivalent directory contains actual data files, or (the more common convention in this repo) non-empty `*.csv`/`*.log`/`*.json` files sit directly at the folder root | soft |
 | `no_vendored_code` | The folder doesn't contain a nested `.git` or an obviously-vendored third-party tree | hard |
 
 `hard` gate failures mean the audit's overall status is FAIL. `soft` gate failures mean WARN — the
