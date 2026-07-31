@@ -1,0 +1,73 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING": "1",
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "50"
+  },
+  "autoCompactWindow": 400000,
+  "statusLine": {
+    "type": "command",
+    "command": "/home/rec1/Desktop/AI_Safety/ICML_reproduce/statusline.sh"
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": false
+  },
+  "viewMode": "verbose",
+  "alwaysThinkingEnabled": true,
+  "showThinkingSummaries": true,
+  "skipWorkflowUsageWarning": true,
+  "permissions": {
+    "defaultMode": "auto",
+    "allow": [
+      "Bash(uv *)",
+      "Bash(uvx *)",
+      "Bash(hf *)",
+      "Bash(trackio *)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(.venv/bin/python *)",
+      "Bash(./.venv/bin/python *)",
+      "Bash(nohup .venv/bin/python *)",
+      "Bash(nohup ./.venv/bin/python *)",
+      "Bash(/home/rec1/anaconda3/envs/*/bin/python *)",
+      "Bash(VIRTUAL_ENV=.venv uv pip *)",
+      "Bash(pytest *)",
+      "Bash(pip *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(sed *)",
+      "Bash(awk *)",
+      "Bash(find *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(sort *)",
+      "Bash(cp *)",
+      "Bash(mkdir *)",
+      "Bash(mv *)",
+      "Bash(touch *)",
+      "Bash(du *)",
+      "Bash(echo *)",
+      "Bash(pgrep *)",
+      "Bash(pkill *)",
+      "Bash(kill *)",
+      "Bash(ps *)",
+      "Bash(rm -rf ./*)",
+      "Bash(rm -f ./*)",
+      "Bash(rm ./*)",
+      "Bash(git clone *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ],
+ "deny": [
+      "Bash(sudo *)",
+      "Bash(git push *)",
+      "Bash(git reset --hard *)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)"
+    ]
+  }
+}

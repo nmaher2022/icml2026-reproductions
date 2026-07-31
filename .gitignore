@@ -8,3 +8,27 @@ posterly/
 poster_embed.html
 poster_preview.*
 *_poster.png
+
+# local Claude Code state (settings.json itself IS committed)
+.claude/settings.local.json
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+
+# vendored upstream clones (linked, not committed -- see repro-harness's no_vendored_code gate)
+Conformal-Prediction-Unlearning/
+causal-profiler/
+
+# large/regeneratable local working data
+data/
+
+# challenge scratch downloads (re-fetchable via hf download, see reference-challenge-leaderboard-api)
+claims.json
+claims_anchored.json
+index.json
+icml2026/
+
+# candidate-selection working files (self-declared local-only in their own headers)
+top100_candidates.md
+top100_verified.csv
+top100removed.md
+unreproduced_3plus_claims_cpu.md
