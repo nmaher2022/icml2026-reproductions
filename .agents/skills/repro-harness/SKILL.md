@@ -40,6 +40,14 @@ pre-extracted `claims.json` string, an abstract, or your own memory of the paper
 
 Full detail and the concrete ask-the-user prompt: `paper_acquisition.md`.
 
+## Invoking this skill
+
+You don't need to paste claim text from the challenge site into the prompt — a paper title or
+OpenReview id is enough. Pull `claims.json`/`claims_anchored.json` yourself (see memory
+`reference-challenge-leaderboard-api` for the download command) for the pre-extracted claim list;
+Step 0 still requires reading the actual PDF as the authoritative source regardless, so
+hand-pasted claim text would just get superseded anyway.
+
 ## Step 1 — Select (only if the paper isn't already assigned)
 
 Rank unclaimed candidates by `score = claims x ease`, cross-checked against the live
@@ -166,8 +174,9 @@ back into these `SKILL.md`/`*.md` files, not just into that paper's bugfix log.
   OpenReview access fails, and how to diff an arXiv version against it.
 - `briefing_template.md` — starting structure for `PAPER_BRIEFING.md`.
 - `verdict_checklist.md` — the verdict vocabulary plus a pre-submission self-check.
-- `session_survival.md` — how to avoid losing work when a Claude session limit is hit mid-run
-  (detached jobs, resumable scripts, write-the-recovery-file-first).
+- `session_survival.md` — how to avoid losing work when a Claude session limit is hit mid-run, or
+  the internet drops mid-run (detached jobs, resumable scripts, write-the-recovery-file-first,
+  resumable transfers).
 
 ## Harness-testing project (outside this skill folder)
 - `harness-testing/design-notes.md` — the conversation that produced this skill, kept as rationale.

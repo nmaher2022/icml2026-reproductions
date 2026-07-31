@@ -1,10 +1,11 @@
-# Surviving a Claude session limit mid-reproduction
+# Surviving a Claude session limit or internet drop mid-reproduction
 
-No skill can prevent a Claude Pro usage/session limit from being hit — that's a platform-level
-constraint, not something client-side instructions can bypass. What the harness *can* do is make
-hitting one cost close to nothing: the compute keeps running unattended, and the next session (or
-a manual restart) picks up exactly where it left off from one file, instead of re-deriving context
-or restarting a multi-hour job from scratch. Two separate problems, two separate mitigations.
+No skill can prevent a Claude Pro usage/session limit from being hit, or a home/network
+connection from dropping — those are platform- and infrastructure-level constraints, not
+something client-side instructions can bypass. What the harness *can* do is make hitting one cost
+close to nothing: the compute keeps running unattended, and the next session (or a manual
+reconnect) picks up exactly where it left off from one file, instead of re-deriving context or
+restarting a multi-hour job from scratch. Three separate problems, three separate mitigations.
 
 ## Problem 1 — the session dies while a long job is running
 
@@ -59,6 +60,30 @@ discover it without the user re-explaining. A one-line project memory ("mid-run:
 `<folder>/REPRO_LOG.md` for status/resume") costs nothing to write and is the difference between
 an automatic resume and a manual one.
 
+## Problem 3 — the internet connection drops mid-run
+
+Two different things can be affected by this, and they need different handling:
+
+- **A detached job (Problem 1's fix) is already immune** to *your* connection dropping — `nohup
+  ... &` makes it a local OS process that doesn't know or care whether the Claude CLI's link to
+  Anthropic is up. If a run is already launched detached, a dropped connection just means you
+  can't see progress for a while; it does not kill the run. This is the single biggest reason to
+  always launch detached rather than foreground, even for jobs that feel short.
+- **The job itself may depend on the network** — downloading a dataset from HF Hub, calling an
+  external API mid-script, `WebFetch`ing the OpenReview/arXiv PDF in Step 0. A drop *during* one
+  of these can leave a truncated file or a half-written checkpoint instead of a clean failure.
+  Mitigate by preferring tools with built-in resumable transfer (`huggingface_hub` downloads
+  resume by default; `curl -C -` / `wget -c` for anything else) and by writing to a temp path then
+  renaming into place on success, so a partial download is never mistaken for a complete one.
+  For Step 0 specifically: if a `WebFetch` for the paper PDF fails, retry once or twice before
+  treating it as the "OpenReview access failed" stop-and-ask condition already defined in
+  `paper_acquisition.md` — a transient drop isn't the same as a genuinely blocked source, but
+  after a couple of failures, treat it the same way (ask the user) rather than looping forever.
+- **Non-destructive network actions (`git push`, publishing the Trackio logbook/HF Space) are
+  always safe to just retry** after a drop — unlike a force-push or a destructive git command,
+  re-running a plain push or a Hub upload after a connection hiccup doesn't risk overwriting
+  anything; it either lands cleanly or fails the same way again.
+
 ## Make it resumable, not just restartable
 
 A relaunch that redoes already-completed work wastes exactly the compute time a session limit
@@ -76,4 +101,6 @@ This applies within **Step 4** (run + self-audit) whenever a run is expected to 
 one session comfortably allows: launch detached, write the recovery file first, make the script
 resumable, save the memory pointer immediately. It's not a separate step because it's not
 optional scaffolding — for anything long-running, it's part of how Step 4 should be done from the
-start, not bolted on after the first session dies mid-run.
+start, not bolted on after the first session dies mid-run. The same detach-first habit is also
+what protects **Step 0** (paper download) and **Step 7** (git push / logbook publish) from a
+mid-action connection drop, per Problem 3 above.
