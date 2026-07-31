@@ -103,3 +103,27 @@ the BiMU claim 2/3 precedent that motivated adding this checklist item in the fi
 Tier 2 item 1 — spot-checking `PAPER_BRIEFING.md`'s transcribed equations directly against the
 arXiv PDF pages — was not performed in this audit. Flagging as an open item rather than silently
 skipping it.
+
+## Addendum: code-level re-audit of the two soft (INCONCLUSIVE / partial) results
+
+Follow-up pass, independently re-deriving `scit_lib.py`'s loss functions, whitening, and test
+statistic against `PAPER_BRIEFING.md`'s transcribed equations, specifically targeting Claim 5
+(INCONCLUSIVE) and Claim 3 (TOY-VERIFIED, partial). **No new bugs found** — both existing
+explanations hold up:
+
+- Claim 3's E_val≈1.0: re-derived the `eps=1e-6` clamp-in-`inv_sqrt` mechanism independently from
+  first principles (a true eigenvalue ~1e-9 gets under-corrected by a clamp-based `rsqrt`, leaving
+  ~1e-3 whitened variance instead of 1) — matches BUGFIX_LOG entry 3 exactly. Confirmed
+  `validation_error()` is correctly called on post-whitening (hat) features per the paper's own
+  notation, not a location bug.
+- Claim 5's collapse: confirmed algebraically that `make_mlp(..., activation=nn.Identity)`
+  produces a literal composition of 3 affine layers with no intervening nonlinearity, i.e. a single
+  linear map — the "collapses to linear" explanation is not just plausible, it's mechanically
+  exact given the code.
+- All loss/statistic/whitening code checked term-for-term against the paper's transcribed
+  equations (index conventions, `N=(N+Nᵀ)/2`, floor via `int()` truncation, SVD's descending-order
+  convention for "leading" singular values) — no transcription errors found.
+- One minor, non-bug design note: `claim5_subgaussian_ablation.py` draws both activation arms'
+  datasets from one shared `rng` stream sequentially rather than a paired same-data design. Adds
+  minor unnecessary variance to the comparison; doesn't affect the INCONCLUSIVE verdict given the
+  ~8x effect size. Worth a paired design in any follow-up ablation.
