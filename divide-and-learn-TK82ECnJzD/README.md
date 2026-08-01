@@ -13,14 +13,19 @@ pseudocode and prose — **not** the authors' code.
 
 ## Verdict summary (6 claims)
 
+Verdict vocabulary: **VERIFIED** (ran at full/fair scale, matches) / **TOY-VERIFIED** (ran at
+reduced/synthetic scale, direction matches) / **REFUTED** (ran at a fair scale, contradicts the
+claim) / **BLOCKED** (not attempted, reason stated). See the repro-harness skill's
+`verdict_checklist.md`.
+
 | Claim | Topic | Verdict |
 |---|---|---|
-| 1 | Regret O(d√(T log T)), depends on subproblem dim d not full n | Qualitatively supported |
-| 2 | Coupling error O(K²QR_max√T) via Lagrangian coordination | Qualitatively supported |
-| 3 | Multi-expert (UCB/EXP3/FTRL) mixture + coordination beats any single expert | **Falsified** |
-| 4 | 80-98% specialized HV at 90-99% less compute, 10-30x faster than BO | **Falsified overall** (D&L beats our BO baseline on Bi-Knapsack specifically, not Bi-TSP; specialized-solver and compute-efficiency comparisons falsified everywhere) |
-| 5 | Bi-TSP-100: D&L HV 0.69 vs specialized 0.67 vs PMOCO 0.63 | **Falsified** as stated (misattributes the paper's own Table 1 numbers) |
-| 6 | D&L-TS HV 0.372±0.006 vs 0.34±0.012 qParEGO, 150-eval budget | Paper's own numbers confirmed accurate; **does not replicate** on our synthetic proxy (D&L-TS worst of 3) |
+| 1 | Regret O(d√(T log T)), depends on subproblem dim d not full n | **TOY-VERIFIED** (synthetic decomposable-with-bounded-coupling environment, no official code/benchmark exists for the theory sections — direction matches: regret does NOT grow with n once decomposed) |
+| 2 | Coupling error O(K²QR_max√T) via Lagrangian coordination | **TOY-VERIFIED** (same synthetic environment as Claim 1 — coordination-off control confirms coupling error is not controlled without it) |
+| 3 | Multi-expert (UCB/EXP3/FTRL) mixture + coordination beats any single expert | **REFUTED** |
+| 4 | 80-98% specialized HV at 90-99% less compute, 10-30x faster than BO | **REFUTED overall** (D&L beats our BO baseline on Bi-Knapsack specifically, not Bi-TSP; specialized-solver and compute-efficiency comparisons refuted everywhere) |
+| 5 | Bi-TSP-100: D&L HV 0.69 vs specialized 0.67 vs PMOCO 0.63 | **REFUTED** as stated (misattributes the paper's own Table 1 numbers) |
+| 6 | D&L-TS HV 0.372±0.006 vs 0.34±0.012 qParEGO, 150-eval budget | Paper's own numbers confirmed accurate; **REFUTED** on our synthetic proxy (D&L-TS worst of 3, does not replicate) |
 
 Full write-up, six real bugs found and fixed across three rounds, an
 intermediate-n diagnostic sweep, and two paper-verification corrections: see
