@@ -18,7 +18,7 @@ reproduction.
 | 1 | Thm 4.1: under H0, T̂_n → χ²(d²) as m,n→∞ | **TOY-VERIFIED** — conservative calibration matching the paper's own admission; pruned-statistic Type I error 6.7% vs. nominal 5% |
 | 2 | Thm 4.2: non-asymptotic power tied to E_m and n | **TOY-VERIFIED** — power climbs 0%→100% between signal strengths 0.05→0.15, matching the paper's Fig. 11 shape |
 | 3 | E_m^val/E_m^pow definitions (p.5) control validity/power | **TOY-VERIFIED (partial), disclosed limitation** — definitions implemented faithfully, but E_val stayed pinned ≈1.0 across all 120 trials even where calibration was reasonable |
-| 4 | Algorithm 1: bi-level training + whitening | **VERIFIED (structural)** — implementation matches the pseudocode line-for-line, one documented non-load-bearing parameterization assumption |
+| 4 | Algorithm 1: bi-level training + whitening | **TOY-VERIFIED** — implementation matches the pseudocode line-for-line (structural check), *and* an added empirical check (synthetic ground-truth partial-covariance data, 10 reps) confirms the trained representations actually recover the claimed leading spectral directions of Σ_{X,Y\|Z} far better than dimension-matched noise controls (u: CCA 0.891 vs. 0.549 vs. 0.215 random; v: 0.849 vs. 0.553 vs. 0.220), not just that the code parses like the box |
 | 5 | Assumption 4.1: validity requires bounded (Tanh) activations | **INCONCLUSIVE** — Tanh→Identity ablation showed no Type I error inflation, but the ablation confounds boundedness with loss of all nonlinear capacity (`nn.Identity` collapses an MLP to a linear map) |
 
 Full write-up with all numbers, two real bugs found and fixed during self-audit, and the
@@ -46,6 +46,13 @@ of scope, not attempted.
   4 conditions (H0 + 3 signal strengths). Writes `claim1_2_raw.csv` / `claim1_2_summary.csv`.
 - `claim5_subgaussian_ablation.py` — Claim 5 (sub-Gaussianity ablation), Tanh vs. Identity
   activation, 30 reps each. Writes `claim5_raw.csv` / `claim5_summary.csv`.
+- `claim4_spectral_verification.py` — Claim 4 empirical check (added after an external judge
+  flagged the original "VERIFIED (structural)" verdict as untested behavior): synthetic
+  jointly-Gaussian (X,Y,Z) with an exact closed-form Σ_{X,Y|Z} (Schur-complement construction, rank
+  2, singular values [3.0, 1.5]), trains the real unmodified `scit_lib.py` Algorithm 1 on it, and
+  compares learned-embedding canonical correlation against the true signal directions vs.
+  dimension-matched noise-direction and random controls. 10 reps. Writes `claim4_raw.csv` /
+  `claim4_summary.csv`.
 - `*.csv` — raw per-trial and per-condition result tables behind every claim.
 - `*.run.log` / `*_run.log` — full stdout of both background runs (live per-trial progress).
 - `PAPER_BRIEFING.md` — Step 2 briefing: paper identity, transcribed math (losses, Algorithm 1,
@@ -71,6 +78,7 @@ interpreter directly instead of `uv run`.
 uv run smoketest.py                        # ~5s, tiny-scale sanity check
 uv run claim1_2_signal_ablation.py 30       # Claims 1-2, ~44 min (30 reps × 4 conditions)
 uv run claim5_subgaussian_ablation.py 30    # Claim 5, ~10 min (30 reps × 2 activations)
+uv run claim4_spectral_verification.py 10   # Claim 4, ~7 min (10 reps, synthetic ground truth)
 ```
 
 Both experiment scripts accept an optional rep-count argument (default 30, the paper uses 500 —

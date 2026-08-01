@@ -1,0 +1,17 @@
+Claim 4 verification: does u_theta(X)/v_theta(Y,Z) preferentially recover the TRUE leading singular directions of Sigma_XY|Z (rank 2, sigma=[3.0, 1.5]) over dimension-matched noise controls? dx=dy=6, dz=3, N=1000, 10 reps.
+[  46.4s] rep 1/10: u signal=0.885 noise=0.391 rand=0.209 | v signal=0.792 noise=0.563 rand=0.188
+[  89.7s] rep 2/10: u signal=0.938 noise=0.561 rand=0.280 | v signal=0.921 noise=0.836 rand=0.247
+[ 132.9s] rep 3/10: u signal=0.904 noise=0.743 rand=0.217 | v signal=0.853 noise=0.425 rand=0.233
+[ 171.4s] rep 4/10: u signal=0.851 noise=0.549 rand=0.218 | v signal=0.738 noise=0.429 rand=0.200
+[ 216.9s] rep 5/10: u signal=0.882 noise=0.479 rand=0.212 | v signal=0.775 noise=0.656 rand=0.241
+[ 261.2s] rep 6/10: u signal=0.813 noise=0.535 rand=0.128 | v signal=0.885 noise=0.609 rand=0.173
+[ 310.2s] rep 7/10: u signal=0.859 noise=0.516 rand=0.214 | v signal=0.857 noise=0.589 rand=0.212
+[ 347.1s] rep 8/10: u signal=0.938 noise=0.617 rand=0.238 | v signal=0.824 noise=0.553 rand=0.215
+[ 384.9s] rep 9/10: u signal=0.881 noise=0.402 rand=0.195 | v signal=0.907 noise=0.283 rand=0.248
+[ 419.0s] rep 10/10: u signal=0.960 noise=0.699 rand=0.240 | v signal=0.938 noise=0.589 rand=0.238
+
+u_theta summary: signal=0.891+-0.043  noise=0.549+-0.108  random=0.215  gap=0.342
+
+v_theta summary: signal=0.849+-0.063  noise=0.553+-0.142  random=0.220  gap=0.296
+
+Wrote claim4_raw.csv, claim4_summary.csv

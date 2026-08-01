@@ -87,3 +87,13 @@ VERIFIED (structural), Claim 5 INCONCLUSIVE (ablation confounded, see above). Re
 ## Task tracker
 This session used TaskCreate; task #2 ("select claims + smoketest") is where this run belongs,
 task #3 ("run experiments and self-audit") is next.
+
+## Update 2026-08-01 — Claim 4 verdict revised
+An external judge review of the published logbook flagged Claim 4's original
+"VERIFIED (structural)" verdict (line above) as understating what was actually tested — it only
+checked control-flow, not learned behavior. Ran a new empirical check
+(`claim4_spectral_verification.py`, synthetic exact-ground-truth Σ_{X,Y|Z}, 10 reps) that
+confirms the learned representations do recover the claimed spectral directions, at toy scale.
+Verdict corrected to **TOY-VERIFIED**. See `BUGFIX_LOG.md` entry 4 and `VERDICTS.md` Claim 4 for
+the full write-up; push is pre-authorized in this repo (see `.claude/settings.json` /
+`.agents/skills/repro-harness/SKILL.md`), no confirmation pause needed for this commit.

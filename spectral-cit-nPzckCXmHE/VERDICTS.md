@@ -1,7 +1,8 @@
 # Verdicts — SpectralCIT (OpenReview nPzckCXmHE, arXiv 2512.19510v2)
 
 Status: FINAL — all 5 in-scope claims (plus the out-of-scope real-data claim, explicitly not
-attempted) have verdicts below, as of 2026-07-31.
+attempted) have verdicts below, as of 2026-07-31. Claim 4 updated 2026-08-01 (structural-only
+verdict replaced with structural + empirical spectral-recovery evidence, see below).
 
 ## Summary
 
@@ -10,7 +11,7 @@ attempted) have verdicts below, as of 2026-07-31.
 | 1 — Thm 4.1 validity | TOY-VERIFIED |
 | 2 — Thm 4.2 power | TOY-VERIFIED |
 | 3 — E_m^val/E_m^pow definitions | TOY-VERIFIED (partial), disclosed limitation |
-| 4 — Algorithm 1 architecture | VERIFIED (structural) |
+| 4 — Algorithm 1 architecture | TOY-VERIFIED (structural + empirical spectral-recovery check) |
 | 5 — Assumption 4.1 sub-Gaussianity | INCONCLUSIVE (ablation confounded) |
 | Real-data (TCGA-BRCA) | out of scope, not attempted |
 
@@ -102,20 +103,21 @@ over it — it does not refute the theorem (which is an asymptotic guarantee, no
 this specific finite-sample training configuration), but it is a real finding about the gap
 between the paper's diagnostic quantity and what we observed at this scale.
 
-## Claim 4 (Algorithm 1, bi-level architecture) — **VERIFIED (structural)**
+## Claim 4 (Algorithm 1, bi-level architecture) — **TOY-VERIFIED**
 
 > Bi-level contrastive learning: inner loop optimizes w_θ against L_in, outer loop optimizes
 > u_θ,v_θ against L_out; then whitening orthonormalizes learned features; SpectralCIT statistic
-> built from the whitened features.
+> built from the whitened features. Implicit in the framing (Section 3): the learned features are
+> estimates of the partial cross-covariance operator Σ_{X,Y|Z}'s leading spectral directions.
 
-This is a structural/architectural claim about the algorithm's design, not a numeric claim with
-an effect size — the appropriate evidence is a faithful implementation, not a benchmark number.
+### Part A — structural check (original pass, 2026-07-31)
 
-`scit_lib.py`'s `train_spectral_model()` implements exactly this structure: a warmup phase that
-trains only w_θ against `loss_in`+`omega_in`, then alternation between `n_steps_inner` inner
-updates (w_θ vs L_in) and one outer update (u_θ,v_θ vs L_out), followed by a population-level
-`whiten()` step (matrix inverse-square-root via eigendecomposition, eps=1e-6 clamp) applied to
-u,v,w before the test statistic is computed. This matches Algorithm 1's pseudocode line-for-line.
+`scit_lib.py`'s `train_spectral_model()` implements exactly the described structure: a warmup
+phase that trains only w_θ against `loss_in`+`omega_in`, then alternation between `n_steps_inner`
+inner updates (w_θ vs L_in) and one outer update (u_θ,v_θ vs L_out), followed by a
+population-level `whiten()` step (matrix inverse-square-root via eigendecomposition, eps=1e-6
+clamp) applied to u,v,w before the test statistic is computed. This matches Algorithm 1's
+pseudocode line-for-line.
 
 One documented ambiguity (BUGFIX_LOG entry 2, not a bug): Algorithm 1's pseudocode does not
 specify a gradient-update rule for the M_θ/N_θ scale parameters that appear inside L_out/L_in.
@@ -123,9 +125,54 @@ We resolved this by bundling M_θ into the outer step (since M only appears in L
 the inner step (since N only appears in L_in) — a reasonable but unverified-against-authors'-code
 assumption. It does not affect the final test statistic, which (Eq. 10) has no M/N term.
 
-Verdict: VERIFIED at the structural level — the implementation matches the paper's described
-architecture and training procedure, modulo one disclosed, non-load-bearing parameterization
-assumption.
+**This part alone only shows the code parses like the pseudocode — it never tested that the
+learned representations actually do what the algorithm claims they do.** An external judge
+reviewing the published logbook scored this claim lower than the internal "VERIFIED (structural)"
+label for exactly that reason. That's a fair critique: a control-flow match isn't evidence about
+learned behavior.
+
+### Part B — empirical spectral-recovery check (added 2026-08-01, `claim4_spectral_verification.py`)
+
+Built a synthetic jointly-Gaussian (X,Y,Z) with an **exact, closed-form ground truth** for
+Σ_{X,Y|Z}, by construction: X = ZA + SBx^T + noise, Y = ZA' + SBy^T + noise, with Bx = Ux·diag(σ),
+By = Uy (Ux, Uy orthonormal). By the Schur-complement identity
+Σ_{X,Y|Z} = Cov(X,Y) − Cov(X,Z)Cov(Z,Z)⁻¹Cov(Z,Y), the shared-Z confound cancels **exactly**,
+leaving Σ_{X,Y|Z} = Bx·By^T = Ux·diag(σ)·Uy^T — a rank-2 operator whose true leading singular
+directions are known analytically (σ=[3.0, 1.5], dx=dy=6, dz=3, N=1000).
+
+Trained the real, unmodified `train_spectral_model`/`whiten` on this data (paper's reference
+hyperparameters, 10 reps) and measured canonical correlation between the held-out, whitened
+embeddings and (a) the true signal directions X·Ux / Y·Uy, (b) a dimension-matched random
+direction in the *orthogonal complement* of the signal (same ambient noise level, no CI-relevant
+content), and (c) i.i.d. Gaussian noise (sanity check that the CCA computation itself reports ~0
+for genuinely unrelated data).
+
+| side | signal CCA | noise-direction CCA | random CCA | gap (signal − noise) |
+|---|---|---|---|---|
+| u_θ(X) | 0.891 ± 0.043 | 0.549 ± 0.108 | 0.215 | **+0.342**, positive in 10/10 reps |
+| v_θ(Y,Z) | 0.849 ± 0.063 | 0.553 ± 0.142 | 0.220 | **+0.296**, positive in 10/10 reps |
+
+Full per-rep numbers: `claim4_raw.csv`; aggregates: `claim4_summary.csv`; run log:
+`claim4_run.log`.
+
+Both u_θ and v_θ preferentially align with the analytically-known true partial-covariance
+directions over a same-dimension, same-noise-level control that carries no CI-relevant signal —
+consistently, across every one of the 10 independent training runs. This is real evidence the
+learned representations do what Section 3 claims (estimate Σ_{X,Y|Z}'s leading spectral
+directions), not just that the training loop's control flow matches the pseudocode box.
+
+Caveats, stated plainly: this is a synthetic benchmark built for this check (not one of the
+paper's own three benchmarks), linear/Gaussian by construction (the paper's setting is more
+general), and 10 reps at one noise/rank configuration. v_θ's noise-direction CCA (0.549-0.553) is
+also non-trivially above the random baseline (~0.22) — some of what v_θ encodes is not
+signal-specific, which is expected since v_θ also sees Z, but means the "preferential" recovery
+is clear rather than absolute.
+
+Verdict: **TOY-VERIFIED** — upgraded from "VERIFIED (structural)" because that label overstated
+what had actually been tested. The structural match (Part A) still holds, and now there is a
+genuine, synthetic-scale empirical result (Part B) supporting the substantive spectral-recovery
+claim, not just the architecture. Not full VERIFIED: the empirical check runs on a purpose-built
+synthetic benchmark at toy scale, not the paper's own benchmarks or real data.
 
 ## Claim 5 (Assumption 4.1, sub-Gaussianity / Tanh necessity) — **INCONCLUSIVE (ablation confounded); narrow finding does not support the naive failure mode**
 
