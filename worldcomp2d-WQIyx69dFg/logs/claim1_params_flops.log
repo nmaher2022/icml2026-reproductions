@@ -1,0 +1,24 @@
+task     PdEnc params   Loc params  AuxLoc params      total
+COFW        1,091,520    1,482,810          3,865  2,578,195
+       PdEnc MACs/fwd=7,732,992  Loc MACs/fwd=1,484,800  AuxLoc MACs/fwd=2,641,896
+       FLOPs_tot (paper formula, 9xPdEnc + Loc + 29xAuxLoc):
+         as MACs:       147,696,712  (147.7M)
+         as 2xMACs:     295,393,424  (295.4M)
+300W        1,092,672    1,522,824          4,297  2,619,793
+       PdEnc MACs/fwd=7,958,784  Loc MACs/fwd=1,524,736  AuxLoc MACs/fwd=2,956,824
+       FLOPs_tot (paper formula, 9xPdEnc + Loc + 68xAuxLoc):
+         as MACs:       274,217,824  (274.2M)
+         as 2xMACs:     548,435,648  (548.4M)
+AFLW        1,092,672    1,472,550          4,297  2,569,519
+       PdEnc MACs/fwd=7,958,784  Loc MACs/fwd=1,474,560  AuxLoc MACs/fwd=2,956,824
+       FLOPs_tot (paper formula, 9xPdEnc + Loc + 19xAuxLoc):
+         as MACs:       129,283,272  (129.3M)
+         as 2xMACs:     258,566,544  (258.6M)
+
+Paper Table 1 target: total params 2.4M (PdEnc 1.1M / Loc 1.3M / AuxLoc 4.0K); FLOPs 293.7M(COFW) / 546.8M(300W) / 256.9M(AFLW)
+Paper per-module single-fixation FLOPs targets: PdEnc ~15.7M, Loc ~3.0M, AuxLoc ~5.9M
+
+Note: total param count differs slightly by task (enc_channel/aux_loc_channel/n_l vary); paper reports a single 2.4M figure -- comparing each task's total against it below.
+  COFW: total=2,578,195 (2.58M) -> param reduction vs PoPos 9.7M = 3.76x
+  300W: total=2,619,793 (2.62M) -> param reduction vs PoPos 9.7M = 3.70x
+  AFLW: total=2,569,519 (2.57M) -> param reduction vs PoPos 9.7M = 3.78x

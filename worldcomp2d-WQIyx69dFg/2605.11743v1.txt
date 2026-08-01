@@ -1,0 +1,717 @@
+                                              WorldComp2D: Spatio-semantic Representations of Object Identity and
+                                                                 Location from Local Views
+
+
+                                                                                     SeongMin Jin 1 Doo Seok Jeong 1 2
+
+
+                                                                   Abstract
+                                              Learning latent representations that capture both
+arXiv:2605.11743v1 [cs.CV] 12 May 2026
+
+
+
+
+                                              semantic and spatial information is central to
+                                              efficient spatio-semantic reasoning. However,
+                                              many existing approaches rely on implicit la-
+                                              tent structures combined with dense feature maps
+                                              or task-specific heads, limiting computational
+                                              efficiency and flexibility. We propose World-
+                                              Comp2D, a novel lightweight representation
+                                                                                                               Figure 1. Overview of WorldComp2D. Observations made by
+                                              learning framework that explicitly structures la-                an agent are encoded into a spatio-semantic latent space in which
+                                              tent space geometry according to object iden-                    object identity is preserved and latent distances reflect real-world
+                                              tity and spatial proximity using multiscale lo-                  spatial proximity. Object locations are then inferred from these
+                                              cal receptive fields. This framework consists of                 representations via the localizer. RF1 and RF2 denote two recep-
+                                              (i) a proximity-dependent encoder that maps a                    tive fields centered at fixation points F1 and F2, respectively.
+                                              given observation into a spatio-semantic latent
+                                              space and (ii) a localizer that infers the coor-
+                                              dinates of objects in the input from the result-
+                                                                                                               fundamentally different conditions: instead of having access
+                                              ing spatio-semantic representation. Using facial
+                                                                                                               to a complete global view of the environment, they perceive
+                                              landmark localization as a proof-of-concept, we
+                                                                                                               the world through local observations dependent on view-
+                                              show that, compared to SoTA lightweight mod-
+                                                                                                               points (Papoudakis et al., 2021). To operate in real-time,
+                                              els, WorldComp2D reduces the numbers of pa-
+                                                                                                               such agents must rapidly construct internal representations
+                                              rameters and FLOPs by up to 4.0× and 2.2×,
+                                                                                                               that support instance-level understanding from these local
+                                              respectively, while maintaining real-time perfor-
+                                                                                                               views while operating under strict constraints on computa-
+                                              mance on CPU. These results demonstrate that
+                                                                                                               tion and power consumption.
+                                              explicitly structured latent spaces provide an effi-
+                                              cient and general foundation for spatio-semantic                 Despite significant progress in representation learning, most
+                                              reasoning. This framework is open-sourced at                     existing approaches to spatio-semantic inference, which
+                                              https://github.com/JinSeongmin/WorldComp2D.                      require jointly reasoning about semantic identity and spatial
+                                                                                                               location such as object localization, are designed around
+                                                                                                               global image access. These methods typically process full-
+                                         1. Introduction                                                       images through pixel-wise computation (Ren et al., 2016;
+                                                                                                               Lin et al., 2017), specialized architectures (Newell et al.,
+                                         Embodied artificial intelligence (AI) agents may need                 2016), or heatmap-based regression heads (Wang et al.,
+                                         to rely on internal latent representations to encode high-            2020; Huang et al., 2021). Although effective in standard
+                                         dimensional and complex real-world visual input into com-             computer vision benchmarks, they fundamentally assume a
+                                         pact, structured forms that summarize the underlying fac-             complete global view of the environment, which conflicts
+                                         tors of variation (Ha & Schmidhuber, 2018). Unlike con-               with embodied AI settings. Moreover, full-image processing
+                                         ventional vision systems, embodied agents operate under               incurs substantial computational cost and latency, which
+                                            1
+                                              Division of Materials Science and Engineering 2 Department       limits their suitability for real-time deployment constraints.
+                                         of Semiconductor Engineering, Hanyang University, Repub-              In this work, we propose WorldComp2D, a novel
+                                         lic of Korea.       Correspondence to: Doo Seok Jeong
+                                         <dooseokj@hanyang.ac.kr>.                                             lightweight representation learning framework for embod-
+                                                                                                               ied AI. Our key idea is to directly encode spatio-semantic
+                                         Preprint. May 13, 2026.                                               structure into the latent space. As illustrated in Fig. 1, ob-
+
+                                                                                                           1
+                                                         WorldComp2D
+
+servations made by an agent are encoded into a latent space           embodied perception by explicitly structuring latent space
+where object identity is preserved and latent distances re-           geometry. Rather than focusing on temporal dynamics, our
+flect real-world spatial proximity. Then, a localizer predicts        framework encodes the semantic identity of objects and
+object locations directly from these representations. This de-        fixation-centered spatial proximity as intrinsic properties
+sign enables efficient spatio-semantic inference from a small         of the representation. By embedding local view-dependent
+set of local observations, consistent with the perceptual and         semantic and spatial information directly into latent space,
+computational constraints of embodied agents.                         WorldComp2D enables efficient spatio-semantic inference
+                                                                      from a small set of local observations, providing an inter-
+We evaluate WorldComp2D using facial landmark local-
+                                                                      nal representation that is naturally aligned with embodied
+ization as a proof-of-concept. While achieving slightly
+                                                                      perception.
+lower accuracy than SoTA regression methods, our frame-
+work enables robust inference from limited visual obser-
+vations with substantially reduced computational complex-             2.2. Contrastive Learning
+ity. WorldComp2D requires only 2.4M parameters and                    Contrastive learning has emerged as a powerful paradigm
+< 550 MFLOPs, achieving > 78 frames per second (FPS)                  for learning discriminative representations by encouraging
+on CPU, whereas prior approaches typically rely on sig-               similarity between related samples while pushing apart un-
+nificantly larger models with 9.7 − 67M parameters and                related ones. In a typical setting, two augmented views
+1.2 − 26.8 GFLOPs.                                                    are generated for each sample, resulting in 2N views for
+Our contributions are as follows:                                     a mini-batch of N samples. Based on these augmented
+                                                                      views, contrastive learning methods define binary positive
+   • We propose WorldComp2D, a lightweight fixation-                  and negative pairs according to instance identity, data aug-
+     centered framework that learns spatio-semantic repre-            mentations, or semantic labels (Chen et al., 2020; Tian et al.,
+     sentations from local views and localizes objects using          2020; Khosla et al., 2020).
+     an encoder and a localizer, with an optional refinement          Our approach departs from conventional binary contrastive
+     module.                                                          formulations by modeling pairwise relationships with con-
+                                                                      tinuous affinity values. Rather than assigning equal impor-
+   • We design a learning objective that preserves object
+                                                                      tance to all positive pairs, we incorporate spatial proximity
+     identity while encouraging latent-space distances to
+                                                                      as a continuous signal that modulates the strength of pair-
+     reflect real-world distances to the fixation point through
+                                                                      wise interactions. This design enables a more precise and
+     proximity-weighted contrastive learning.
+                                                                      fine-grained notion of distance in the latent space, allow-
+   • We demonstrate that WorldComp2D achieves compet-                 ing representations to capture fixation-centered proximity
+     itive localization accuracy with real-time efficiency            beyond categorical similarity.
+     and flexible accuracy–speed trade-offs, supported by
+     extensive ablation and robustness studies.                       2.3. Object Localization
+                                                                      Object localization has been widely studied for identifying
+2. Related Work                                                       and localizing objects or keypoints in images. Early ap-
+                                                                      proaches depend on full-image processing and pixel-wise
+2.1. Representation Learning for Embodied AI
+                                                                      prediction schemes, such as anchor-based detectors (Ren
+In embodied AI, latent representations serve as internal              et al., 2016; Lin et al., 2017). While effective, these ap-
+states that summarize sensory observations under partial              proaches often involve high computational cost and strong
+observability, as agents perceive the environment through             task-specific architectural assumptions.
+local, viewpoint-dependent inputs. In this context, previ-
+                                                                      Facial landmark localization can be viewed as a struc-
+ous work has explored world model-based approaches that
+                                                                      tured instance of object localization, in which semantically
+map high-dimensional observations to compact latent states,
+                                                                      meaningful keypoints are estimated under fixed spatial con-
+where a learned transition function predicts their evolution
+                                                                      straints (Zhang et al., 2014; Bulat & Tzimiropoulos, 2017).
+over time for imagination, planning, and control (Ha &
+                                                                      Most existing facial landmark localization methods employ
+Schmidhuber, 2018; Hafner et al., 2019). These approaches
+                                                                      heatmap-based regression as the primary mechanism for
+enable agents to predict how the environment changes over
+                                                                      spatial inference (Wang et al., 2019; 2020), typically requir-
+time under their actions. Although effective for sequential
+                                                                      ing high-resolution feature maps and multi-stage refinement,
+decision making, the latent space is primarily shaped by tem-
+                                                                      which further increases computational cost.
+poral prediction objectives and is not explicitly structured to
+preserve fine-grained spatial or instance-level information.          WorldComp2D enables object localization without full-
+                                                                      image processing. Rather than performing pixel-wise com-
+In contrast, WorldComp2D is designed to directly support
+
+                                                                  2
+                                                          WorldComp2D
+
+putations, our framework encodes a small set of local obser-           Multiscale receptive fields. The spatial proximity is defined
+vations into latent representations and infers object locations        as the real-world distance between the fixation point and
+by aggregating the resulting information directly in latent            surrounding objects within the second-scale receptive field
+space. This design allows localization to be achieved effi-            RF[2] . This distance provides a continuous measure of spa-
+ciently from limited local views, without relying on exhaus-           tial closeness, enabling PdEnc to learn latent representations
+tive image-level processing. Conventional heatmap-based                that reflect both semantic similarity and fixation-centered
+regression is optionally employed as a lightweight refine-             spatial structure. It is important to note that spatial proxim-
+ment mechanism, providing improved accuracy.                           ity can only be reliably inferred within the support of the
+                                                                       receptive field since any distal objects outside the receptive
+3. Methodology                                                         field do not provide sufficient evidence for estimating spatial
+                                                                       proximity.
+WorldComp2D comprises a proximity-dependent encoder
+                                                                       Proximity-weighted contrastive learning. To train PdEnc
+(PdEnc) and a localizer (Loc), which consider objects be-
+                                                                       to explicitly enforce the semantic and spatial structures de-
+longing to a set of given classes. WorldComp2D also in-
+                                                                       scribed above, we propose a proximity-weighted contrastive
+cludes an optional auxiliary localizer (AuxLoc) to improve
+                                                                       learning method. This method uses multiple image sam-
+object localization accuracy. These three models are illus-
+                                                                       ples, each of which includes multiple objects c with their
+trated in Fig. 2.
+                                                                       coordinates xc annotated.
+3.1. Proximity-dependent Encoder
+                                                                                Ci = {c|objects c included in image i} .
+Local observation as input. An AI agent is assumed to
+observe the 2D world through two receptive fields, RF[1]
+and RF[2] , of different sizes but centered at the same fixation       For training, each mini-batch B is constructed by (i) ran-
+point F ∈ R2 , as illustrated in Fig. 3. This design ensures           domly sampling images from a given dataset, (ii) randomly
+that each observation captures both fine-grained appearance            sampling a single object c (along with their annotated co-
+cues and broader contextual information. Specifically, the             ordinates xc ) in Ci for each image, and (iii) subsequently
+observation o is constructed by extracting two patches from            constructing observation o ∈ R2C×a×a by placing the fix-
+an input image of size C × H × W :                                     ation point F on the object coordinate xc (F = xc ) for
+                                                                       each sampled object c. For the ith sample (object ci and
+             o[1] ∈ RC×a×a       from     RF[1] ,                      Fi = xc(i) ), we define a set of proximal objects:
+
+             o[2] ∈ RC×sa×sa       from     RF[2] ,                               n                                   o
+                                                                              Pi = c ∈ Ci |xc ∈ o[2] for Fi on image i .          (1)
+where s > 1 and a ≪ H, W . The larger-scale patch o[2]
+is resized to C × a × a and concatenated with o[1] along
+the channel dimension to form the final observation o ∈                An augmented mini-batch B ′ is constructed by (i) randomly
+R2C×a×a . In this work, we set a = 27 and s = 4. When a                placing a single fixation point F on each image in the batch
+receptive field extends beyond the image boundary, constant-           B and (ii) subsequently constructing observation o for each
+value padding is applied to the out-of-bound regions.                  image. A set of proximal objects for each sample in B ′ is
+                                                                       also defined as in Eq. (1).
+Spatio-semantic latent vector as output. PdEnc encodes
+observation o ∈ R2C×a×a for a given fixation point F into              The goal of proximity-weighted contrastive learning is two-
+a spatio-semantic latent vector z ∈ Rdz , where dz = 256.              fold:
+This spatio-semantic latent vector lies on a hypersphere,
+z T z = 1.
+                                                                          • Optimal mapping of objects with regard to their identi-
+PdEnc architecture.        The network architecture of                      ties and spatial proximity using the observations (with
+PdEnc is illustrated in Fig. 2a.         PdEnc is a sim-                    F = xc ) in batch B
+ple convolutional neural network (CNN) with six
+convolutional layers and two fully connected lay-
+ers: 2C32(6C32)-32C32-32C64-64C64-64C128-128C256-                         • Optimal mapping of random observations with respect
+FC512-FC256-L2Norm for grayscale(RGB) images. The                           to their proximal objects using the observations (with
+final L2Norm operation constrains latent representations to                 random F ) in augmented batch B ′
+lie on a hypersphere, which stabilizes learning and facili-
+tates distance-based reasoning in the spatio-semantic latent
+space.                                                                 To this end, we introduce proximity-weighted contrastive
+
+                                                                   3
+                                                                           WorldComp2D
+
+
+
+
+Figure 2. Networks in WorldComp2D. (a) Proximity-dependent encoder (PdEnc), which maps fixation-centered observations to a
+normalized latent vector. (b) Localizer (Loc), which aggregates paired latent vectors and fixation coordinates to predict object locations.
+(c) Auxiliary localizer (AuxLoc), an optional refinement module that estimates a heatmap from a local patch and class-conditioned
+embedding.
+
+
+
+                                                                                      where z i and τ denote the output vector for the ith sample
+                                                                                      and temperature parameter, respectively. The weight wij is
+                                                                                      constrained to range (1, 2] such that
+
+                                                                                                       wij = 1 + exp (−0.025dij ) ,                  (3)
+                                                                                                         (j)                           (j)
+                                                                                      where dij = ||xc(i) − Fj ||2 . Note that xc(i) means the
+                                                                                      coordinate of object ci on the jth sample. The constant
+                                                                                      0.025 is chosen so that wij ≈ 1.5 when dij = 27, which
+                                                                                      corresponds to the height and width of the smaller receptive
+Figure 3. Example of sample augmentation for proximity-weighted                       field o[1] with size C × 27 × 27. Examples of sample aug-
+contrastive learning. The right eye, left eye, nose, left mouth corner,
+and right mouth corner are denoted by re, le, no, ml, and mr,                         mentation for proximity-weighted contrastive learning are
+respectively.                                                                         shown in Fig. 3.
+
+                                                                                      3.2. Localizer
+loss (PWConLoss) as follows.                                                          Localizer input. Localizer (Loc) infers the coordinates of
+                                                                                     proximal objects in P in Eq. (1) from the spatio-semantic
+          −1 X 1 X
+   LPWC =                       wij 1{ci ∈Pj } lij                                    output z of PdEnc for a given fixation  Spoint   F . Assume that
+           |B|       Ni                                                               all objects in a given dataset (Ctot = i=1
+                                                                                                                                 Ns
+                                                                                                                                     Ci ; Ns is the total
+               i∈B      j∈B\{i}
+                     |          {z               }                                    number of samples) are included in a set of proximal objects
+                                between ci and cj (i ̸= j)
+                                                                           (2)       for any fixation point. If this holds, a single observation is
+                              1 X                                                     sufficient to localize all objects. However, since observation
+                          +          wij 1{ci ∈Pj } lij                .
+                            Ni′                                                       is made through local receptive fields over an entire image,
+                                j∈B′
+                            |         {z              }                               this assumption unlikely holds. Therefore, Loc collects No
+                             between ci and random observation o
+                                                                                      observations (for different fixation points) that, in aggregate,
+                 X                               X                                    cover all object classes in Ctot . A pair of a fixation-point and
+       Ni =              1{ci ∈Pj } ,   Ni′ =           1{ci ∈Pj } ,
+                                                                                      the resulting latent representation (z, F ) is concatenated
+               j∈B\{i}                           j∈B′
+                                                                                      across total No observations and subsequently vectorized to
+                          exp(z Ti z j /τ )                                           construct Loc input I ∈ RNo (dz +2) .
+       lij = log                                   ,
+                                 exp(z Ti z k /τ )
+                         P
+                   k∈(B∪B′ )\{i}                                                      Localizer architecture. The network architecture of Loc is
+
+                                                                                  4
+                                                        WorldComp2D
+
+illustrated in Fig. 2b. Loc is designed to simultaneously pre-
+dict the object coordinates normalized to the range (−1, 1)
+                                           tot
+for all |Ctot | object classes, x̂ ∈ R2|C | . It is a simple
+multilayer perceptron of FC512-FC512-FCn-Tanh, where
+n = 2|Ctot |. Rather than producing independent predictions
+per observation, Loc jointly aggregates all latent representa-
+tions to infer object coordinates for each class. By leverag-        Figure 4. Fixation points on a given image for NF = 9, 5, and 4.
+ing the spatio-semantic structure encoded in z, Loc enables
+localization of class-specific objects from a small set of lo-
+cal observations, without relying on pixel-wise computation
+or global image access.                                              4.1. Implementation Detail
+                                                                     Each image was cropped to include the full head, randomly
+3.3. Auxiliary Localizer
+                                                                     rescaled (±5%), horizontally flipped (50%), and rotated
+Auxiliary localizer input. Auxiliary localizer (AuxLoc)              (60%, ±10◦ ), then resized to 256 × 256. During facial
+is optional model that refines the object coordinates x̂ in-         landmark localization, we first computed the mean location
+ferred by Loc for each object separately. For the predicted          for each landmark across the samples in a given dataset, and
+coordinate x̂ in each object class, a first-scale image patch        Loc predicted an offset relative to this mean. To improve
+o[1] ∈ RC×a×a for F = x̂ is extracted from the input im-             robustness, random offsets uniformly sampled from [−5, 5]
+age. An object class-conditioned embedding is constructed            pixels were applied to the fixation points when training
+as a tensor of size 1 × a × a, with values normalized to the         Loc and AuxLoc. The ground-truth heatmap for AuxLoc is
+range [−1, 1], and concatenated with o[1] along the channel          constructed as a 2D Gaussian centered at the ground-truth
+dimension, yielding AuxLoc input I ∈ R(C+1)×a×a .                    landmark coordinate within the extracted patch o[1] , with a
+                                                                     fixed standard deviation of 1.5. The samples whose ground-
+Auxiliary localizer architecture. The network architec-
+                                                                     truth coordinates fall outside the extracted patch o[1] were
+ture of AuxLoc is illustrated in Fig. 2c. AuxLoc is a
+                                                                     ignored during training.
+CNN of 2C24(4C24)-4×DW24-C1 for grayscale(RGB) im-
+ages, where DW denotes a depth-wise separable convolution            We set the number of fixation points to nine (NF = 9)
+block (Chollet, 2017). In response to the local view centered        to cover all landmarks on each 256 × 256 sample, evenly
+at x̂, AuxLoc outputs a class-specific heatmap h ∈ R1×a×a .          distributed at fixed spatial intervals of 64 pixels along both
+The refined object location is obtained by applying an offset        image axes. Examples of NF = 9/5/4 are shown in Fig. 4.
+derived from the peak of the heatmap h to the corresponding          The coordinate refinement by AuxLoc was constrained to at
+coarse estimate x̂.                                                  most 2 pixels on COFW and 1 pixel on other datasets. The
+                                                                     models were trained using the Pytorch framework (Paszke
+                                                                     et al., 2019) on a GPU workstation (RTX A6000; Xeon Gold
+4. Experimental Results
+                                                                     CPU 2.9GHz; 256GB DRAM). The hyperparameters and
+As a proof-of-concept, we applied the WorldComp2D frame-             learning behaviors of PdEnc, Loc, and AuxLoc are detailed
+work to facial landmark localization tasks in which facial           in Appendix.
+landmarks are the objects whose spatio-semantic representa-
+tions are learned. We used the COFW (Burgos-Artizzu et al.,          4.2. Analysis of proximity-dependent encoder
+2013), 300W (Sagonas et al., 2016), and AFLW (Koestinger
+et al., 2011) datasets. The COFW dataset consists of 1,345           Intra-class clustering. We evaluated the L2 distances be-
+training and 507 test grayscale images, each annotated with          tween individual spatio-semantic representations for each
+29 facial landmarks (|Ctot | = 29). COFW frequently con-             class on COFW (with 29 landmarks). Their mean values are
+tains facial landmarks occluded by external objects. The             plotted in Fig. 5a, indicating successful class-wise cluster-
+300W dataset contains 3,148 training and 689 test RGB                ing. This result suggests that the latent space effectively pre-
+images, each annotated with 68 landmarks (|Ctot | = 68),             serves landmark identity, yielding stable landmark-specific
+and exhibits substantial variations in facial pose and illu-         representations across different spatial contexts.
+mination conditions. The AFLW dataset comprises 20,000               Inter-class separation. Fig. 5b shows the L2 distances
+training and 4,386 test RGB images, each annotated with 19           between the left pupil (Class 17) representation and other
+landmarks (|Ctot | = 19), and is characterized by large pose         landmark representations within the same image. While
+variations and partial facial visibility.                            clear separation is observed across landmark clusters, land-
+                                                                     marks that are spatially adjacent to the left pupil, such as
+                                                                     other left eye related landmarks, exhibit relatively smaller
+                                                                     distances. This pattern indicates that the latent space distin-
+
+                                                                 5
+                                                            WorldComp2D
+
+                                                                         300W, and AFLW. The localization accuracy is measured
+                                                                         using the Normalized Mean Error (NME), where the er-
+                                                                         ror is normalized by the inter-ocular distance (NMEIO ) or
+                                                                         inter-pupil distance (NMEIP ) or the diagonal length of the
+                                                                         face bounding box (NMEDiag ), following standard evalu-
+                                                                         ation protocols for each dataset. Since WorldComp2D is
+                                                                         not trained via direct supervised regression for landmark
+                                                                         localization, it yields higher NME values on COFW and
+                                                                         300W compared to regression-based SoTA methods listed in
+                                                                         Table 1. In contrast, on the AFLW, our framework achieves
+                                                                         lower NME than LAB (Wu et al., 2018), Awing (Wang et al.,
+                                                                         2019), ODN (Zhu et al., 2019), and HRNet (Wang et al.,
+                                                                         2020).
+                                                                         Beyond localization accuracy, WorldComp2D highlights
+                                                                         extremely low computational complexity. The entire frame-
+                                                                         work consists of 2.4M parameters in total, with 1.1M, 1.3M,
+                                                                         and 4.0K parameters assigned to PdEnc, Loc, and AuxLoc,
+                                                                         respectively. In terms of computational cost, PdEnc, Loc,
+Figure 5. Analysis of spatio-semantic latent representation. (a)         and AuxLoc require approximately 15.7M, 3.0M, and 5.9M
+L2 distances between individual landmark representations and             FLOPs, respectively. Since the framework processes nine
+their corresponding class means. (b) L2 distances between the left
+pupil representation and other landmarks representations within
+                                                                         fixation-centered observations (NF = 9), the total number
+the same image. L2 distances as a function of spatial distance           of FLOPs is computed as
+from a given landmark obtained from (c) PdEnc and (d) from an
+encoder trained using proximity-unweighted contrastive loss.             FLOPstot = 9FLOPsPdEnc +FLOPsLoc +|Ctot |FLOPsAuxLoc ,
+
+                                                                         resulting in 293.7, 546.8, and 256.9 MFLOPs on COFW,
+guishes landmark identity while simultaneously encoding                  300W, and AFLW, respectively.         Compared to the
+relative spatial relationships among landmarks.                          lightweight PoPos (Xiang et al., 2025) model with 9.7M
+                                                                         parameters, WorldComp2D achieves a 4.0× reduction in
+Distance-preserving embedding. We examined whether                       the number of parameters and a 2.2× reduction in FLOPs
+the real-world distance between an object and the fixation               in the worst case.
+point is preserved in the spatio-semantic latent space (i.e.,
+whether latent-space distance reflects physical proximity)               Real-time operation. Due to its low computational com-
+by sampling observations on a fixation point with controlled             plexity, our method runs at 138.41 (COFW), 78.48 (300W),
+offsets relative to the left eye landmark. As shown in Fig. 5c,          and 163.55 (AFLW) frames per second (FPS) on a desktop
+L2 distances increase with real-world distance, indicating               (i5-13400 CPU 2.5GHz; 128GB DRAM), using a batch
+that spatial proximity is preserved in the latent space. Within          size of 1 (Table 2). This highlights the feasible real-time
+the range of the second-scale receptive field (approximately             operation of WorldComp2D.
+54 pixels), this pattern remains consistent across landmarks.            We decompose the overall framework into five sub-
+Beyond this range, real-world proximity can no longer be                 workloads: (1) patch extraction (local observation for a
+reliably inferred, resulting in increased landmark-dependent             given fixation point for PdEnc), (2) PdEnc operation, (3)
+variability in latent distances.                                         Loc operation, (4) optional patch extraction for AuxLoc,
+As a counter part, we trained an encoder of the same architec-           and (5) AuxLoc operation. Fig. 7 shows the normalized
+ture as PdEnc but using proximity-unweighted contrastive                 runtime for each of the five workloads. Across all datasets,
+loss that is the same as Eq. (2) but with wij = 1 for all i              AuxLoc occupies the largest contribution to the total run-
+and j. Fig. 5d shows the latent space L2 distance between a              time, followed by PdEnc and patch extraction stages. This is
+given object and a fixation point with real-world distance.              because AuxLoc (despite lightweight) processes a separate
+Compared with Fig. 5c, the spatial proximity is obviously                local patch for each landmark. Accordingly, its contribution
+unpreserved.                                                             decreases as the number of landmarks decreases. PdEnc
+                                                                         accounts for the larger contribution than Loc as it operates
+                                                                         on multiple fixation-centered patches per frame, whereas
+4.3. Results on Facial Landmark Localization
+                                                                         Loc relies on a single forward pass on aggregated represen-
+Localization accuracy and efficiency. Fig. 6 presents land-              tations. Patch extraction constitutes another non-negligible
+mark localization results on several samples from COFW,                  component since it involves patching and resizing for the
+
+                                                                     6
+                                                          WorldComp2D
+
+
+
+
+Figure 6. Localized landmarks (red circles) and ground-truth annotations (green circles) on sample images from COFW, 300W and
+AFLW.
+
+
+                     Table 1. Comparison of our method with SoTA approaches on COFW, 300W and AFLW.
+
+                                        COFW                  300W         AFLW
+  Method                                                                              # Params (M)              FLOPs
+                                  NMEIO     NMEIP            NMEIO        NMEDiag
+  LAB (Wu et al., 2018)            3.92      5.58              3.49         1.85           25.1                 18.9G
+  AWing (Wang et al., 2019)          -       4.94              3.07         1.53           24.2                 26.8G
+  AVS (Qian et al., 2019)            -       4.43              3.86         1.86           28.3                  2.4G
+  ODN (Zhu et al., 2019)             -         -               4.17         1.63             -                     -
+  HRNet (Wang et al., 2020)        3.45        -               3.32         1.57            9.7                  4.8G
+  PIP (Jin et al., 2021)           3.45        -               3.19         1.42           45.7                 10.5G
+  ADNet (Huang et al., 2021)         -       4.69              2.93           -            13.4                 17.0G
+  SDFL (Lin et al., 2021)          3.63        -                 -            -              -                   5.2G
+  HIH (Lan et al., 2021)           3.21      4.63              3.09           -            22.7                 17.2G
+  SLPT (Xia et al., 2022)          3.32      4.63              3.17           -            13.2                  6.1G
+  STARLoss (Zhou et al., 2023)       -       4.62              2.87           -            13.4                    -
+  RHT-R (Wan et al., 2023)           -       4.42              2.82         1.18             -                     -
+  D-ViT (Dang et al., 2025)          -       4.13              2.85           -            67.3                 21.8G
+  PoPos (Xiang et al., 2025)         -       3.80              3.28         1.43            9.7                  1.2G
+  WorldComp2D on
+                               5.16±0.05      7.43±0.07    5.06±0.01      1.52±0.01        2.4         293.7M / 546.8M / 256.9M
+    COFW/300W/AFLW
+
+                                       Table 2. FPS and tolerance to reduced data precision.
+
+                                                COFW                        300W                      AFLW
+                 Precision
+                                           FPS     NMEIO               FPS      NMEIO            FPS     NMEDiag
+                 FP32 on CPU i5           138.4   5.16±0.05           78.48    5.06±0.01       163.55   1.52±0.01
+                 FP32 on GPU A6000       9328.96 5.16±0.05           5905.59 5.06±0.01         6381.85 1.52±0.01
+                 FP16 on GPU A6000       9556.62 5.16±0.05           7217.09 5.06±0.02         7709.42 1.52±0.01
+                 BF16 on GPU A6000       9834.96 5.17±0.04           7486.92 5.07±0.02         7743.49 1.52±0.01
+
+
+                                                                     Table 3. Effect of AuxLoc on localization accuracy and computa-
+                                                                     tional efficiency on CPU i5.
+
+                                                                                                COFW
+                                                                           Model           NMEIO(Diag)     FLOPs       FPS
+                                                                           with AuxLoc      5.16±0.05      293.7M     138.41
+                                                                           w/o AuxLoc       5.41±0.04      140.5M     344.19
+                                                                                                300W
+                                                                           with AuxLoc      5.06±0.01      546.8M      78.48
+                                                                           w/o AuxLoc       5.22±0.01      144.7M     282.34
+                                                                                                AFLW
+Figure 7. Normalized localization runtime decomposed into five             with AuxLoc      1.52±0.01      256.9M     163.55
+sub-workloads.                                                             w/o AuxLoc       1.61±0.01      144.6M     304.93
+
+
+
+                                                                     the largest contribution to the overall runtime. Table 3 re-
+second-scale receptive field (o[2] ). This leads to a longer
+                                                                     ports the accuracy improvement from adding AuxLoc and
+processing time than patch extraction for AuxLoc that uses
+                                                                     its computational overhead. In the best case, AuxLoc yields
+first-scale patches only.
+                                                                     only a 4.6% reduction in NME on COFW, underscoring
+As such, AuxLoc serves as an auxiliary module that refines           the strong localization accuracy of the baseline (Loc-only)
+the localization predicted by Loc, but it still accounts for         model. However, omitting AuxLoc during object local-
+
+                                                                 7
+                                                          WorldComp2D
+
+   Table 4. Localization accuracy under various degradations.               Table 5. PdEnc with different model complexities.
+
+ Degradation               COFW         300W          AFLW                                      COFW
+ Baseline                5.16±0.05    5.06±0.01     1.52±0.01             Model           # Params NMEIO(Diag)           FLOPs
+ Blur (σ = 1)            5.15±0.05    5.06±0.02     1.53±0.01             PdEnc (C9)       1.4M      5.80±0.05           162.3M
+ Blur (σ = 2)            5.27±0.04    5.17±0.04     1.57±0.01             PdEnc (C16)      1.8M      5.30±0.06           195.2M
+ Blur (σ = 3)            5.60±0.02    5.43±0.06     1.64±0.02             PdEnc (C32)      2.4M      5.16±0.05           293.7M
+ JPEG (Q = 80)           5.17±0.04    5.08±0.01     1.52±0.01                                   300W
+ JPEG (Q = 60)           5.18±0.03    5.10±0.01     1.52±0.01             PdEnc (C9)       1.4M      5.88±0.07           412.5M
+ JPEG (Q = 40)           5.19±0.03    5.11±0.01     1.53±0.01             PdEnc (C16)      1.8M      5.28±0.03           446.2M
+ JPEG (Q = 20)           5.22±0.06    5.19±0.02     1.54±0.01             PdEnc (C32)      2.4M      5.06±0.01           546.8M
+ Motion Blur (k = 5)     5.17±0.06    5.09±0.03     1.53±0.01                                   AFLW
+ Motion Blur (k = 10)    5.57±0.03    5.42±0.04     1.68±0.01             PdEnc (C9)       1.4M      1.74±0.02           122.6M
+ Occlusion (size = 20)   5.33±0.05    5.27±0.01     1.59±0.01             PdEnc (C16)      1.8M      1.57±0.01           156.4M
+ Occlusion (size = 40)   5.56±0.07    5.58±0.01     1.64±0.01             PdEnc (C32)      2.4M      1.52±0.01           256.9M
+
+                                                                                 Table 6. Cross-dataset evaluation result.
+ization substantially reduces FLOPs and correspondingly
+improves FPS. This FPS gain becomes more pronounced as                Model                    300W    COFW-68 Degradation
+the number of landmarks increases, since AuxLoc causes                LAB (Wu et al., 2018)     3.49      4.62   32.4%
+additional per-landmark computation.                                  ODN (Zhu et al., 2019)    4.17      5.30   27.1%
+                                                                      PIP (Jin et al., 2021)    3.23      4.23   31.0%
+Effect of data precision. We examined the localization                WorldComp2D            5.06±0.01 6.08±0.14 20.2%
+accuracy and computational efficiency for three different
+                                                                     Table 7. Localization accuracy and efficiency with different num-
+data formats (FP32, FP16, and BF16) on GPU. As sum-                  bers of fixation points.
+marized in Table 2, FP16 and BF16 substantially improve
+FPS while leading to only negligible degradation in NME.                                        COFW
+These results highlight that WorldComp2D can be deployed                    Model       # Params NMEIO(Diag)          FLOPs
+efficiently under practical deployment constraints.                         NF = 4       1.6M      5.75±0.06          216.0M
+                                                                            NF = 5       1.8M      5.30±0.06          231.6M
+Robustness to input degradation. Since PdEnc encodes                        NF = 9       2.4M      5.16±0.05          293.7M
+real-world objects, robustness to input degradations is a pre-                                  300W
+requisite for reliable downstream localization. To identify                 NF = 4       1.7M      5.60±0.04          466.8M
+this robustness, we evaluated the localization performance                  NF = 5       1.9M      5.34±0.04          482.8M
+                                                                            NF = 9       2.4M      5.06±0.01          546.8M
+of WorldComp2D under various degradation cases, includ-
+                                                                                                AFLW
+ing Gaussian blur, JPEG degradation, motion blur, and oc-                   NF = 4       1.7M      1.69±0.01          176.9M
+clusion. For the occlusion experiments, a square patch                      NF = 5       1.9M      1.62±0.01          192.9M
+(height=width=size) with zero-valued pixels was inserted                    NF = 9       2.4M      1.52±0.01          256.9M
+at a random location on each test sample. Table 4 summa-
+rizes the results. Across all datasets and degradation types,
+WorldComp2D exhibits consistently moderate performance               tion accuracy tends to increase with the model complexity
+degradation. Notably, the largest absolute degradation is ob-        at the cost of a increase in computation number. Regard-
+served under extreme occlusion (size=40) on 300W, where              ing this tradeoff, we chose C32 as our standard PdEnc that
+NME increases by 10.2% only. These results suggest that              realizes competitive localization accuracy while remaining
+our spatio-semantic representations provide a stable foun-           lightweight.
+dation for robust inference under diverse real-world image           Cross-dataset evaluation. The COFW, 300W, and AFLW
+degradations.                                                        datasets contain different numbers of annotated landmarks.
+                                                                     For cross-dataset evaluation, we conducted zero-shot land-
+4.4. Ablation study                                                  mark localization on COFW-68 (Ghiasi & Fowlkes, 2014)
+                                                                     (COFW with 68 landmarks comparable to 300W with
+PdEnc complexity versus accuracy. We investigated a
+                                                                     |Ctot | = 68) using the WorldComp2D framework trained on
+relationship between PdEnc complexity (model size) and
+                                                                     300W. Table 6 reports the cross-validation result and sev-
+the downstream localization accuracy. To this end, we con-
+                                                                     eral SoTA results. These regression-based SoTA methods
+sidered two additional lighter models (C9 and C16) to our
+                                                                     suffer from a performance degradation of 27–32%, whereas
+PdEnc (referred to as C32). The architectural details for
+                                                                     WorldComp2D shows only a 20.2% increase in NME.
+these models are addressed in Appendix. The localization
+accuracy and the number of total FLOPs with these models             Number of fixation points. Loc uses the spatio-semantic
+are compared with C32 in Table 5. The downstream localiza-           representations for multiple fixation points (NF = 9) in
+
+                                                                 8
+                                                         WorldComp2D
+
+aggregate as its input because a single local observation             Impact Statement
+cannot include all objects (landmarks) in a given dataset.
+As such, we applied 3 × 3 periodic fixation points on each            This paper presents work whose goal is to advance the field
+input image in an attempt to cover all landmarks for each set         of machine learning. There are many potential societal
+of nine observations. We also evaluated Loc with NF = 4               consequences of our work, none of which we feel must be
+and 5 as illustrated in Fig. 4. Table 7 summarizes the effect         specifically highlighted here.
+of NF on the localization accuracy on the three datasets and
+the number of total FLOPs. An increase in NF increases                References
+evidence for real-world objects to be mapped into the latent
+                                                                      Bulat, A. and Tzimiropoulos, G. How far are we from solv-
+space, leading to a higher localization accuracy. Never-
+                                                                        ing the 2d & 3d face alignment problem?(and a dataset
+theless, WorldComp2D achieves competitive localization
+                                                                        of 230,000 3d facial landmarks). In Proceedings of the
+accuracy even with NF = 4, while significantly reducing its
+                                                                        IEEE international conference on computer vision, pp.
+computational complexity.
+                                                                        1021–1030, 2017.
+
+5. Conclusion                                                         Burgos-Artizzu, X. P., Perona, P., and Dollár, P. Robust face
+                                                                        landmark estimation under occlusion. In Proceedings of
+We propose WorldComp2D, a lightweight representation                    the IEEE international conference on computer vision,
+learning framework for embodied AI agents that must reason              pp. 1513–1520, 2013.
+from local observations under limited compute. It encodes
+local views into a spatio-semantic latent space that jointly          Chen, T., Kornblith, S., Norouzi, M., and Hinton, G. A
+captures object identity and spatial proximity, enabling lo-            simple framework for contrastive learning of visual rep-
+calization without exhaustive full-image processing and pro-            resentations. In International conference on machine
+viding an efficient alternative to global-view architectures.           learning, pp. 1597–1607. PmLR, 2020.
+Using facial landmark localization as a proof-of-concept, we          Chollet, F. Xception: Deep learning with depthwise separa-
+show that this latent space has meaningful geometry (intra-             ble convolutions. In Proceedings of the IEEE conference
+class clustering, inter-class separation, and distances consis-         on computer vision and pattern recognition, pp. 1251–
+tent with real-world proximity). WorldComp2D achieves                   1258, 2017.
+competitive accuracy and high inference speed with substan-
+tially reduced compute and lightweight models, while en-              Dang, Z., Li, J., and Liu, L. Cascaded dual vision trans-
+abling accuracy–efficiency trade-offs via an optional refine-           former for accurate facial landmark detection. In 2025
+ment module (AuxLoc). More broadly, explicitly structured               IEEE/CVF Winter Conference on Applications of Com-
+latent geometry offers a compact, interpretable foundation              puter Vision (WACV), pp. 5884–5894. IEEE, 2025.
+for scalable perception and spatial inference under resource
+constraints.                                                          Ghiasi, G. and Fowlkes, C. C. Occlusion coherence: Lo-
+                                                                        calizing occluded faces with a hierarchical deformable
+                                                                        part model. In Proceedings of the IEEE conference on
+6. Limitations and future work                                          computer vision and pattern recognition, pp. 2385–2392,
+WorldComp2D is validated mainly on a controlled 2D land-                2014.
+mark localization setting, so generalization to more di-
+                                                                      Ha, D. and Schmidhuber, J. World models. arXiv preprint
+verse objects, clutter, occlusion, and larger viewpoint/scale
+                                                                        arXiv:1803.10122, 2(3), 2018.
+changes remain uncertain. The method also assumes a fixed
+observation policy (periodic fixation points). Future work            Hafner, D., Lillicrap, T., Fischer, I., Villegas, R., Ha, D.,
+includes extending to 3D embodied settings, learning an                 Lee, H., and Davidson, J. Learning latent dynamics for
+adaptive fixation policy, and evaluating on broader bench-              planning from pixels. In International conference on
+marks and edge-deployment targets.                                      machine learning, pp. 2555–2565. PMLR, 2019.
+
+Acknowledgments                                                       Huang, Y., Yang, H., Li, C., Kim, J., and Wei, F. Adnet:
+                                                                        Leveraging error-bias towards normal direction in face
+This research was supported by Institute of Information &               alignment. In Proceedings of the IEEE/CVF international
+communications Technology Planning & Evaluation (IITP)                  conference on computer vision, pp. 3080–3090, 2021.
+grants funded by the Koreagovernment (MSIT) (RS-2023-
+00229689 and RS-2023-00253914).                                       Jin, H., Liao, S., and Shao, L. Pixel-in-pixel net: Towards ef-
+                                                                         ficient facial landmark detection in the wild. International
+                                                                         Journal of Computer Vision, 129:3174–3194, 2021.
+
+                                                                  9
+                                                         WorldComp2D
+
+Khosla, P., Teterwak, P., Wang, C., Sarna, A., Tian, Y., Isola,        Tian, Y., Krishnan, D., and Isola, P. Contrastive multiview
+  P., Maschinot, A., Liu, C., and Krishnan, D. Supervised                coding. In Computer Vision–ECCV 2020: 16th European
+  contrastive learning. Advances in neural information                   Conference, Glasgow, UK, August 23–28, 2020, Proceed-
+  processing systems, 33:18661–18673, 2020.                              ings, Part XI 16, pp. 776–794. Springer, 2020.
+
+Koestinger, M., Wohlhart, P., Roth, P. M., and Bischof, H.             Wan, J., Liu, J., Zhou, J., Lai, Z., Shen, L., Sun, H., Xiong,
+  Annotated facial landmarks in the wild: A large-scale,                P., and Min, W. Precise facial landmark detection by
+  real-world database for facial landmark localization. In              reference heatmap transformer. IEEE Transactions on
+  2011 IEEE international conference on computer vision                 Image Processing, 32:1966–1977, 2023.
+  workshops (ICCV workshops), pp. 2144–2151. IEEE,
+                                                                       Wang, J., Sun, K., Cheng, T., Jiang, B., Deng, C., Zhao,
+  2011.
+                                                                        Y., Liu, D., Mu, Y., Tan, M., Wang, X., et al. Deep
+Lan, X., Hu, Q., Chen, Q., Xue, J., and Cheng, J. Hih:                  high-resolution representation learning for visual recogni-
+  Towards more accurate face alignment via heatmap in                   tion. IEEE transactions on pattern analysis and machine
+  heatmap. arXiv preprint arXiv:2104.03100, 2021.                       intelligence, 43:3349–3364, 2020.
+                                                                       Wang, X., Bo, L., and Fuxin, L. Adaptive wing loss for
+Lin, C., Zhu, B., Wang, Q., Liao, R., Qian, C., Lu, J.,
+                                                                        robust face alignment via heatmap regression. In Pro-
+  and Zhou, J. Structure-coherent deep feature learning
+                                                                        ceedings of the IEEE/CVF international conference on
+  for robust face alignment. IEEE Transactions on Image
+                                                                        computer vision, pp. 6971–6981, 2019.
+  Processing, 30:5313–5326, 2021.
+                                                                       Wu, W., Qian, C., Yang, S., Wang, Q., Cai, Y., and Zhou,
+Lin, T.-Y., Goyal, P., Girshick, R., He, K., and Dollár, P.            Q. Look at boundary: A boundary-aware face alignment
+  Focal loss for dense object detection. In Proceedings of              algorithm. In Proceedings of the IEEE conference on
+  the IEEE international conference on computer vision,                 computer vision and pattern recognition, pp. 2129–2138,
+  pp. 2980–2988, 2017.                                                  2018.
+Newell, A., Yang, K., and Deng, J. Stacked hourglass                   Xia, J., Qu, W., Huang, W., Zhang, J., Wang, X., and Xu, M.
+  networks for human pose estimation. In European con-                   Sparse local patch transformer for robust face alignment
+  ference on computer vision, pp. 483–499. Springer, 2016.               and landmarks inherent relation learning. In Proceedings
+                                                                         of the IEEE/CVF conference on computer vision and
+Papoudakis, G., Christianos, F., and Albrecht, S. Agent mod-             pattern recognition, pp. 4052–4061, 2022.
+  elling under partial observability for deep reinforcement
+  learning. Advances in Neural Information Processing                  Xiang, C.-Y., He, J.-Y., Cheng, Z.-Q., Wu, X., and Hua,
+  Systems, 34:19210–19222, 2021.                                         X.-S. Popos: Improving efficient and robust facial land-
+                                                                         mark detection with parallel optimal position search. In
+Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J.,               Proceedings of the AAAI Conference on Artificial Intelli-
+  Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga,              gence, volume 39, pp. 8602–8610, 2025.
+  L., et al. Pytorch: An imperative style, high-performance
+  deep learning library. Advances in neural information                Zhang, Z., Luo, P., Loy, C. C., and Tang, X. Facial land-
+  processing systems, 32, 2019.                                          mark detection by deep multi-task learning. In European
+                                                                         conference on computer vision, pp. 94–108. Springer,
+Qian, S., Sun, K., Wu, W., Qian, C., and Jia, J. Aggregation             2014.
+  via separation: Boosting facial landmark detector with
+  semi-supervised style translation. In Proceedings of the             Zhou, Z., Li, H., Liu, H., Wang, N., Yu, G., and Ji, R. Star
+  IEEE/CVF International Conference on Computer Vision,                  loss: Reducing semantic ambiguity in facial landmark
+  pp. 10153–10163, 2019.                                                 detection. In Proceedings of the IEEE/CVF conference
+                                                                         on computer vision and pattern recognition, pp. 15475–
+Ren, S., He, K., Girshick, R., and Sun, J. Faster r-cnn:                 15484, 2023.
+  Towards real-time object detection with region proposal
+                                                                       Zhu, M., Shi, D., Zheng, M., and Sadiq, M. Robust facial
+  networks. IEEE transactions on pattern analysis and
+                                                                         landmark detection via occlusion-adaptive deep networks.
+  machine intelligence, 39(6):1137–1149, 2016.
+                                                                         In Proceedings of the IEEE/CVF conference on computer
+Sagonas, C., Antonakos, E., Tzimiropoulos, G., Zafeiriou,                vision and pattern recognition, pp. 3486–3496, 2019.
+  S., and Pantic, M. 300 faces in-the-wild challenge:
+  Database and results. Image and vision computing, 47:
+  3–18, 2016.
+
+                                                                  10
+                                                     WorldComp2D
+
+A. Training PdEnc, Loc, and AuxLoc
+                                             Table 1. Hyperparameters used.
+
+                                         PdEnc                     Loc                   AuxLoc
+                    Optimizer            Adam                     Adam                    Adam
+                    # Epochs      2000 (600 on AFLW)      1000 (400 on AFLW)      1000 (400 on AFLW)
+                    Batch size            128                      50                      50
+                    Initial lr            1E-2                    5E-4                    5E-4
+                    Lr decay               0.1                     0.1                     0.1
+                    Decay epoch   1000 (300 on AFLW)       500 (200 on AFLW)       500 (200 on AFLW)
+
+
+
+
+                             Figure 1. Learning curve for (a) PdEnc, (b) Loc, and (c) AuxLoc.
+
+
+
+Table 1 lists the hyperparameters used to train PdEnc, Loc, and AuxLoc on the COFW, 300W, and AFLW datasets. The
+learning behavior of these elementary modules is plotted in Fig. 1.
+
+B. Summary of architectures for elementary modules
+Table 2 lists the architectures of elementary modules on the COFW, 300W, and AFLW datasets.
+
+
+
+
+                                                           11
+                                                        WorldComp2D
+
+
+
+
+                                                Table 2. Network architectures.
+
+                                                               PdEnc (C9)
+                                       2C9-9C16-16C32-32C64-FC256-FC128-L2Norm for COFW
+                                  6C9-9C16-16C32-32C64-FC256-FC128-L2Norm for 300W and AFLW
+                                                               PdEnc (C16)
+                     2C16-16C16(s = 1)-16C32-32C32(s = 1)-32C64-64C128-FC512-FC256-L2Norm for COFW
+                6C16-16C16(s = 1)-16C32-32C32(s = 1)-32C64-64C128-FC512-FC256-L2Norm for 300W and AFLW
+                                                               PdEnc (C32)
+                    2C32-32C32(s = 1)-32C64-64C64(s = 1)-64C128-128C256-FC512-FC256-L2Norm for COFW
+              6C32-32C32(s = 1)-32C64-64C64(s = 1)-64C128-128C256-FC512-FC256-L2Norm for 300W and AFLW
+                                                                    Loc
+                          FC512-FC512-FCn-Tanh (n = 58 for COFW, n = 136 for 300W, n = 38 for AFLW)
+                                                                  AuxLoc
+                                                       2C24-4*DW24-C1 for COFW
+                                                  4C24-4*DW24-C1 for 300W and AFLW
+Unless otherwise specified, all convolution layers in PdEnc have the same convolutional operational settings, kH = kW = 3, s = 2, p = 1.
+
+
+
+
+                                                              12
+

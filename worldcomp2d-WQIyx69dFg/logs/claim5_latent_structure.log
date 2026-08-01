@@ -1,0 +1,30 @@
+/home/rec1/Desktop/AI_Safety/ICML_reproduce/worldcomp2d-WQIyx69dFg/.venv/lib/python3.11/site-packages/torchvision/transforms/functional.py:1603: UserWarning: The default value of the antialias parameter of all the resizing transforms (Resize(), RandomResizedCrop(), etc.) will change from None to True in v0.17, in order to be consistent across the PIL and Tensor backends. To suppress this warning, directly pass antialias=True (recommended, future default), antialias=None (current default, which means False for Tensors and True for PIL), or antialias=False (only works on Tensors - PIL will still use antialiasing). This also applies if you are using the inference transforms from the models weights: update the call to weights.transforms(antialias=True).
+  warnings.warn(
+Extracting embeddings for 150 COFW test images...
+(a) Intra-class clustering:
+    mean intra-class L2 (instance-to-class-mean): 0.1263 +/- 0.0145
+    mean inter-class L2 (class-mean-to-class-mean): 0.5738 +/- 0.2499
+    inter/intra ratio: 4.54x (clear class-wise clustering)
+
+(b) Inter-class separation (left pupil, class 16, vs. all other classes):
+    nearest-3 classes (real-world) latent dist: [0.1393094  0.13940175 0.22730051]
+    farthest-3 classes (real-world) latent dist: [0.8191284 0.8118919 1.0121241]
+    Spearman rho(real-world dist, latent dist) across 28 other classes: 0.995 (p=0.0000)
+    positive correlation -- spatially adjacent landmarks are latently closer, as claimed
+
+(c) Distance-preserving embedding (anchor = left pupil, n=60 images x 8 directions):
+    r=   5px  mean latent L2 = 0.1039 <= RF[2] (~54px)
+    r=  10px  mean latent L2 = 0.1695 <= RF[2] (~54px)
+    r=  15px  mean latent L2 = 0.2143 <= RF[2] (~54px)
+    r=  20px  mean latent L2 = 0.2515 <= RF[2] (~54px)
+    r=  27px  mean latent L2 = 0.2827 <= RF[2] (~54px)
+    r=  35px  mean latent L2 = 0.3096 <= RF[2] (~54px)
+    r=  45px  mean latent L2 = 0.3515 <= RF[2] (~54px)
+    r=  54px  mean latent L2 = 0.4063 <= RF[2] (~54px)
+    r=  70px  mean latent L2 = 0.5308
+    r=  90px  mean latent L2 = 0.6494
+    r= 110px  mean latent L2 = 0.7058
+    r= 130px  mean latent L2 = 0.7499
+    Spearman rho (all radii): 1.000 (p=0.0000)
+    Spearman rho (radii <= 54px, RF[2] range): 1.000 (p=0.0000)
+    monotonic increase within RF[2], as claimed

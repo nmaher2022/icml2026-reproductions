@@ -1,0 +1,3 @@
+sigma=1: post-crop blur ours = 5.156 +/- 0.052
+sigma=2: post-crop blur ours = 5.281 +/- 0.044
+sigma=3: post-crop blur ours = 5.612 +/- 0.022

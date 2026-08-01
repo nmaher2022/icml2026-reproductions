@@ -17,9 +17,13 @@ poster_preview.*
 # vendored upstream clones (linked, not committed -- see repro-harness's no_vendored_code gate)
 Conformal-Prediction-Unlearning/
 causal-profiler/
+WorldComp2D/
+worldcomp2d-WQIyx69dFg/cofw68-benchmark/
 
 # large/regeneratable local working data
 data/
+worldcomp2d-WQIyx69dFg/data_raw/
+worldcomp2d-WQIyx69dFg/data/
 
 # challenge scratch downloads (re-fetchable via hf download, see reference-challenge-leaderboard-api)
 claims.json

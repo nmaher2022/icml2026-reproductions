@@ -1,0 +1,27 @@
+/home/rec1/Desktop/AI_Safety/ICML_reproduce/worldcomp2d-WQIyx69dFg/.venv/lib/python3.11/site-packages/torchvision/transforms/functional.py:1603: UserWarning: The default value of the antialias parameter of all the resizing transforms (Resize(), RandomResizedCrop(), etc.) will change from None to True in v0.17, in order to be consistent across the PIL and Tensor backends. To suppress this warning, directly pass antialias=True (recommended, future default), antialias=None (current default, which means False for Tensors and True for PIL), or antialias=False (only works on Tensors - PIL will still use antialiasing). This also applies if you are using the inference transforms from the models weights: update the call to weights.transforms(antialias=True).
+  warnings.warn(
+Degradation                            ours   paper (COFW)
+Baseline                 ours =  5.165 +/- 0.052
+                                              5.16 +/- 0.05
+Blur (sigma=1)           ours =  5.156 +/- 0.052
+                                              5.15 +/- 0.05
+Blur (sigma=2)           ours =  5.281 +/- 0.044
+                                              5.27 +/- 0.04
+Blur (sigma=3)           ours =  5.612 +/- 0.022
+                                              5.60 +/- 0.02
+JPEG (Q=80)              ours =  5.165 +/- 0.052
+                                              5.17 +/- 0.04
+JPEG (Q=60)              ours =  5.194 +/- 0.053
+                                              5.18 +/- 0.03
+JPEG (Q=40)              ours =  5.211 +/- 0.060
+                                              5.19 +/- 0.03
+JPEG (Q=20)              ours =  5.270 +/- 0.036
+                                              5.22 +/- 0.06
+Motion Blur (k=5)        ours =  5.156 +/- 0.064
+                                              5.17 +/- 0.06
+Motion Blur (k=10)       ours =  5.339 +/- 0.063
+                                              5.57 +/- 0.03
+Occlusion (size=20)      ours =  5.384 +/- 0.041
+                                              5.33 +/- 0.05
+Occlusion (size=40)      ours =  5.593 +/- 0.022
+                                              5.56 +/- 0.07

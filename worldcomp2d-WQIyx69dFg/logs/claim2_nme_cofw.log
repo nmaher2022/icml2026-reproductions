@@ -1,0 +1,9 @@
+/home/rec1/Desktop/AI_Safety/ICML_reproduce/worldcomp2d-WQIyx69dFg/.venv/lib/python3.11/site-packages/torchvision/transforms/functional.py:1603: UserWarning: The default value of the antialias parameter of all the resizing transforms (Resize(), RandomResizedCrop(), etc.) will change from None to True in v0.17, in order to be consistent across the PIL and Tensor backends. To suppress this warning, directly pass antialias=True (recommended, future default), antialias=None (current default, which means False for Tensors and True for PIL), or antialias=False (only works on Tensors - PIL will still use antialiasing). This also applies if you are using the inference transforms from the models weights: update the call to weights.transforms(antialias=True).
+  warnings.warn(
+Evaluated 507 images across 13 batches (of 507 total; 0 dropped by drop_last if batch size didn't divide evenly).
+  model 1: NME_IO (COFW) = 5.2214
+  model 2: NME_IO (COFW) = 5.1569
+  model 3: NME_IO (COFW) = 5.1175
+
+Ours:  NME_IO mean/std across 3 trained models = 5.165 +/- 0.052
+Paper: NME_IO (COFW) = 5.16 +/- 0.05
