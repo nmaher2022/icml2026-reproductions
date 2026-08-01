@@ -59,3 +59,17 @@
 Scripts run via `worldcomp2d-WQIyx69dFg/.venv/bin/python`, NOT `uv run` — torch-dependent PEP-723
 scripts fetch fresh GPU wheels from PyPI instead of reusing a pinned CPU build (bit
 `spectral-cit-nPzckCXmHE` earlier in this project).
+
+## Status as of 2026-08-01 (complete)
+
+All 5 claims run to completion, verdicts written (`VERDICTS.md`), Trackio logbook published, and
+the reproduction mirrored into the monorepo. Fig 5d's ablation encoder (proximity-unweighted
+PdEnc, would need training from scratch) was scoped out — not part of the anchored claim text
+(panels a-c only), documented as "not attempted" in `VERDICTS.md` rather than silently omitted.
+
+- Trackio logbook: https://huggingface.co/spaces/nmaher/repro-worldcomp2d-spatio-semantic-representations-of-object-identity-and-location-from-local-vie
+- `harness-testing/audit_harness.py worldcomp2d-WQIyx69dFg`: PASS, 0 hard failures, 0 warnings.
+- Committed and pushed to `nmaher2022/icml2026-reproductions` main (commit `ff795a3`).
+- `logs/` populated with a fresh final rerun of every claim script (all numbers matched
+  `VERDICTS.md` exactly except FPS, which is expected to vary run-to-run on this shared/virtualized
+  host — already disclosed as TOY-VERIFIED for that reason).
