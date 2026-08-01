@@ -137,8 +137,11 @@ Per memory `reference-icml-monorepo-conventions`: create `<short-slug>-<orid>/` 
 of the target monorepo (`nmaher2022/icml2026-reproductions` for this project), containing
 patches/configs/logs/results/README but **not** vendored third-party code (link + clone
 instructions instead). Add a row to the top-level README's Index table. Direct-commit to `main` —
-no PR workflow in this repo. Confirm with the user before pushing (push is not auto-authorized by
-this skill).
+no PR workflow in this repo. **Push is pre-authorized for this repo** (user confirmed 2026-08-01):
+commit and `git push origin main` without pausing to ask — this repo is a solo-owned public
+mirror with no collaborators to disrupt, and the user has explicitly opted out of a per-run
+confirmation gate here. Still follow the standing git safety rules otherwise (no force-push, no
+`--no-verify`, review the diff for secrets before pushing).
 
 **Before cloning anything**, run `git remote -v` in the current working directory. If it already
 points at the target monorepo, work in place (`scripts/scaffold_reproduction.py add` with no
