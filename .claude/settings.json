@@ -60,11 +60,11 @@
       "Bash(git clone *)",
       "Bash(git status)",
       "Bash(git diff *)",
-      "Bash(git log *)"
+      "Bash(git log *)",
+      "Bash(git push *)"
     ],
  "deny": [
       "Bash(sudo *)",
-      "Bash(git push *)",
       "Bash(git reset --hard *)",
       "Bash(rm -rf /*)",
       "Bash(rm -rf ~*)"
