@@ -1,0 +1,39 @@
+Dataset artificial_characters: 7152 train rows, cat=[], int=['V1', 'V2', 'V3', 'V4', 'V5'], float=['V6', 'V7'], label=Class
+Cardinalities: {'V1': 8, 'V2': 48, 'V3': 64, 'V4': 51, 'V5': 66, 'V6': 20, 'V7': 20, 'Class': 10}
+epsilon=1.0, delta=1.575422064457033e-05, degree=2
+/home/rec1/Desktop/AI_Safety/ICML_reproduce/tab-pe-WB0hLRRlcj/.venv/lib/python3.11/site-packages/mbi/dataset.py:87: UserWarning: Pandas dataframe inputs are deprecated, please pass in a dictionary of numpy arrays instead.
+  warnings.warn(
+Initial Sigma 47.03033789762097
+Budget Used 0.0020596107467075794 / 0.03215002141202075
+Measuring Clique ('V2',)
+(!!!!!!!!!!!!!!!!!!!!!!) Reducing sigma 23.515168948810484
+Budget Used 0.003064298915833228 / 0.03215002141202075
+Measuring Clique ('V1', 'Class')
+Budget Used 0.004068987084958876 / 0.03215002141202075
+Measuring Clique ('V2',)
+Budget Used 0.005073675254084525 / 0.03215002141202075
+Measuring Clique ('V5',)
+Budget Used 0.006078363423210173 / 0.03215002141202075
+Measuring Clique ('V3',)
+Budget Used 0.007083051592335822 / 0.03215002141202075
+Measuring Clique ('V4',)
+Budget Used 0.00808773976146147 / 0.03215002141202075
+Measuring Clique ('V7', 'Class')
+Budget Used 0.009092427930587118 / 0.03215002141202075
+Measuring Clique ('V7',)
+Budget Used 0.010097116099712766 / 0.03215002141202075
+Measuring Clique ('V7',)
+(!!!!!!!!!!!!!!!!!!!!!!) Reducing sigma 11.757584474405242
+Budget Used 0.01411586877621536 / 0.03215002141202075
+Measuring Clique ('V7', 'Class')
+Budget Used 0.018134621452717953 / 0.03215002141202075
+Measuring Clique ('V1', 'V4')
+Budget Used 0.022153374129220547 / 0.03215002141202075
+Measuring Clique ('V6', 'Class')
+Budget Used 0.02617212680572314 / 0.03215002141202075
+Measuring Clique ('V1', 'V3')
+Budget Used 0.03215002141202075 / 0.03215002141202075
+Measuring Clique ('V1', 'V2')
+Generating Data...
+AIM run finished in 144.1s, produced 7152 synthetic rows
+AIM synthetic data -> TabICL test accuracy: 15.92%, macro F1: 14.07

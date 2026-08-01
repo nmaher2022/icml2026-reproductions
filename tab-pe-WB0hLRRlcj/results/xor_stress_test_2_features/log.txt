@@ -1,0 +1,842 @@
+08/01/2026 05:16:50 AM [pe] [INFO ]  DP epsilon=1.0, delta=2.730683970301006e-06, noise_multiplier=17.49931555315762, num_iterations=19.
+08/01/2026 05:16:50 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: generating 499 initial synthetic samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: generating 499*1 initial synthetic samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  RANDOM API: creating 499 samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  RANDOM API: finished creating 499 samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: finished generating 499*1 initial synthetic samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: finished generating 499 initial synthetic samples for label target: 0.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: generating 501 initial synthetic samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: generating 501*1 initial synthetic samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  RANDOM API: creating 501 samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  RANDOM API: finished creating 501 samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: finished generating 501*1 initial synthetic samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: finished generating 501 initial synthetic samples for label target: 1.0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:50 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:50 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:50 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:50 AM [pe] [INFO ]  Tabular classifier test accuracy: 54.09%
+08/01/2026 05:16:50 AM [pe] [INFO ]  Tabular classifier test AUC: 56.11
+08/01/2026 05:16:50 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 54.09
+08/01/2026 05:16:50 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:50 AM [pe] [INFO ]  Iteration: 0
+08/01/2026 05:16:50 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 54.09000000
+08/01/2026 05:16:50 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 54.08898583
+08/01/2026 05:16:50 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 56.10864165
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE iteration 1
+08/01/2026 05:16:50 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:50 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 17465/17465 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 17465/17465 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: generating 499*1 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: finished generating 499*1 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:50 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 17535/17535 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 17535/17535 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: generating 501*1 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE population: finished generating 501*1 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:50 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:50 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:50 AM [pe] [INFO ]  Number of samples after filtering: 0
+08/01/2026 05:16:50 AM [pe] [WARNI]  No samples satisfy the filter criterion {'PE.VARIATION_API_FOLD_ID':-1}. Skipping computation.
+08/01/2026 05:16:50 AM [pe] [INFO ]  PE iteration 2
+08/01/2026 05:16:50 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:50 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:50 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:50 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:51 AM [pe] [INFO ]  Number of samples after filtering: 0
+08/01/2026 05:16:51 AM [pe] [WARNI]  No samples satisfy the filter criterion {'PE.VARIATION_API_FOLD_ID':-1}. Skipping computation.
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE iteration 3
+08/01/2026 05:16:51 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:51 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:51 AM [pe] [INFO ]  Number of samples after filtering: 0
+08/01/2026 05:16:51 AM [pe] [WARNI]  No samples satisfy the filter criterion {'PE.VARIATION_API_FOLD_ID':-1}. Skipping computation.
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE iteration 4
+08/01/2026 05:16:51 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:51 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 499*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  PE population: finished generating 501*1 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:51 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:51 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:52 AM [pe] [INFO ]  Number of samples after filtering: 0
+08/01/2026 05:16:52 AM [pe] [WARNI]  No samples satisfy the filter criterion {'PE.VARIATION_API_FOLD_ID':-1}. Skipping computation.
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE iteration 5
+08/01/2026 05:16:52 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:52 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:52 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 499/499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 499 synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:52 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 501/501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 501 synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:52 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:52 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:52 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:52 AM [pe] [INFO ]  Tabular classifier test accuracy: 86.89%
+08/01/2026 05:16:52 AM [pe] [INFO ]  Tabular classifier test AUC: 95.52
+08/01/2026 05:16:52 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 86.89
+08/01/2026 05:16:52 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:52 AM [pe] [INFO ]  Iteration: 5
+08/01/2026 05:16:52 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 86.89000000
+08/01/2026 05:16:52 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 86.88997050
+08/01/2026 05:16:52 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 95.51578718
+08/01/2026 05:16:52 AM [pe] [INFO ]  PE iteration 6
+08/01/2026 05:16:52 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:52 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:52 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:52 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:53 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:53 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:53 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:53 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:53 AM [pe] [INFO ]  Tabular classifier test accuracy: 95.84%
+08/01/2026 05:16:53 AM [pe] [INFO ]  Tabular classifier test AUC: 99.49
+08/01/2026 05:16:53 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 95.84
+08/01/2026 05:16:53 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:53 AM [pe] [INFO ]  Iteration: 6
+08/01/2026 05:16:53 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 95.84000000
+08/01/2026 05:16:53 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 95.83691999
+08/01/2026 05:16:53 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.48520668
+08/01/2026 05:16:53 AM [pe] [INFO ]  PE iteration 7
+08/01/2026 05:16:53 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:53 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:53 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:53 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:54 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:54 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:54 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:54 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:54 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:54 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:54 AM [pe] [INFO ]  Tabular classifier test accuracy: 96.22%
+08/01/2026 05:16:55 AM [pe] [INFO ]  Tabular classifier test AUC: 99.52
+08/01/2026 05:16:55 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 96.22
+08/01/2026 05:16:55 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:55 AM [pe] [INFO ]  Iteration: 7
+08/01/2026 05:16:55 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 96.22000000
+08/01/2026 05:16:55 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 96.21988146
+08/01/2026 05:16:55 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.51731663
+08/01/2026 05:16:55 AM [pe] [INFO ]  PE iteration 8
+08/01/2026 05:16:55 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:55 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:55 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:55 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:55 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:55 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:55 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:55 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:56 AM [pe] [INFO ]  Tabular classifier test accuracy: 97.60%
+08/01/2026 05:16:56 AM [pe] [INFO ]  Tabular classifier test AUC: 99.80
+08/01/2026 05:16:56 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 97.60
+08/01/2026 05:16:56 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:56 AM [pe] [INFO ]  Iteration: 8
+08/01/2026 05:16:56 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 97.60000000
+08/01/2026 05:16:56 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 97.59981413
+08/01/2026 05:16:56 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.80074588
+08/01/2026 05:16:56 AM [pe] [INFO ]  PE iteration 9
+08/01/2026 05:16:56 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:56 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:56 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:56 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:56 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:57 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:57 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:57 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:57 AM [pe] [INFO ]  Tabular classifier test accuracy: 97.73%
+08/01/2026 05:16:57 AM [pe] [INFO ]  Tabular classifier test AUC: 99.81
+08/01/2026 05:16:57 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 97.73
+08/01/2026 05:16:57 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:57 AM [pe] [INFO ]  Iteration: 9
+08/01/2026 05:16:57 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 97.73000000
+08/01/2026 05:16:57 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 97.72982817
+08/01/2026 05:16:57 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.80681025
+08/01/2026 05:16:57 AM [pe] [INFO ]  PE iteration 10
+08/01/2026 05:16:57 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:57 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:57 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:57 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:57 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:58 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:58 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:58 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:58 AM [pe] [INFO ]  Tabular classifier test accuracy: 97.31%
+08/01/2026 05:16:58 AM [pe] [INFO ]  Tabular classifier test AUC: 99.72
+08/01/2026 05:16:58 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 97.31
+08/01/2026 05:16:58 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:58 AM [pe] [INFO ]  Iteration: 10
+08/01/2026 05:16:58 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 97.31000000
+08/01/2026 05:16:58 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 97.30999997
+08/01/2026 05:16:58 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.71729280
+08/01/2026 05:16:58 AM [pe] [INFO ]  PE iteration 11
+08/01/2026 05:16:58 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:58 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:58 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:58 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:58 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:59 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:16:59 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:16:59 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:16:59 AM [pe] [INFO ]  Tabular classifier test accuracy: 96.60%
+08/01/2026 05:16:59 AM [pe] [INFO ]  Tabular classifier test AUC: 99.70
+08/01/2026 05:16:59 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 96.60
+08/01/2026 05:16:59 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:16:59 AM [pe] [INFO ]  Iteration: 11
+08/01/2026 05:16:59 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 96.60000000
+08/01/2026 05:16:59 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 96.59995594
+08/01/2026 05:16:59 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.69760960
+08/01/2026 05:16:59 AM [pe] [INFO ]  PE iteration 12
+08/01/2026 05:16:59 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:16:59 AM [pe] [INFO ]  Label 0
+08/01/2026 05:16:59 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Label 1
+08/01/2026 05:16:59 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:16:59 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:00 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:00 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:00 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:00 AM [pe] [INFO ]  Tabular classifier test accuracy: 96.75%
+08/01/2026 05:17:00 AM [pe] [INFO ]  Tabular classifier test AUC: 99.59
+08/01/2026 05:17:00 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 96.75
+08/01/2026 05:17:00 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:00 AM [pe] [INFO ]  Iteration: 12
+08/01/2026 05:17:00 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 96.75000000
+08/01/2026 05:17:00 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 96.74968144
+08/01/2026 05:17:00 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.59031707
+08/01/2026 05:17:00 AM [pe] [INFO ]  PE iteration 13
+08/01/2026 05:17:00 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:00 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:00 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:00 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:00 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:01 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:01 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:01 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:01 AM [pe] [INFO ]  Tabular classifier test accuracy: 97.97%
+08/01/2026 05:17:01 AM [pe] [INFO ]  Tabular classifier test AUC: 99.83
+08/01/2026 05:17:01 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 97.97
+08/01/2026 05:17:01 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:01 AM [pe] [INFO ]  Iteration: 13
+08/01/2026 05:17:01 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 97.97000000
+08/01/2026 05:17:01 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 97.96993859
+08/01/2026 05:17:01 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.83052169
+08/01/2026 05:17:01 AM [pe] [INFO ]  PE iteration 14
+08/01/2026 05:17:01 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:01 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:01 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:01 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:01 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:02 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:02 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:02 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:02 AM [pe] [INFO ]  Tabular classifier test accuracy: 98.09%
+08/01/2026 05:17:02 AM [pe] [INFO ]  Tabular classifier test AUC: 99.82
+08/01/2026 05:17:02 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 98.09
+08/01/2026 05:17:02 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:02 AM [pe] [INFO ]  Iteration: 14
+08/01/2026 05:17:02 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 98.09000000
+08/01/2026 05:17:02 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 98.08974737
+08/01/2026 05:17:02 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.82410530
+08/01/2026 05:17:02 AM [pe] [INFO ]  PE iteration 15
+08/01/2026 05:17:02 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:02 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:02 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:02 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:02 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:03 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:03 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:03 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:03 AM [pe] [INFO ]  Tabular classifier test accuracy: 97.88%
+08/01/2026 05:17:03 AM [pe] [INFO ]  Tabular classifier test AUC: 99.87
+08/01/2026 05:17:03 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 97.88
+08/01/2026 05:17:03 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:03 AM [pe] [INFO ]  Iteration: 15
+08/01/2026 05:17:03 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 97.88000000
+08/01/2026 05:17:03 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 97.87942965
+08/01/2026 05:17:03 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.87161419
+08/01/2026 05:17:03 AM [pe] [INFO ]  PE iteration 16
+08/01/2026 05:17:03 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:03 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:03 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:03 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:03 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:04 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:04 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:04 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:04 AM [pe] [INFO ]  Tabular classifier test accuracy: 98.59%
+08/01/2026 05:17:04 AM [pe] [INFO ]  Tabular classifier test AUC: 99.87
+08/01/2026 05:17:04 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 98.59
+08/01/2026 05:17:04 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:04 AM [pe] [INFO ]  Iteration: 16
+08/01/2026 05:17:04 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 98.59000000
+08/01/2026 05:17:04 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 98.58988831
+08/01/2026 05:17:04 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.86963607
+08/01/2026 05:17:04 AM [pe] [INFO ]  PE iteration 17
+08/01/2026 05:17:04 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:04 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:04 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:04 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:04 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:05 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:05 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:05 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:05 AM [pe] [INFO ]  Tabular classifier test accuracy: 98.55%
+08/01/2026 05:17:05 AM [pe] [INFO ]  Tabular classifier test AUC: 99.92
+08/01/2026 05:17:05 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 98.55
+08/01/2026 05:17:05 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:05 AM [pe] [INFO ]  Iteration: 17
+08/01/2026 05:17:05 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 98.55000000
+08/01/2026 05:17:05 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 98.54991402
+08/01/2026 05:17:05 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.91516484
+08/01/2026 05:17:05 AM [pe] [INFO ]  PE iteration 18
+08/01/2026 05:17:05 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:05 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:05 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:05 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:05 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:06 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:06 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:06 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:06 AM [pe] [INFO ]  Tabular classifier test accuracy: 98.99%
+08/01/2026 05:17:06 AM [pe] [INFO ]  Tabular classifier test AUC: 99.97
+08/01/2026 05:17:06 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 98.99
+08/01/2026 05:17:06 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:06 AM [pe] [INFO ]  Iteration: 18
+08/01/2026 05:17:06 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 98.99000000
+08/01/2026 05:17:06 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 98.98990884
+08/01/2026 05:17:06 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.96719000
+08/01/2026 05:17:06 AM [pe] [INFO ]  PE iteration 19
+08/01/2026 05:17:06 AM [pe] [WARNI]  fraction_per_label_id is not provided. Assuming the fraction of label ids in private data is public information.
+08/01/2026 05:17:06 AM [pe] [INFO ]  Label 0
+08/01/2026 05:17:06 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1497/1996 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17465 private samples and 1996 synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Composite population: generating 499 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  PE population: generating 499*3 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  VARIATION API: finished creating variations for 499 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  PE population: finished generating 499*3 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Composite population: finished generating 499 next synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Label 1
+08/01/2026 05:17:06 AM [pe] [INFO ]  Histogram: computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: PE.EMBEDDING.TabularEmbedding already computed
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:06 AM [pe] [INFO ]  Embedding: finished computing PE.EMBEDDING.TabularEmbedding for 1503/2004 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  Histogram: finished computing nearest neighbors histogram for 17535 private samples and 2004 synthetic samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  Composite population: generating 501 next synthetic samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  PE population: generating 501*3 next synthetic samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  VARIATION API: finished creating variations for 501 samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  PE population: finished generating 501*3 next synthetic samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  Composite population: finished generating 501 next synthetic samples
+08/01/2026 05:17:07 AM [pe] [INFO ]  Saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:07 AM [pe] [INFO ]  Finished saving the synthetic tabular data to a CSV file
+08/01/2026 05:17:07 AM [pe] [INFO ]  Evaluating tabular classifier
+08/01/2026 05:17:07 AM [pe] [INFO ]  Number of samples after filtering: 1000
+08/01/2026 05:17:07 AM [pe] [INFO ]  Tabular classifier test accuracy: 98.55%
+08/01/2026 05:17:07 AM [pe] [INFO ]  Tabular classifier test AUC: 99.96
+08/01/2026 05:17:07 AM [pe] [INFO ]  Tabular classifier test (macro) F1 score: 98.55
+08/01/2026 05:17:07 AM [pe] [INFO ]  Finished evaluating tabular classifier (tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1})
+08/01/2026 05:17:07 AM [pe] [INFO ]  Iteration: 19
+08/01/2026 05:17:07 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_acc: 98.55000000
+08/01/2026 05:17:07 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_f1: 98.54989523
+08/01/2026 05:17:07 AM [pe] [INFO ]  	tabular_classifier_xgboost_filter_{'PE.VARIATION_API_FOLD_ID':-1}_test_auc: 99.96025958

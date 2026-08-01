@@ -1,0 +1,2068 @@
+                                                      Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+                                                   Toan Tran 1 Arturs Backurs * 2 Zinan Lin * 2 Victor Reis * 2 Li Xiong * 1 Sergey Yekhanin * 2
+
+
+                                                                  Abstract                                      challenging due to potential risks of exposing private infor-
+                                                                                                                mation (Borisov et al., 2024). To tackle the privacy concerns,
+                                             This paper investigates the problem of generat-                    generating synthetic tabular data with differential privacy
+                                             ing synthetic tabular data with differential privacy               (DP) guarantees (Dwork, 2006) has been a long-standing
+                                             (DP) guarantees, enabling data sharing in sen-                     and active research area (Li et al., 2014; Zhang et al., 2021;
+arXiv:2606.08259v1 [cs.LG] 6 Jun 2026
+
+
+
+
+                                             sitive domains. Despite extensive study, state-                    Liu et al., 2021; McKenna et al., 2022; Liu et al., 2023; Tran
+                                             of-the-art methods often focus on minimizing                       & Xiong, 2024; Cormode et al., 2025; Maddock et al., 2025;
+                                             low-order marginal query errors and overlook the                   Rosenblatt et al., 2026). This synthetic data can be used for
+                                             challenges posed by high-order correlations. To                    various purposes – such as data analysis, machine learning
+                                             address this gap, we extend the Private Evolu-                     model training, and sharing with third parties – while still
+                                             tion (PE) framework, originally developed for                      providing formal privacy guarantees for individual records
+                                             DP-compliant image and text synthesis, to tab-                     in the original dataset.
+                                             ular data. We introduce Tab-PE − an algorithm
+                                             for synthetic tabular data generation under DP                     Despite the potential, generating realistic tabular data re-
+                                             constraints. Tab-PE iteratively improves a can-                    mains challenging due to difficulties in capturing complex
+                                             didate dataset via an evolutionary process that                    multi-dimensional data distributions under the privacy con-
+                                             leverages tabular-specialized operators to produce                 straints. State-of-the-art (SOTA) methods (McKenna et al.,
+                                             variations, privately scores them, and selects the                 2022; Liu et al., 2021; 2023) address this by estimating
+                                             highest-quality samples to retain and propagate.                   low-order statistical queries (typically marginals) and then
+                                             In contrast to the original PE, which relies on large              stitching them together to approximate the full data distri-
+                                             foundation models, Tab-PE employs heuristic op-                    bution. It is known that these marginal-based methods have
+                                             erators with significantly lower computational                     a fundamental limitation: they do not scale well to model
+                                             costs, making PE more practical and scalable for                   high-order correlations as the number of queries grows ex-
+                                             tabular data. Through extensive experiments on                     ponentially with the order (i.e., the number of relevant at-
+                                             real-world and simulation datasets, we demon-                      tributes) (Hu et al., 2023; Ponomareva et al., 2025). Since
+                                             strate that Tab-PE substantially outperforms prior                 DP requires adding noise to each query answer, the noise
+                                             baselines on datasets exhibiting high-order cor-                   accumulates as the number of queries increases. Therefore,
+                                             relations. Compared to the best baseline – AIM,                    estimating a large number of queries under strict privacy
+                                             Tab-PE improves classification accuracy by up to                   constraints is challenging and often leads to low-quality
+                                             10% while running 28× faster.1                                     measurements. Despite the theoretical limitation, marginal-
+                                                                                                                based methods still achieve strong empirical performance on
+                                                                                                                existing benchmarks (Chen et al., 2025b; Tao et al., 2022).
+
+                                        1. Introduction                                                         We found that most prior evaluations sidestep the challenge
+                                                                                                                of high-order correlations. Datasets widely used in the lit-
+                                        Tabular data is a foundational data modality underlying                 erature appear to be dominated by low-order dependencies.
+                                        applications across many domains. However, because it                   Intuitively, we measure the order of correlations in a dataset
+                                        often contains sensitive information such as patient records            by considering the downstream performance gap of sim-
+                                        and financial transactions, using and sharing such data are             ple classifiers that capture only low-order correlations (e.g.,
+                                          *
+                                            Equal contribution; author order is alphabetical 1 Emory Uni-
+                                                                                                                shallow decision trees) versus complex classifiers that lever-
+                                        versity 2 Microsoft Research.                                           age high-order correlations (e.g., deep trees). When the per-
+                                                                                                                formance gap between these two types of classifiers is small,
+                                        Proceedings of the 43 rd International Conference on Machine            the dataset primarily reflects low-order correlations. Indeed,
+                                        Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026            many commonly used datasets such as Adult (Becker &
+                                        by the author(s).
+                                            1                                                                   Kohavi, 1996), Bank (Moro et al., 2014), and Census (Ding
+                                              Our code is available at https://github.com/
+                                        microsoft/DPSDA                                                         et al., 2021) have this property. Varying the maximum depth
+
+                                                                                                            1
+                                                     Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+of the XGBoost trees (Chen & Guestrin, 2016) yields trivial                            We design simple yet effective and efficient heuristic opera-
+performance differences (typically <1%) (Fig. 9, App. C.1).                            tors/APIs for generating variations of tabular data without
+This characteristic makes the existing leading methods using                           using any foundation models. Building on the PE frame-
+statistical queries appear highly effective, even though they                          work, Tab-PE first initializes a random synthetic dataset
+do not model high-order correlations. Consequently, much                               and then iteratively refines it. In each iteration, we gener-
+of the field has been implicitly optimized for this favorable                          ate variations by simply adding controlled random noise
+setting, while leaving open the question of whether the cur-                           to numerical features and resampling categorical features
+rent methods can truly preserve high-order correlations that                           with a scheduled probability. The synthetic samples are
+are not revealed by standard benchmarks.                                               then scored by a DP voting mechanism based on full-record
+                                                                                       nearest-neighbor matching to private data, which can im-
+                                 UB             PrivMRF      PrivGSD                   plicitly capture complex, high-dimensional dependencies.
+                                 LB             GEM          RAP++                     High-scoring samples are selected for the next iteration, en-
+                                 PrivSyn        AIM          Tab-PE (ours)
+                                                                                       abling an iterative refinement process. We show that Tab-PE
+                           1.0
+                                                                                       outperforms SOTA methods on a wide range of settings and
+                           0.9
+          Test AUC Score
+
+
+
+
+                                                                                       is the most computationally efficient. Overall, our contribu-
+                           0.8                                                         tions can be summarized as follows:
+                           0.7
+                                                                                          • We revisit the challenge of modeling high-order corre-
+                           0.6                                                              lations in differentially private synthetic tabular data
+                           0.5                                                              generation. Our stress test reveals that SOTA methods
+                                   1       2 3 4 5 6                 7                      fail to capture such correlations.
+                                            Number of Features
+                                                                                          • We propose Tab-PE, a method based on the Private
+Figure 1. Stress test for high-order correlation modeling with XOR                          Evolution framework, with simple yet effective and ef-
+simulation datasets at ϵ = 1.0. The binary label is assigned based                          ficient evolutionary operators for generating variations
+on the parity of the number of positive features among all features,
+                                                                                            of tabular data without using any foundation models.
+which requires capturing full-order correlations. UB stands for
+Upper Bound using private data. LB represents random guess.                               • We provide a broad collection of new datasets and
+                                                                                            settings that better reflect high-order correlations for
+In this work, we focus on investigating this gap. We con-                                   evaluating differentially private tabular data generation
+struct a stress test with XOR correlations, where labels are                                methods, going beyond the standard benchmarks that
+assigned by the parity of the number of positive features                                   are dominated by low-order correlations.
+across all dimensions, requiring to capture full-order corre-
+lations. We show that SOTA methods quickly fail to capture                                • Extensive experiments demonstrate that Tab-PE con-
+such high-order correlations (Fig. 1). To address this chal-                                sistently outperforms the baselines for high-order fi-
+lenge, we propose a method based on the Private Evolution                                   delity and downstream utility, especially under strict
+(PE) framework (Lin et al., 2024), tailored for tabular data –                              privacy regimes. Tab-PE is also the most computa-
+named Tab-PE. PE is a breakthrough that has shown promis-                                   tionally efficient method and up to 28× faster than
+ing results in generating high-quality synthetic data in other                              utility-competitive baselines without requiring GPUs.
+domains such as images (Lin et al., 2024; 2025; Wang et al.,
+2025a) and texts (Xie et al., 2024; Hou et al., 2024; 2025;                            2. Related Works
+Wang et al., 2025b). It generates synthetic data through an
+                                                                                       Differentially Private Tabular Synthesis. DP synthetic
+iterative process of generating variations of the data and then
+                                                                                       tabular data is a long-standing problem with many prior
+selecting the best ones based on a DP voting mechanism.
+                                                                                       works (Yang et al., 2024; Cormode et al., 2025), spanning
+Previous methods proposed different ways to generate varia-
+                                                                                       the general setting, constrained generation (Ge et al., 2021),
+tions of images or text such as using foundation models (Lin
+                                                                                       federated settings (Maddock et al., 2024), and relational
+et al., 2024; Xie et al., 2024; Wang et al., 2025b) or using
+                                                                                       databases (Alimohammadi et al., 2025; Pang et al., 2024).
+simulators (Lin et al., 2025). For tabular data, Swanberg
+                                                                                       In a real-world competition (NIST, 2018), the winning so-
+et al. (2025) argue that Private Evolution using LLMs for
+                                                                                       lutions are dominated by methods that rely on marginal
+tabular generation does not perform satisfactorily.
+                                                                                       queries such as MST (McKenna et al., 2021), DPSyn (Li
+Remark 1 (API). Following prior PE terminology, we use                                 et al., 2021), and PrivBayes (Zhang et al., 2017). All these
+“API” to mean a callable generation interface, not necessarily                         methods first answer the low-order marginal queries in a
+an external service. In Tab-PE, APIs are lightweight local                             DP manner, then reconstruct the synthetic data from the
+operators that do not rely on external foundation models or                            noisy answers with different techniques, e.g., probabilis-
+expensive services.                                                                    tic graphical models (PGMs) (McKenna et al., 2019) and
+
+                                                                                   2
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Bayesian networks. To improve this pipeline, more ad-                the PE framework can leverage arbitrary data generators,
+vanced methods (AIM (McKenna et al., 2022), MRF (Cai                 including non-differentiable generator tools such as simu-
+et al., 2021)) dynamically select suitable marginal queries.         lators. Examples include computer graphics renderers for
+Subsequently, RAP (Liu et al., 2021), RAP++ (Vietri et al.,          image generation and robotics simulators for robotics appli-
+2022), PrivGSD (Liu et al., 2023), and PrivPGD (Donhauser            cations. This highlights a key distinction between the PE
+et al., 2024) consider generation as an optimization process         framework and traditional training-based or model-based
+that iteratively refines the synthetic dataset to minimize the       approaches for DP synthetic data: PE is not limited to ma-
+error on the noisy answers. Meanwhile, JAM (Fuentes et al.,          chine learning models and can naturally incorporate both
+2024) aims to utilize publicly available data. Maddock et al.        model-based and non-model-based generators within the
+(2025) and Chen et al. (2025a) focus more on efficiency and          same framework. In this work, we further extend this idea
+scalability, with performance comparable to SOTA methods.            to tabular data generation. While our random and variation
+Beyond the methods using statistical queries, there is a line        APIs (Section 4) share some high-level similarities with
+of research that leverages machine learning methods for              Sim-PE (Lin et al., 2025)—generating random values in
+this problem. Inspired by the success of image generation,           the random API and adding perturbations in the variation
+some works employ GANs (Xie et al., 2018; Yoon et al.,               API—our APIs are even simpler as they do not require any
+2019). Some recent works explore transformer-based archi-            external tools such as simulators.
+tectures (Castellon et al., 2023; Sablayrolles et al., 2023),
+and large-language models (Tran & Xiong, 2024; Rosenblatt            3. Preliminaries
+et al., 2026). Although these approaches narrow the gap to
+marginal-based methods compared with GANs, they still                Differential Privacy. (ϵ, δ)-differential privacy (DP) is a
+lag behind the marginal-based methods. A recent bench-               property of a randomized algorithm M that guarantees that
+mark (Chen et al., 2025b) confirms that the marginal-based           the output of M does not change much whether we add or
+methods still dominate the field. In this work, we revisit the       remove any particular entry in the input. More precisely,
+problem from the perspective of high-order correlations and          given any two neighboring datasets D, D′ (one can be ob-
+propose a new efficient and effective framework that does            tained from the other by deleting a single entry) and any
+not rely on statistical queries or model training.                   possible set of outputs S, it holds that Pr[M(D) ∈ S] ≤
+                                                                     eϵ Pr[M(D′ ) ∈ S] + δ (Dwork & Roth, 2014).
+Private Evolution. PE is a breakthrough for synthetic data
+generation with DP. PE was first introduced by Lin et al.            High-order correlation. We define high-order correlation
+(2024) for images. Unlike previous synthesizers, which               through a multivariate extension of mutual information. Let
+require model training/fine-tuning on private data (Kurakin          X = {X1 , X2 , ...Xk } be a set of random variables rep-
+et al., 2024; Dockhorn et al., 2023), PE instead leverages           resenting k attributes in a dataset. The total correlation
+inference API access to pretrained foundation models. By             (also called multi-information) I(X1 , X2 , ..., Xk ) (Watan-
+employing an evolutionary process that iteratively refines           abe, 1960) quantifies the total amount of information shared
+the synthetic data, PE achieves SOTA results while being             among all k attributes.
+computationally efficient. Xie et al. (2024) extended PE to
+                                                                     We call that a k-way correlation exists among the k at-
+text, demonstrating its effectiveness by significantly outper-
+                                                                     tributes if the mutual information between the set of k at-
+forming LLM DP fine-tuning baselines. Zou et al. (2025)
+                                                                     tributes is significantly greater than the maximum mutual
+enhanced the performance for text by utilizing multiple
+                                                                     information of any subset of k − 1 attributes. Formally,
+LLMs via a weighted fusion mechanism. Moreover, the
+                                                                     we say that there is a k-way correlation among attributes
+PE framework has been adapted to federated learning set-
+                                                                     X1 , X2 , ..., Xk if:
+tings to reduce communication costs while achieving better
+utility for language modeling (Hou et al., 2024; 2025). Ad-
+ditionally, Zhang et al. (2025) modified PE for few-shot                    Gk = I(X1 , . . . , Xk )
+generation, while González et al. (2025) studied theoretical                  − max I({X1 , . . . , Xk } \ {Xi }) > ∆        (1)
+                                                                                  i∈{1,...,k}
+convergence aspects of PE. For tabular data, Swanberg et al.
+(2025) applied PE with LLM-guided APIs. However, the
+authors argue that PE with LLM API access does not per-              This definition captures the idea that the joint behavior of
+form satisfactorily. While our work does not contradict their        all k attributes contains unique information, which is not
+message, we demonstrate that PE using heuristic operators            well explained by any subset of k − 1 attributes. We provide
+(without any foundation models) and appropriate designs              a proposition in App. A.1 to show that a non-trivial gap of
+can be both effective and computationally efficient.                 two tree-based predictors with max depth of k and k − 1
+                                                                     implies the existence of k-way correlation. This connection
+  While most prior PE-based works rely on foundation                 motivates us to constrain tree-based predictors to determine
+models, Sim-PE (Lin et al., 2025) was the first to show that         whether a dataset exhibits high-order correlations.
+
+                                                                 3
+                                    Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+4. Methodology – Tab-PE
+                                                                                           
+                                                                                           xcat(i) ,                with probability 1 − µcat ,
+            APPLY_                                                            x′cat(i) ∼                                                           (2)
+                                                                                                        cat(i) ) ,   with probability µcat .
+                                                                                           Uniform(X
+           VARIATION
+
+
+  Synthetic Data                                                             For a numerical attribute xnum(j) ∈ Xnum(j) , the variation is
+                                                   DP_NN_Histogram
+                                             3
+                                                                            generated by adding controlled Gaussian perturbation with
+                                         0                3   +             scale controlled by a numerical mutation rate µnum ∈ [0, 1]
+                                             1        1
+                                                                            and projecting back into the valid range:
+                        Top K Selection/Sampling
+                                                                                   x′num(j) = ΠXnum(j) xnum(j) + ϕ ,  ϕ ∼ N (0, τ 2 ),
+                                                                                                                  
+
+Figure 2. Illustration of Tab-PE’s workflow. The process starts                                                                    
+                                                                                           τ = µnum · max(Xnum(j) ) − min(Xnum(j) ) .
+with an initial set of synthetic samples and iteratively refines them
+through variations and private scoring.
+                                                                            where ΠX (·) denotes projection onto the feasible range of
+Overview. Sample s = {xcat(1) , . . . , xnum(1) , ..., c} includes          Xnum(j) . To simplify, the numerical bounds are assumed
+categorical attributes xcat and numerical attributes xnum , and             known, as in the default configuration of a widely used
+class label c. Xcat(i) and Xnum(j) denote the domains of cat-               DP library (Holohan et al., 2019). These bounds can be
+egorical attribute i and numerical attribute j, respectively.               estimated from the private data using DP methods if neces-
+Given a private dataset Dpriv of samples, our goal is to gen-               sary (Dwork & Roth, 2014). We also ensure the baselines
+erate a synthetic dataset Dsyn that preserves the statistical               have access to the same numerical bounds for a fair compar-
+properties of Dpriv while ensuring DP. Tab-PE consists of                   ison in our experiments.
+three main components: (1) a RANDOM API that generates                      Both mutation rates µcat and µnum follow a polynomial decay
+an initial set of synthetic samples, (2) a VARIATION API                    as a function of the iteration index t to balance exploration
+that creates variations of existing samples to explore the                  and exploitation. In the early stages, higher mutation rates
+sample space, and (3) a DP NN HISTOGRAM function that                       encourage exploration of the sample space, while in later
+scores each sample in a DP manner. The overall process                      stages, lower rates focus on refining high-quality samples.
+is an evolutionary loop, illustrated in Fig. 2. For each iter-
+ation, we generate variations of the current samples using                                  µ = µinit − (µinit − µfinal ) · (t/T )γ                (3)
+VARIATION API, evaluate them using the private dataset
+with DP NN HISTOGRAM, and retain the top-scoring sam-
+ples to form the next generation. This process continues for                Algorithm 1 DP NN HISTOGRAM
+a predefined number of iterations T .                                        1: Input: Dpriv , Population P , Noise multiplier σ
+RANDOM API. The RANDOM API generates an initial                              2: Output: Noisy histogram hist
+set of synthetic samples. For categorical attribute xcat(i) ,                3: hist ← [0, 0, . . . , 0]
+it samples a value uniformly at random from the set                          4: for each sample s ∈ Dpriv do
+of possible categories Xcat(i) . For numerical attribute                     5:   i ← argminj distance(s, P [j])
+xnum(j) , it uniformly samples values within the range                       6:   hist[i] ← hist[i] + 1
+(minXnum(j) , maxXnum(j) ). This ensures that the initial                    7: end for
+synthetic samples are diverse and cover the attribute space.                 8: for each index i in hist do
+                                                                             9:   hist[i] ← hist[i] + N (0, σ 2 )
+                                                                            10: end for
+ RANDOM API(n) = {s1 , s2 , . . . , sn } where
+                                                                            11: return hist
+              sk = {xcat(1) , . . . , xnum(1) , . . . , c},
+          xcat(i) ∼ Uniform(Xcat(i) ),
+                                                                          DP NN HISTOGRAM. The DP NN HISTOGRAM scores
+         xnum(j) ∼ Uniform min(Xnum(j) ), max(Xnum(j) )                     synthetic samples in a DP manner. At each iteration t, Tab-
+                                                                            PE maintains a population P , which is a set of candidate
+VARIATION API. The operator generates perturbed varia-                      synthetic samples, mainly generated by VARIATION API.
+tions of existing samples to explore the sample space. The                  We denote a histogram hist, where each bin hist[i] corre-
+variation degree m is the number of variations generated                    sponds to a sample P [i] in P . The value hist[i] represents
+per sample. We implement a simple but effective random                      the count of private samples in Dpriv whose nearest neighbor
+walk strategy. For a categorical attribute xcat(i) ∈ Xcat(i) , the          in P is P [i]. The pseudocode of DP NN HISTOGRAM is
+variation is produced by resampling from its domain with a                  presented in Algo. 1. For each sample in the private dataset
+controlled categorical mutation rate µcat ∈ [0, 1].                         Dpriv , we find its nearest neighbor in P and increment the
+
+                                                                        4
+                                     Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Algorithm 2 Tabular Private Evolution                                    dataset Dsyn with RANDOM API. Then we iteratively re-
+ 1: Input: The set of classes C, Private dataset Dpriv , Noise           fine the synthetic samples over T iterations. In each itera-
+    multiplier σ, Number of iterations T , Number of sam-                tion, we generate a population of sample candidates using
+    pling iterations Tsampling , Variation degree m, Number              VARIATION API, score them with DP NN HISTOGRAM,
+    of synthetic samples N                                               and select the top samples to form the next generation. To
+ 2: Output: Synthetic dataset Dsyn                                       enhance exploration and exploitation, we employ a two-
+ 3: Dsyn ← ∅                                                             stage approach: sampling with replacement in the early
+ 4: for each class c ∈ C do                                              iterations, followed by ranking and selecting the top sam-
+         (c)                                                             ples in later iterations (See Algo. 2). In the first Tsampling
+ 5:    Dpriv ← subset of Dpriv of class c
+                         (c)                                             iterations, we sample new synthetic samples based on the
+ 6:   N (c) ← N · |Dpriv |/|Dpriv | {# syn samples of class c}
+                                                                         noisy histogram-based probabilities. The variation degree m
+ 7:   P0 ← RANDOM API(N (c) ) {Initialize a population}                  is set to 1 (Algo. 2, Line 18) to maintain a small population
+ 8:   for t = 0 to T − 1 do                                              size, which yields higher average histogram counts (Algo. 1,
+                                             (c)
+ 9:      histt ← DP NN HISTOGRAM(Dpriv , Pt , σ)                         Lines 4-7) and thus reduces sensitivity to noise (Algo. 1,
+10:      if t ≤ Tsampling then                                           Line 9). This leads to more reliable sampling probabilities
+11:         histt [i] ← max(0, hist
+                                P t [i])                                 (Algo. 2, Line 12). In the second stage, we set m to a higher
+12:         prob[i] ← histt [i]/ j histt [j]                             value to encourage local refinement. The population P now
+13:         Dt ← sample N (c) samples from Pt with re-                   includes both the variations and the previous selected sam-
+            placement according to prob                                  ples (Algo. 2, Line 20). We then select the top N (c) samples
+14:      else                                                            based on their noisy histogram scores (Algo. 2, Line 15).
+15:         Dt ← top N (c) samples of Pt by histt                        Intuitively, at the beginning, some samples may have signif-
+16:      end if                                                          icantly large counts and sampling with replacement allows
+17:      if t < Tsampling then                                           these samples to be selected multiple times, which helps to
+18:         Pt+1 ← VARIATION API(Dt , 1)                                 quickly shift the distribution of synthetic samples towards
+19:      else                                                            the private data distribution. In the later stage, selecting
+20:         Pt+1 ← VARIATION API(Dt , m) ∪ Dt                            the top samples helps to locally refine the synthetic dataset
+21:      end if                                                          and improve its quality. This two-stage approach effectively
+22:   end for                                                            exploits the strengths of both sampling and top selection,
+23:   Dsyn ← Dsyn ∪ DT −1                                                leading to better overall performance.
+24: end for
+                                                                         Compute Efficiency. The previous query-based methods
+25: return Dsyn
+                                                                         require answering many queries. Each single query needs to
+                                                                         scan the entire dataset. Moreover, high-dimensional queries
+corresponding bin (Algo. 1, Lines 4-7). To ensure DP, we                 involving many attributes are especially costly, as they cre-
+add Gaussian noise to each bin of the histogram (Algo. 1,                ate large multi-way count tables that consume significant
+Line 9). As each private sample can only affect one bin, the             memory and computation resources. Additionally, model
+sensitivity of this histogram query is 1. By adding noise                fitting and optimization over these query measurements usu-
+drawn from N (0, σ 2 ) to each bin, we achieve (ϵ, δ)-DP,                ally require iterative solvers that may scale poorly with the
+where ϵ and δ are determined by the noise multiplier σ and               dimensionality. In contrast, Tab-PE operates at the sample
+the number of iterations T . The privacy analysis can be                 level, and each iteration only requires a single pass over the
+reused from the Gaussian mechanism and the composition                   private dataset to conduct nearest neighbor search. While
+theorem, as done in the original private evolution paper (Lin            the query-based methods struggle to handle high-order cor-
+et al., 2024) and detailed in App. B.1. The distance met-                relations due to the exponential growth of queries, Tab-PE
+ric between samples is the mixed-type distance defined as                leverages full-record nearest neighbor matching and itera-
+follows, where λ is a hyperparameter to balance the contri-              tive refinement that can implicitly capture complex, high-
+butions of categorical and numerical attributes.                         dimensional dependencies.
+                                   X  (a)        (b)
+                                                         
+          distance(sa , sb ) = λ    1 xcat(i) ̸= xcat(i)                 5. Experiments and Results
+                                    i
+                                    (a)      (b)
+                                                         !2    (4)       Overview. As we focus on high-order correlation modeling
+                     X            xnum(j) − xnum(j)
+                 +                                                       in DP tabular data, we first examine the algorithmic capa-
+                     j
+                               maxXnum(j) − minXnum(j)
+                                                                            1
+                                                                              We assume class distributions are known as in (Lin et al., 2024;
+                                                                         Xie et al., 2024). Additionally, experiments in App. D.11 show
+Tabular Private Evolution. The overall process of Tab-PE                 Tab-PE performs similarly either w/ or w/o this assumption.
+is summarized in Algo. 2. We first initialize a synthetic
+
+                                                                     5
+                                              Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                                  PrivSyn          PrivMRF           GEM        RAP++              PrivGSD          AIM           Tab-PE
+                                              Tree                         Neural Network                       Random Fourier Features
+                                                                                                          0.7
+                            0.7
+            Test Accuracy                                            0.8
+                                                                                                          0.6
+                            0.6
+                                                                     0.6
+                                                                                                          0.5
+                            0.5
+                                            100                101               100                101                  100                101
+                                      {0.2, 0.5, 1.0, 3.0, 10.0}           {0.2, 0.5, 1.0, 3.0, 10.0}              {0.2, 0.5, 1.0, 3.0, 10.0}
+                                  Figure 3. The test accuracy on SCM simulated datasets under various privacy budgets.
+
+bility of the baselines and Tab-PE using an extreme case                            joint distributions, while TVD is often distorted by sparse
+of XOR simulation datasets. We then conduct extensive                               bins. Additionally, we perform evaluations in a unified
+experiments on realistic simulated datasets with multiple                           embedding space, derived from an autoencoder trained on
+non-linear underlying functions and real-world datasets with                        the private data with a reconstruction objective. This high-
+high-order correlations, under various privacy constraint                           dimensional space enables us to compare the synthetic and
+settings. We also evaluate the methods on widely-used real-                         real distributions at the representation level rather than just
+world datasets with predominantly low-order correlations.                           marginals. We calculate distributional Precision and Re-
+Finally, we examine computational efficiency and analyze                            call (Sajjadi et al., 2018), measuring the fidelity of synthetic
+the technical design choices in Tab-PE.                                             samples to the real distribution and the coverage of the real
+                                                                                    distribution by the synthetic data, respectively. We present
+5.1. Experiment Setup                                                               the details of the metrics in App. C.2
+Baselines. We consider several SOTA baselines in DP tabu-                           Implementation Details. We provide additional details and
+lar data synthesizers, following a recent benchmark (Chen                           hyperparameters of Tab-PE in App. C.3. For the baselines,
+et al., 2025b): PrivSyn (Zhang et al., 2021), PrivMRF (Cai                          we follow the original papers and a recent benchmark (Chen
+et al., 2021), GEM (Vietri et al., 2022), RAP++ (Liu et al.,                        et al., 2025b) for the hyperparameter settings. We run all
+2021), PrivGSD (Liu et al., 2023), and the SOTA method                              methods on three distinct data splits generated by different
+– AIM (McKenna et al., 2022). For details of these meth-                            random seeds and report the average performance values
+ods, we refer readers to the original papers and recent sur-                        with corresponding standard deviations. When running an
+veys (Yang et al., 2024; Cormode et al., 2025). Additionally,                       (ϵ, δ)-DP algorithm on a dataset Dpriv of size |Dpriv |, for
+we present the upper bound performance (UB), directly                               all methods, we set δ = 1/ (|Dpriv | · ln |Dpriv |), which is a
+using the private dataset without DP guarantees.                                    common choice in the DP literature (Yue et al., 2023).
+Datasets. In total, we organize the datasets used in our
+                                                                                    5.2. Curse of Dimensionality
+experiments into four categories. 1) XOR, simulation stress-
+test datasets. 2) Structural Causal Model (SCM) Simula-                             In this experiment, we examine the algorithmic capability of
+tion generated from causal graphs (details in App. C.1.2).                          methods in modeling high-order correlation. We construct a
+3) Real-World Datasets with High-Order Correlations,                                simulated XOR dataset where all features are drawn from
+in which complex classifiers significantly outperform sim-                          zero-centered uniform distributions. The label is assigned
+ple ones, requiring synthetic data to capture high-order de-                        based on the parity of the number of positive feature values.
+pendencies. 4) Real-World Datasets with Low-Order                                   In this dataset, the features themselves are mutually inde-
+Correlations, widely used in the literature, only low-order                         pendent; the only dependency lies between the features and
+correlations are sufficient for high downstream accuracy.                           the label. This setup represents an extreme case where any
+                                                                                    single feature can flip the label. Consequently, failing to
+Evaluation Metrics.           Following previous bench-
+                                                                                    capture the contribution of only a single feature reduces the
+marks (Chen et al., 2025b; Tao et al., 2022; Du & Li, 2025),
+                                                                                    performance to random guessing (illustrated in Figs. 12& 11,
+we evaluate the methods using Machine Learning (ML)
+                                                                                    App. C.1.2). The baseline methods are set up with the ideal
+Downstream Efficiency and Fidelity Error. For the fidelity,
+                                                                                    degree for marginal queries, i.e., K = num features + 1.
+we calculate Wasserstein Distance (WD) between high-order
+joint distributions of the synthetic and private datasets, fol-                     Fig. 1 presents the AUC score of the classifier trained on
+lowing prior work (Du & Li, 2025). Compared to another                              the synthetic data generated by the methods at ϵ = 1.0. As
+popular choice – Total Variation Distance (TVD), WD does                            the number of features increases, the classification problem
+not require discretizing continuous features into bins as                           itself becomes more challenging, leading to the performance
+TVD does. Moreover, WD is more reliable for high-order                              drop of the upper bound – using private data (ϵ = ∞). Intu-
+
+
+                                                                                6
+                                   Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                               ML Downstream (↑)                             Fidelity (↓)                        Embedding (↑)
+  Dataset       Method
+                              Accuracy     Macro F1             5-WD            6-WD            7-WD          Precision     Recall
+                UB            80.80 ± 0.44 79.87 ± 0.65      0.088 ± 0.011   0.107 ± 0.011   0.124 ± 0.012   98.09 ± 0.15 98.66 ± 0.27
+                PrivSyn       13.83 ± 0.00 2.43 ± 0.00       0.224 ± 0.005   0.287 ± 0.005   0.347 ± 0.006   13.42 ± 0.32 98.05 ± 0.43
+                PrivMRF       13.63 ± 0.28 4.72 ± 3.24       0.218 ± 0.004   0.279 ± 0.004   0.337 ± 0.004   13.93 ± 0.18 97.33 ± 0.59
+  Artificial    GEM           10.13 ± 0.86 5.62 ± 0.46       0.337 ± 0.014   0.402 ± 0.015   0.465 ± 0.015   9.55 ± 0.75 94.57 ± 1.19
+  Characters    RAP++         33.29 ± 2.14 32.17 ± 2.11      0.201 ± 0.021   0.243 ± 0.023   0.283 ± 0.024   28.45 ± 4.49 3.77 ± 1.76
+                PrivGSD       40.36 ± 1.29 39.10 ± 1.38      0.161 ± 0.002   0.204 ± 0.002   0.245 ± 0.002   26.98 ± 0.36 98.40 ± 0.22
+                AIM           23.24 ± 1.48 20.17 ± 1.24      0.191 ± 0.003   0.247 ± 0.002   0.301 ± 0.002   18.82 ± 0.55 98.06 ± 0.21
+                Tab-PE        49.38 ± 0.46 48.09 ± 0.71      0.158 ± 0.011   0.191 ± 0.012   0.220 ± 0.013   36.57 ± 1.51 89.77 ± 3.09
+                UB            78.01 ± 0.06 54.63 ± 0.36      0.108 ± 0.001   0.142 ± 0.001   0.176 ± 0.001   98.27 ± 0.13 98.30 ± 0.07
+                PrivSyn       33.05 ± 0.00 4.52 ± 0.00       0.303 ± 0.003   0.385 ± 0.004   0.463 ± 0.004   41.87 ± 0.12 97.74 ± 0.12
+                PrivMRF       51.83 ± 1.28 22.42 ± 1.01      0.138 ± 0.003   0.185 ± 0.004   0.233 ± 0.004   88.85 ± 0.37 98.11 ± 0.14
+                GEM           31.85 ± 1.10 5.64 ± 0.79       0.275 ± 0.005   0.333 ± 0.006   0.392 ± 0.007   55.92 ± 3.42 95.20 ± 1.35
+  Person        RAP++         52.72 ± 0.83 26.57 ± 0.82      0.176 ± 0.003   0.216 ± 0.003   0.256 ± 0.004   59.95 ± 2.49 62.36 ± 2.81
+  Activity      PrivGSD       56.47 ± 0.36 29.25 ± 0.53      0.161 ± 0.001   0.199 ± 0.001   0.237 ± 0.002   80.06 ± 0.74 93.74 ± 0.58
+                AIM           59.53 ± 0.47 30.79 ± 0.32      0.125 ± 0.002   0.168 ± 0.002   0.213 ± 0.002   89.97 ± 0.24 98.73 ± 0.07
+                Tab-PE        63.72 ± 0.18 35.09 ± 0.19      0.116 ± 0.002   0.150 ± 0.002   0.183 ± 0.001   90.93 ± 0.88 91.57 ± 0.38
+Table 1. ϵ = 1.0. The query degree hyperparameter of baselines vary from 2 to 5, the best-performing results of the baselines are reported.
+
+itively, the number of marginal queries grows exponentially             correlations to deliver the highest predictive downstream
+with the correlation order. For instance, assume each fea-              utility.
+ture is binary-valued, to fully capture the correlation among
+                                                                        Fig. 3 depicts the test accuracy under different privacy-
+d features and the label, we need to answer 2d queries of
+                                                                        budget settings. In general, Tab-PE consistently outperforms
+d-way marginals to cover all possible feature combinations.
+                                                                        the baselines under a variety of privacy settings. Most meth-
+This is challenging to marginal query-based methods for
+                                                                        ods improve with larger ϵ. Tree and RFF priors induce sharp,
+modeling high-order correlations. Consequently, all the
+                                                                        brittle high-order correlations that marginal-based methods
+baselines fail completely at 5 features, delivering a down-
+                                                                        cannot approximate well. This yields roughly 10% accuracy
+stream performance of random guess. In contrast, Tab-PE
+                                                                        gains for Tab-PE over the best-performing baselines. In
+successfully yields an AUC score of 0.8 for 5 features. This
+                                                                        contrast, the NN prior often produces smoother correlations,
+demonstrates that Tab-PE provides broader support for
+                                                                        so the gap remains around 4%. These results demonstrate
+capturing high-order correlations.
+                                                                        that Tab-PE is effective at modeling challenging high-order
+                                                                        correlations and maintains significant performance gains
+5.3. Simulated Datasets by Structural Causal Models                     over baselines under either strict or loose privacy settings.
+We adapt the simulation method from TabPFN (Hollmann
+et al., 2025), which is a breakthrough in tabular data classi-          5.4. Real-world Datasets
+fication. The full pipeline is described in App. C.1.2. Com-
+                                                                        We evaluate on two real-world datasets with high-order
+pared to the previous XOR setting, this simulation using
+                                                                        correlations (details in App. C.1). Generally, the perfor-
+Structural Causal Models (SCM) is a more realistic scenario:
+                                                                        mance trends are consistent with the previous SCM simu-
+features are correlated; modeling a subset of the joint dis-
+                                                                        lated datasets, as shown in Tab. 1. Tab-PE improves the
+tribution can translate into gains for downstream tasks. We
+                                                                        downstream utilities by a large margin, e.g., +9.02% ac-
+implement three non-linear prior functions (mapping fea-
+                                                                        curacy and +8.99% macro F1 on the Artificial Characters
+tures to labels): Tree, Neural Network (NN), and Random
+                                                                        dataset, but still lags the non-private upper bound (∼30%
+Fourier Features (RFF).
+                                                                        accuracy gap). Moreover, consistent with the SCM datasets,
+Across all prior functions, Tab-PE achieves the best down-              Tab-PE achieves the highest precision in the embedding
+stream performance at ϵ = 1.0. See Tab. 5, App. D.2 for nu-             space. Tab-PE captures stronger high-order fidelity (from
+merical details. Tab-PE achieves 89.4% accuracy and 96.4%               5-way interactions onward), while being slightly behind
+AUC for the neural network prior, significantly above the               AIM and MRF on low-order fidelity (1-way, 2-way, and
+best baseline – AIM (85.2%, 93.3%). For fidelity (Tab. 6,               3-way marginals), detailed in App. D.3 (Tab. 7). The main
+App. D.2), AIM and Tab-PE offer competitive performance                 reason is that marginal-based methods (e.g., AIM, MRF)
+and outperform the other baselines. In the embedding space,             explicitly optimize low-order marginals, making them excel
+Tab-PE consistently yields the highest precision ∼98% but               in low-order fidelity. The fact that many high-order joint
+the recall slightly lags at ∼81%. Overall, these results                distributions can share the same 1-way and 2-way marginals
+indicate that Tab-PE most effectively captures high-order               further explains why preserving low-order fidelity well does
+
+                                                                    7
+                                                                    Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                                             PrivSyn            PrivMRF (GPU)               GEM (GPU)                   RAP++ (GPU)                                Private-GSD (GPU)                    AIM              Tab-PE
+                                                           (a) Efficiency                                     (b) Running Time vs                                                        (c) Running Time vs Data Size
+                                                       28x faster                                       104                                                                            103
+
+
+
+
+                                                                                     Running Time (s)
+
+
+
+
+                                                                                                                                                                    Running Time (s)
+                                          0.85         10x faster
+                          Test Accuracy
+
+
+
+
+                                                                                                                                                                                                                        18.6x
+                                                                                                        103
+
+
+
+
+                                                                                                                                                     119x faster
+                                          0.80                                                                                                                                         102
+
+
+
+
+                                                                                                                                                   15x faster
+                                          0.75                                                          102
+                                          0.70                                                                                                                                         101
+                                                                                                        101
+                                                 101            102               103                                    100                101                                           0         200         400
+                                                          Running Time (s)                                         {0.2, 0.5, 1.0, 3.0, 10.0}                                            Number of Samples (in thousands)
+Figure 4. The runtime of the methods under different privacy budgets and dataset sizes. In the left figure, each method is shown with
+multiple markers, corresponding to various query degree settings. PrivSyn has only one marker as it does not have this hyperparameter.
+
+ not necessarily translate to high-order and downstream utili-                                                                degree, detailed in App. D.5, Fig. 15. Generally, increasing
+ ties. Conversely, better matching high-order patterns can be                                                                 the query degree does not bring significant performance
+ slightly inferior at low-order marginals, as the method does                                                                 gains for the baselines. However, it leads to an exponential
+ not focus on modeling low-order correlations. For example,                                                                   increase in runtime for GEM and PrivGSD. Subsequently,
+ consider a dataset with two binary features including 50%                                                                    most methods including Tab-PE scale well with the privacy
+ of “00” and 50% of “11”. A method focusing on low-order                                                                      budget, as presented in Fig. 4 (middle). Meanwhile, AIM
+ marginals may generate samples with 50% of 01 and 50%                                                                        exhibits a rapid increase (60×) in runtime as ϵ increases
+ of 10 and perfectly preserves 1-way marginals. Meanwhile,                                                                    from 1.0 to 10.0, as the larger privacy budget allows it to is-
+ a method focusing on high-order correlations would gen-                                                                      sue more queries. Finally, we examine the scalability of the
+ erate 60% of 00 and 40% of 11, better capturing the joint                                                                    methods with the dataset size. As depicted in Fig. 4 (right),
+ distribution but slightly deviating from the 1-way marginals.                                                                at ϵ = 1.0, Tab-PE is the fastest method across all dataset
+                                                                                                                              sizes. Notably, Tab-PE runs 18.6× faster than the leading
+ Moreover, Fig. 5 illustrates the test accuracy under different
+                                                                                                                              baselines (AIM, RAP++, GSD, and MRF) at 500K samples.
+ privacy budgets. Tab-PE consistently outperforms the base-
+                                                                                                                              Taken together, these results demonstrate that Tab-PE is
+ lines across the privacy settings. Due to space constraints,
+                                                                                                                              highly efficient and scalable.
+ we present the results of low-order real-world datasets in
+ App. D.4 (Tab. 8). While Tab-PE is primarily designed for
+ high-order correlations, it remains competitive (only ∼1%                                                                     5.6. Findings & Analyses
+ accuracy drop compared to AIM) on low-order datasets.
+                                                                                                                                                                                                             0.25
+                                                                                                                             Val. Accuracy
+
+
+
+
+                        PrivSyn                         GEM               PrivGSD                         Tab-PE                             0.4
+                                                                                                                                                                                                             0.20
+                                                                                                                                                                                                      5-WD
+
+                        PrivMRF                         RAP++             AIM
+                0.6
+                      Artificial Characters                                     Person Activity                                              0.2
+                                                                                                                                                                                                             0.15
+                                                                    0.6                                                                            0                 5       10                  15                 0           5       10   15
+Test Accuracy
+
+
+
+
+                0.4                                                                                                                                                  Iteration                                                  Iteration
+                                                                                                                                                        Best marginal-query baseline                                Tab-PE w/ random walk
+                0.2                                                 0.4                                                                                 Tab-PE w/ crossover&mutation
+
+                             100                101                                100                101                     Figure 6. Comparing the proposed random-walk for variation
+                       {0.2, 0.5, 1.0, 3.0, 10.0}                            {0.2, 0.5, 1.0, 3.0, 10.0}                       generation with genetic algorithm operators.
+
+Figure 5. The test accuracy on real-world datasets under various                                                              Simple variation operator can be effective. We adapt
+privacy budgets.                                                                                                              the genetic algorithm design (crossover and mutation) from
+                                                                                                                              PrivGSD (Liu et al., 2023) to VARIATION API in Tab-PE.
+ 5.5. Compute Efficiency & Scalability                                                                                        The detailed implementations are provided in App. D.6.2.
+                                                                                                                              Fig. 6 shows that Tab-PE with either API achieves higher
+ We further study the compute efficiency and scalability of
+                                                                                                                              accuracy compared to the best marginal-based method
+ the methods. We run the experiments on the Neural Net-
+                                                                                                                              (∼40%). The simple random walk with scheduled prob-
+ work prior simulation dataset using the same computing
+                                                                                                                              ability decay boosts accuracy by 7%, from 43% to 50%, and
+ resources allocated by Slurm. While most baselines re-
+                                                                                                                              reduces 5-WD by around 21%.
+ quire GPUs, Tab-PE runs entirely on CPUs. As shown
+ in Fig. 4 (left), at ϵ = 1.0, Tab-PE is the most efficient                                                                   Two-stage selection outperforms ranking- or sampling-
+ method while achieving the best downstream utilities, 10×                                                                    only strategies. Fig. 7 presents the ablation study on
+ faster than PrivMRF and 28× faster than AIM. We also                                                                         two-stage selection by comparing with ranking-only and
+ study the scalability of the baselines by varying the query                                                                  sampling-only strategies. While the sampling selection can
+
+                                                                                                                         8
+                                                   Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+quickly preserve the distribution, which translates to the
+
+
+
+
+                                                                                             Real
+fidelity metric, the ranking selection is essential for local re-
+finement to boost the downstream accuracy. The two-stage
+selection effectively combines the advantages of both strate-
+gies, leading to faster convergence and better performance.
+
+
+
+
+                                                                                             GEM
+                                                        0.6
+                                                                        PE (sampling)
+Val. Accuracy
+
+
+
+
+                0.4                                                     PE (ranking)
+                                                        0.4             Tab-PE
+
+
+
+
+                                                                                             RAP
+                                                 5-WD
+                               PE (sampling)
+                0.2            PE (ranking)
+                               Tab-PE                   0.2
+                      0     5       10      15                0      5       10     15
+
+
+
+
+                                                                                             Tab-PE
+                            Iteration                                Iteration
+Figure 7. The performance of different selection strategies. Tab-PE
+implements a two-stage strategy: 5 iterations for sampling and 10
+iterations for ranking (Artificial Characters; ϵ = 1.0).                                     Figure 8. Samples generated by Tab-PE and the baselines with
+                                                                                             ϵ = 1.0. Other digits are shown in Fig. 18, Sec. D.7.
+Extremely High-Dimensional Dataset. We experiment
+on flattened MNIST dataset with 196 attributes (rescaled
+to 14×14 pixels) and 10 classes. This dataset is not only                                    that the polynomial decay schedule works better than the
+high-dimensional but also expresses complex high-order                                       linear decay as it can allow more exploration in the early
+correlations, since forming digit shapes requires a signifi-                                 stage and more exploitation in the later stage, presented in
+cant number of pixels to be jointly considered. It is worth                                  App. D.6.1.
+noting that we do not consider image-based methods (such
+as CNNs) that leverage the spatial structure (i.e., pixel posi-                              6. Conclusion
+tion) while tabular methods do not. The experiment details
+are described in App. D.7. At this scale, most baselines                                     We revisit the challenges of modeling high-order correla-
+are not computationally feasible due to the large required                                   tions in synthetic tabular data generation under differen-
+GPU memory and runtime. Tab. 2 presents the test accuracy                                    tial privacy constraints. We showed that existing methods
+of the baselines and Tab-PE at ϵ = 1.0. Tab-PE achieves a                                    struggle to capture these correlations. To address this, we
+notable accuracy of 54%, while the query-based methods                                       introduced Tab-PE, a novel approach using Private Evolu-
+fail to capture the complex high-order correlations of pixels                                tion. Our method effectively models high-order correlations
+and deliver random guess performance.                                                        while being lightweight and efficient. While Private Evolu-
+                                                                                             tion has become an emerging paradigm showing promising
+                      Method (ϵ = 1.0)       GEM              RAP      Tab-PE                performance for image and text synthesis (Lin et al., 2024;
+                      Test Accuracy (↑)      12.06            9.82      54.05                Xie et al., 2024; Lin et al., 2025), our exploration shows
+Table 2. Classification accuracy on the flattened MNIST dataset.                             its potential in tabular data generation. With appropriate
+                                                                                             design choices, Tab-PE outperforms existing state-of-the-art
+Hyperparameter Sensitivity Analysis. We study the sen-                                       methods in capturing high-order fidelity, downstream utility,
+sitivity of key hyperparameters in Tab-PE. The detailed                                      and computational efficiency.
+results are presented in App. D.9. Generally, Tab-PE needs
+sufficient iterations (15-20) to converge and provide good                                   Impact Statement
+utilities. Our ideal number of iterations is notably smaller
+than PrivGSD (also an evolutionary approach but operating                                    We believe our work has positive ethical implications. By
+on dataset level rather than sample level), which typically                                  enabling the generation of high-quality synthetic tabular
+performs 200K iterations. The number of synthetic sam-                                       data with differential privacy guarantees, our methods can
+ples should be proportional to the dataset size to ensure                                    enable data sharing, application, and innovation in many
+an appropriate signal-to-noise ratio. At ϵ = 1.0, Tab-PE                                     fields where privacy concerns currently limit data access.
+performs best when generating 10-20% of the original size                                    However, we also acknowledge the potential risks of syn-
+(Fig. 19), but the synthetic data can be further enriched                                    thetic data, even with DP guarantees, loose configurations
+by oversampling algorithms (App. D.10). The optimal hy-                                      of privacy parameters may still lead to information leakage.
+perparameter setting is robust across ϵ settings (Fig. 25).                                  We encourage users to carefully consider the privacy-utility
+We also show that Tab-PE is fairly robust to the choice                                      trade-offs and choose appropriate privacy parameters for
+of categorical-numerical weight λ. Additionally, we find                                     their specific use cases.
+
+                                                                                         9
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Acknowledgement                                                         2939672.2939785. URL https://doi.org/10.
+                                                                        1145/2939672.2939785.
+Toan Tran and Li Xiong are supported by the National
+Science Foundation under Award Numbers CNS-2437345,                   Cormode, G., Maddock, S., Ullah, E., and Gade, S. Syn-
+IIS-2302968, CNS-2124104, by the National Institutes                    thetic tabular data: Methods, attacks and defenses. In
+of Health under Award Numbers R01ES033241 and                           Proceedings of the 31st ACM SIGKDD Conference on
+R01LM013712. The views and opinions expressed in this                   Knowledge Discovery and Data Mining V. 2, pp. 5989–
+paper are those of the authors and do not necessarily reflect           5998, 2025.
+the views of the U.S. Government or any agency thereof.
+                                                                      Ding, F., Hardt, M., Miller, J., and Schmidt, L. Retiring
+                                                                        adult: New datasets for fair machine learning. Advances
+References                                                              in Neural Information Processing Systems, 34, 2021.
+Alimohammadi, K., Wang, H., Gulati, O., Srivastava, A.,
+  and Azizan, N. Differentially private synthetic data gen-           Dockhorn, T., Cao, T., Vahdat, A., and Kreis, K. Dif-
+  eration for relational databases, 2025. URL https:                    ferentially private diffusion models.  Transactions
+  //arxiv.org/abs/2405.18670.                                           on Machine Learning Research, 2023. ISSN 2835-
+                                                                        8856. URL https://openreview.net/forum?
+Balle, B. and Wang, Y.-X. Improving the gaussian mecha-                 id=ZPpQk7FJXF.
+  nism for differential privacy: Analytical calibration and
+  optimal denoising. In International conference on ma-               Dong, J., Roth, A., and Su, W. J. Gaussian differential
+  chine learning, pp. 394–403. PMLR, 2018.                              privacy. Journal of the Royal Statistical Society Series B:
+                                                                       Statistical Methodology, 84(1):3–37, 2022.
+Becker, B. and Kohavi, R.         Adult.          UCI Ma-
+  chine Learning Repository,       1996.             DOI:             Donhauser, K., Abad, J., Hulkund, N., and Yang, F. Privacy-
+  https://doi.org/10.24432/C5XW20.                                      preserving data release leveraging optimal transport and
+                                                                        particle gradient descent. In Proceedings of the 41st In-
+Borisov, V., Leemann, T., Seßler, K., Haug, J., Pawelczyk,              ternational Conference on Machine Learning, ICML’24.
+  M., and Kasneci, G. Deep neural networks and tabular                  JMLR.org, 2024.
+  data: A survey. IEEE Transactions on Neural Networks
+  and Learning Systems, 35(6):7499–7519, 2024. doi: 10.               Du, Y. and Li, N. Systematic assessment of tabular data
+ 1109/TNNLS.2022.3229161.                                               synthesis. In Proceedings of the 2025 ACM SIGSAC Con-
+                                                                        ference on Computer and Communications Security, CCS
+Cai, K., Lei, X., Wei, J., and Xiao, X. Data synthesis via             ’25, pp. 2414–2428, New York, NY, USA, 2025. Associa-
+  differentially private markov random fields. Proceedings              tion for Computing Machinery. ISBN 9798400715259.
+  of the VLDB Endowment, 14(11):2190–2202, 2021.                        doi: 10.1145/3719027.3765067. URL https://doi.
+                                                                        org/10.1145/3719027.3765067.
+Castellon, R., Gopal, A., Bloniarz, B., and Rosenberg, D.
+  Dp-tbart: A transformer-based autoregressive model for              Dwork, C. Differential privacy. In Bugliesi, M., Preneel, B.,
+  differentially private tabular data generation, 2023. URL            Sassone, V., and Wegener, I. (eds.), Automata, Languages
+  https://arxiv.org/abs/2307.10430.                                    and Programming, pp. 1–12, Berlin, Heidelberg, 2006.
+                                                                       Springer Berlin Heidelberg. ISBN 978-3-540-35908-1.
+Chen, K., Gong, C., and Wang, T. Beyond one-size-fits-
+  all: Neural networks for differentially private tabular data        Dwork, C. and Roth, A. The algorithmic foundations of
+  synthesis, 2025a. URL https://arxiv.org/abs/                         differential privacy. Found. Trends Theor. Comput. Sci.,
+  2511.13893.                                                          9(3–4):211–407, August 2014. ISSN 1551-305X. doi:
+                                                                       10.1561/0400000042. URL https://doi.org/10.
+Chen, K., Li, X., Gong, C., McKenna, R., and Wang, T.                  1561/0400000042.
+  Benchmarking differentially private tabular data synthe-
+  sis, 2025b. URL https://arxiv.org/abs/2504.                         Fuentes, M., Mullins, B., McKenna, R., Miklau, G., and
+  14061.                                                                Sheldon, D. Joint selection: Adaptively incorporating
+                                                                        public information for private synthetic data, 2024. URL
+Chen, T. and Guestrin, C. Xgboost: A scalable tree                      https://arxiv.org/abs/2403.07797.
+  boosting system. In Proceedings of the 22nd ACM
+  SIGKDD International Conference on Knowledge Dis-                   Ge, C., Mohapatra, S., He, X., and Ilyas, I. F. Kamino:
+  covery and Data Mining, KDD ’16, pp. 785–794,                         Constraint-aware differentially private data synthesis,
+  New York, NY, USA, 2016. Association for Comput-                      2021.    URL https://arxiv.org/abs/2012.
+  ing Machinery. ISBN 9781450342322. doi: 10.1145/                      15713.
+
+                                                                 10
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+González, T., Fanti, G., and Ramdas, A. Private evolution             on Learning Representations, 2024. URL https://
+  converges, 2025. URL https://arxiv.org/abs/                          openreview.net/forum?id=YEhQs8POIo.
+  2506.08312.
+                                                                     Lin, Z., Baltrusaitis, T., Wang, W., and Yekhanin, S. Dif-
+Guvenir, H., Acar, B., and Muderrisoglu, H. Artificial                 ferentially private synthetic data via apis 3: Using sim-
+  characters. https://archive.ics.uci.edu/                             ulators instead of foundation model. arXiv preprint
+  dataset/6/artificial+characters,              1992.                  arXiv:2502.05505, 2025.
+  UCI Machine Learning Repository.
+                                                                     Liu, T., Vietri, G., and Wu, S. Z. Iterative methods for pri-
+Hollmann, N., Müller, S., Purucker, L., Krishnakumar, A.,             vate synthetic data: Unifying framework and new meth-
+  Körfer, M., Hoo, S. B., Schirrmeister, R. T., and Hut-              ods. Advances in Neural Information Processing Systems,
+  ter, F. Accurate predictions on small data with a tabu-              34:690–702, 2021.
+  lar foundation model. Nature, 01 2025. doi: 10.1038/
+  s41586-024-08328-6. URL https://www.nature.                        Liu, T., Tang, J., Vietri, G., and Wu, S. Generating pri-
+  com/articles/s41586-024-08328-6.                                     vate synthetic data with genetic algorithms. In Inter-
+                                                                       national Conference on Machine Learning, pp. 22009–
+Holohan, N., Braghin, S., Mac Aonghusa, P., and Levacher,              22027. PMLR, 2023.
+  K. Diffprivlib: the IBM differential privacy library. ArXiv
+  e-prints, 1907.02444 [cs.CR], July 2019.                           Maddock, S., Cormode, G., and Maple, C. Flaim: Aim-
+                                                                      based synthetic data generation in the federated setting.
+Hou, C., Shrivastava, A., Zhan, H., Conway, R., Le, T.,               In Proceedings of the 30th ACM SIGKDD Conference on
+  Sagar, A., Fanti, G., and Lazar, D. Pre-text: training              Knowledge Discovery and Data Mining, KDD ’24, pp.
+  language models on private federated data in the age of             2165–2176, New York, NY, USA, 2024. Association for
+  llms. In Proceedings of the 41st International Conference           Computing Machinery. ISBN 9798400704901. doi: 10.
+  on Machine Learning, ICML’24. JMLR.org, 2024.                       1145/3637528.3671990. URL https://doi.org/
+                                                                      10.1145/3637528.3671990.
+Hou, C., Wang, M.-Y., Zhu, Y., Lazar, D., and Fanti, G.
+  Private federated learning using preference-optimized              Maddock, S., Gade, S., Cormode, G., and Bullock, W.
+  synthetic data. In Forty-second International Confer-               Gem+: Scalable state-of-the-art private synthetic data
+  ence on Machine Learning, 2025. URL https://                        with generator networks, 2025. URL https://arxiv.
+  openreview.net/forum?id=ZuaU2bYzlc.                                 org/abs/2511.09672.
+Hu, Y., Wu, F., Li, Q., Long, Y., Garrido, G. M., Ge, C.,            McKenna, R., Sheldon, D., and Miklau, G. Graphical-
+  Ding, B., Forsyth, D., Li, B., and Song, D. X. Sok:                 model based estimation and inference for differ-
+  Privacy-preserving data synthesis. 2024 IEEE Sym-                   ential privacy.  In ICML, pp. 4435–4444, 2019.
+  posium on Security and Privacy (SP), pp. 4696–4713,                 URL http://proceedings.mlr.press/v97/
+  2023. URL https://api.semanticscholar.                              mckenna19a.html.
+  org/CorpusID:259342074.
+                                                                     McKenna, R., Miklau, G., and Sheldon, D. Winning the nist
+Kurakin, A., Ponomareva, N., Syed, U., MacDermed, L.,                 contest: A scalable and general approach to differentially
+  and Terzis, A. Harnessing large-language models to                  private synthetic data, 2021. URL https://arxiv.
+  generate private synthetic text, 2024. URL https:                   org/abs/2108.04978.
+ //arxiv.org/abs/2306.01684.
+                                                                     McKenna, R., Mullins, B., Sheldon, D., and Miklau, G. Aim:
+Li, H., Xiong, L., Zhang, L., and Jiang, X. Dpsynthe-                 An adaptive and iterative mechanism for differentially
+  sizer: differentially private data synthesizer for privacy          private synthetic data. arXiv preprint arXiv:2201.12677,
+  preserving data sharing. Proc. VLDB Endow., 7(13):                  2022.
+  1677–1680, August 2014. ISSN 2150-8097. doi: 10.
+  14778/2733004.2733059. URL https://doi.org/                        Moro, S., Rita, P., and Cortez, P. Bank marketing. UCI
+  10.14778/2733004.2733059.                                           Machine Learning Repository, 2014. URL https://
+                                                                      doi.org/10.24432/C5K306.
+Li, N., Zhang, Z., and Wang, T. Dpsyn: Experiences in the
+  nist differential privacy data synthesis challenges, 2021.         NIST. 2018 differential privacy synthetic data chal-
+  URL https://arxiv.org/abs/2106.12949.                                lenge.  https://www.nist.gov/ctl/pscr/
+                                                                       open-innovation-prize-challenges/
+Lin, Z., Gopi, S., Kulkarni, J., Nori, H., and Yekhanin, S.            past-prize-challenges/
+  Differentially private synthetic data via foundation model           2018-differential-privacy-synthetic,
+  APIs 1: Images. In The Twelfth International Conference              2018.
+
+                                                                11
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Pang, W., Shafieinejad, M., Liu, L., Hazlewood, S., and                In Advances in Neural Information Processing Systems,
+  He, X. Clavaddpm: multi-relational data synthesis with               2022.
+  cluster-guided diffusion models. In Proceedings of the
+  38th International Conference on Neural Information                Wang, H., Lin, Z., Yu, D., and Zhang, H. Synthesize privacy-
+  Processing Systems, NIPS ’24, Red Hook, NY, USA,                    preserving high-resolution images via private textual in-
+  2024. Curran Associates Inc. ISBN 9798331314385.                    termediaries. arXiv preprint arXiv:2506.07555, 2025a.
+
+Ponomareva, N., Xu, Z., McMahan, H. B., Kairouz, P.,                 Wang, S., Raunak, V., Backurs, A., Reis, V., Zhou, P., Chen,
+  Rosenblatt, L., Cohen-Addad, V., Guzmán, C., McKenna,              S., Yang, L., Lin, Z., Yekhanin, S., and Fanti, G. Struct-
+  R., Andrew, G., Bie, A., Yu, D., Kurakin, A., Zadi-                 bench: A benchmark for differentially private structured
+  moghaddam, M., Vassilvitskii, S., and Terzis, A. How                text generation, 2025b. URL https://arxiv.org/
+  to dp-fy your data: A practical guide to generating                 abs/2509.10696.
+  synthetic data with differential privacy, 2025. URL
+                                                                     Watanabe, S. Information theoretical analysis of multivari-
+  https://arxiv.org/abs/2512.03238.
+                                                                      ate correlation. IBM Journal of Research and Develop-
+Qu, J., Holzmüller, D., Varoquaux, G., and Morvan, M. L.             ment, 4(1):66–82, 1960. doi: 10.1147/rd.41.0066.
+ TabICL: A tabular foundation model for in-context learn-
+  ing on large data. In Forty-second International Con-              Xie, C., Lin, Z., Backurs, A., Gopi, S., Yu, D., Inan, H. A.,
+  ference on Machine Learning, 2025. URL https:                        Nori, H., Jiang, H., Zhang, H., Lee, Y. T., Li, B., and
+ //openreview.net/forum?id=0VvD1PmNzM.                                 Yekhanin, S. Differentially private synthetic data via
+                                                                       foundation model apis 2: Text, 2024. URL https:
+Rosenblatt, L., Liu, P., McKenna, R., and Ponomareva, N.               //arxiv.org/abs/2403.01749.
+  Privately fine-tuned llms preserve temporal dynamics
+  in tabular data, 2026. URL https://arxiv.org/                      Xie, L., Lin, K., Wang, S., Wang, F., and Zhou, J. Differen-
+  abs/2602.02766.                                                      tially private generative adversarial network, 2018. URL
+                                                                       https://arxiv.org/abs/1802.06739.
+Sablayrolles, A., Wang, Y., and Karrer, B. Privately gen-
+  erating tabular data using language models, 2023. URL              Yang, M., Chi, C.-H., Lam, K.-Y., Feng, J., Guo, T., and
+  https://arxiv.org/abs/2306.04803.                                    Ni, W. Tabular data synthesis with differential privacy: A
+                                                                       survey. arXiv preprint arXiv:2411.03351, 2024.
+Sajjadi, M. S. M., Bachem, O., Lucic, M., Bousquet, O.,
+  and Gelly, S. Assessing generative models via precision            Yoon, J., Jordon, J., and van der Schaar, M. PATE-GAN:
+  and recall. In Advances in Neural Information Processing             Generating synthetic data with differential privacy guaran-
+  Systems, volume 31, 2018.                                            tees. In International Conference on Learning Represen-
+                                                                       tations, 2019. URL https://openreview.net/
+Swanberg, M., McKenna, R., Roth, E., Cheu, A., and                     forum?id=S1zk9iRqF7.
+  Kairouz, P. Is api access to llms useful for gener-
+  ating private synthetic tabular data? arXiv preprint               Yue, X., Inan, H. A., Li, X., Kumar, G., McAnallen, J.,
+  arXiv:2502.06555, 2025.                                              Shajari, H., Sun, H., Levitan, D., and Sim, R. Synthetic
+                                                                       text generation with differential privacy: A simple and
+Tao, Y., McKenna, R., Hay, M., Machanavajjhala, A., and
+                                                                       practical recipe, 2023. URL https://arxiv.org/
+  Miklau, G. Benchmarking differentially private syn-
+                                                                       abs/2210.14348.
+  thetic data generation algorithms, 2022. URL https:
+  //arxiv.org/abs/2112.09238.                                        Zhang, J., Xiao, X., and Xie, X. Privtree: A differ-
+                                                                       entially private algorithm for hierarchical decomposi-
+Tran, T. V. and Xiong, L. Differentially private tabular
+                                                                       tions. In Proceedings of the 2016 International Con-
+  data synthesis using large language models, 2024. URL
+                                                                       ference on Management of Data, SIGMOD ’16, pp.
+  https://arxiv.org/abs/2406.01457.
+                                                                       155–170, New York, NY, USA, 2016. Association for
+Vidulin, V., Lustrek, M., Kaluza, B., Piltaver, R., and                Computing Machinery. ISBN 9781450335317. doi: 10.
+  Krivec, J. Localization data for person activity. https:             1145/2882903.2882928. URL https://doi.org/
+  //archive.ics.uci.edu/dataset/201/                                   10.1145/2882903.2882928.
+  localization+data+for+person+activity,
+  2010. UCI Machine Learning Repository.                             Zhang, J., Cormode, G., Procopiuc, C. M., Srivastava, D.,
+                                                                       and Xiao, X. Privbayes: Private data release via bayesian
+Vietri, G., Archambeau, C., Aydore, S., Brown, W., Kearns,             networks. ACM Trans. Database Syst., 42(4), October
+  M., Roth, A., Siva, A., Tang, S., and Wu, S. Private                 2017. ISSN 0362-5915. doi: 10.1145/3134428. URL
+  synthetic data for multitask learning and marginal queries.          https://doi.org/10.1145/3134428.
+
+                                                                12
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Zhang, J., Liu, Y., FU, J., Hua, Y., Zou, T., Cao, J., and
+  Yang, Q. PCEvolve: Private contrastive evolution for
+  synthetic dataset generation via few-shot private data
+  and generative APIs. In Forty-second International Con-
+  ference on Machine Learning, 2025. URL https:
+  //openreview.net/forum?id=IKCfxWtTsu.
+Zhang, Z., Wang, T., Li, N., Honorio, J., Backes, M., He, S.,
+  Chen, J., and Zhang, Y. Privsyn: Differentially private
+  data synthesis. In 30th USENIX Security Symposium
+  (USENIX Security 21), pp. 929–946, 2021.
+Zou, T., Liu, Y., Li, P., Xiong, Y., Zhang, J., Liu, J., Ye,
+  X., Ouyang, Y., and Zhang, Y.-Q. Contrastive private
+  data synthesis via weighted multi-PLM fusion. In Forty-
+  second International Conference on Machine Learning,
+  2025. URL https://openreview.net/forum?
+  id=oRdfFS7xO5.
+
+
+
+
+                                                                13
+                                  Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+  Appendix of “Differentially Private Synthetic Data via APIs 4: Tabular Data”
+
+
+Due to the space limit, we present additional details, results, and analyses in this Appendix.
+
+A. Preliminaries
+A.1. Analysis on high-order correlations
+In this section, we show that constraining tree-based predictor depth can effectively quantify the order of correlations.
+Let Y be the label and X = {X1 , X2 , . . . , Xk−1 } be the feature set. We denote X−Z = {X1 , X2 , . . . , Xk−1 }\{Z} for Z ∈
+X. Typically, the predictors are trained and evaluated by expected log-loss (i.e., cross entropy): RT = E[− log PfT (Y |X)],
+where T is the depth of the tree-based predictor, and fT represents the predictor. We assume that each branch in the predictor
+fT can be an arbitrary function on one feature, and the predictor is trained to the optimal and RT∗ = minfT RT .
+Proposition A.1 (Performance gap of tree-based predictors indicates high-order correlations). Assume increasing the
+tree depth from k − 2 to k − 1 can significantly improve the prediction performance, i.e., the training loss decreases by
+  ∗        ∗
+Rk−2  − Rk−1   > ∆, where ∆ is a non-trivial positive constant.
+Then the set of attributes {Y, X1 , . . . , Xk−1 } exhibits a k-way correlation.
+
+Proof. Since X contains only k − 1 features, the predictor requires at most k − 1 layers to achieve the optimal prediction.
+Therefore,
+                                                 ∗
+                                                Rk−1 = min Rk−1 = H(Y | X).
+                                                            fk−1
+
+
+For the predictor fk−2 , each prediction branch can depend on at most k − 2 features. Consequently, its prediction error is no
+                                 ′
+worse than that of a predictor fk−2  that selects the best subset of k − 2 features from X so as to minimize the training loss.
+This implies
+                                                       ∗
+                                                      Rk−2 ≤ min H(Y | X−Z ).
+                                                                Z∈X
+
+
+Combining the above inequalities, we obtain
+
+                                                                ∗      ∗
+                                  min H(Y | X−Z ) − H(Y | X) ≥ Rk−2 − Rk−1 > ∆.
+                                  Z∈X
+
+
+
+Recall that, by definition, the set of attributes {Y, X1 , . . . , Xk−1 } exhibits a k-way correlation if and only if
+                                                                                                          
+                        I(Y, X1 , . . . , Xk−1 ) −         max             I {Y, X1 , . . . , Xk−1 } \ {Z} > ∆.
+                                                     Z∈{Y,X1 ,...,Xk−1 }
+
+
+In what follows, we first show that
+                                                                                                         
+                         I(Y, X1 , . . . , Xk−1 ) −        max            I {Y, X1 , . . . , Xk−1 } \ {Z} > ∆,
+                                                      Z∈{X1 ,...,Xk−1 }
+
+
+and then prove that
+                                        I(Y, X1 , . . . , Xk−1 ) − I(X1 , . . . , Xk−1 ) > ∆.
+
+Together, these two inequalities establish the desired conclusion.
+
+First term.    For
+                                                                                                            
+                            I(Y, X1 , . . . , Xk−1 ) −        max            I {Y, X1 , . . . , Xk−1 } \ {Z} ,
+                                                         Z∈{X1 ,...,Xk−1 }
+
+
+                                                                    14
+                                 Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+we have
+                                                                                                               
+                            I(Y, X1 , . . . , Xk−1 ) −        max            I {Y, X1 , . . . , Xk−1 } \ {Z}
+                                                         Z∈{X1 ,...,Xk−1 }
+                                                
+                        = min I XZ ; {Y } ∪ X−Z
+                           Z
+                                                            
+                        = min I(XZ ; X−Z ) + I(Y ; XZ | X−Z )
+                             Z
+                        ≥ min I(XZ ; X−Z ) + min I(Y ; XZ | X−Z )
+                             Z                       Z
+                        >0+∆
+                        = ∆,
+
+where we utilize the fact that minZ I(Y ; XZ | X−Z ) = minZ∈X H(Y |X−Z ) − H(Y |X) > ∆.
+
+Second term.    For
+                                          I(Y, X1 , . . . , Xk−1 ) − I(X1 , . . . , Xk−1 ),
+
+we obtain
+
+                                            I(Y, X1 , . . . , Xk−1 ) − I(X1 , . . . , Xk−1 )
+                                         = I(Y ; X1 , . . . , Xk−1 )
+                                         = I(Y ; X−X1 ) + I(Y ; X1 | X−X1 )
+                                         >0+∆
+                                         = ∆,
+
+where we utilize the fact that I(Y ; X1 | X−X1 ) ≥ minZ I(Y ; XZ | X−Z ) > ∆.
+This concludes the proof.
+
+B. Methodology
+B.1. Privacy Analysis
+The privacy analysis of Algorithm 2 can be reused from (Lin et al., 2024) (see Section 4.3 there), as Tab-PE changes only
+non-private steps of the original PE framework. For completeness, we include it here as well. The DP guarantee of the
+Tab-PE algorithm (Algorithm 2) can be reasoned as follows:
+
+  • Step 1: The sensitivity of DP Nearest Neighbors Histogram (Algorithm 1). Each private sample only contributes one
+    vote for histogram of one class. If we add or remove one sample, the resulting histogram for the corresponding class
+    will change by at most 1 in the ℓ2 norm. Therefore, the sensitivity is upper bounded by 1.
+
+  • Step 2: Regarding each PE iteration as a Gaussian mechanism. The second for loop of Algorithm 1 adds i.i.d. Gaussian
+    noise with standard deviation σ to each bin. This is a standard Gaussian mechanism ((Dwork & Roth, 2014)) with
+    noise multiplier σ.
+
+  • Step 3: Regarding the entire PE algorithm as T adaptive compositions of Gaussian mechanisms, as Tab-PE is simply
+    applying Algorithm 1 T times sequentially.
+                                                                                                    √
+  • Step 4: Regarding the entire Tab-PE algorithm as one Gaussian mechanism with noise multiplier σ/ T . It is a standard
+    result from (Dong et al., 2022) (see Corollary 3.3 therein).
+
+  • Step 5: Computing DP parameters ϵ and δ. Since the problem is simply computing ϵ and δ for a standard Gaussian
+    mechanism, we use the formula from (Balle & Wang, 2018) directly.
+
+                                                                  15
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+C. Experimental Setup
+C.1. Datasets
+C.1.1. R EAL - WORLD DATASETS
+Quantifying high-order correlation through classifier performance gap We aim to study how well the methods
+can capture high-order correlations. It is easy to be misled about high-dimensional correlations and high-dimensional
+datasets. While some datasets can have a large number of features, the features are often independent or only have low-order
+correlations (i.e., dependencies involving only a few features). We first propose a way to quantify the order of correlation in
+a dataset by considering the performance gap between simple classifiers, which only capture low-order correlations, and
+complex classifiers, which can leverage high-order correlations. The larger the gap, the more high-order correlations exist in
+the dataset. In practice, motivated by Proposition A.1, we vary the max depth of XGBoost, where the decision depth works
+as an upper bound on the order of captured correlations.
+
+Widely used datasets are dominated by low-order correlations We investigate a variety of datasets that have been
+widely used in prior evaluations (Chen et al., 2025b; Tao et al., 2022). We increase the max depth from 2 to 7, while
+keeping other hyperparameters as default. The results are shown in Figure 9. The gap of accuracy is trivial (typically smaller
+than 1%). This indicates that the downstream tasks on these datasets are dominated by low-order correlations. This leads
+to the conclusion that these datasets are not suitable for evaluating the ability to capture high-order correlations because
+synthesizers that can only capture low-order correlations may already achieve good performance.
+
+Datasets with high-order correlations We selected two datasets that yield significant differences in accuracy while varying
+the max depth of XGBoost, as depicted in Figure 10. In particular, we consider the Artificial Characters dataset (Guvenir
+et al., 1992) 2 and the Person Activity dataset (Vidulin et al., 2010) 3 . The Artificial Characters dataset contains 10218
+samples with 8 numerical features and 10 classes, while the Person Activity dataset includes 164860 samples with 2
+categorical features, 6 numerical features, and 11 classes.
+
+C.1.2. S IMULATION DATASETS
+XOR correlations as a stress test We consider XOR correlations as a stress test for capturing high-order correlations.
+The XOR function is a classic example that requires all input features to determine the output. Failing to model any single
+feature leads to random guessing. Each feature is drawn from a uniform distribution over (−10, 10). The label is then
+determined by the parity of positive features.
+                                               (        Pd
+                                                1 if i=1 1(xi > 0) is odd
+                                            c=
+                                                0 otherwise
+
+For each setting of the number of features, we generate 50K samples and ensure balanced binary classes. The dataset with
+two features is visualized in Figure 11. Figure 12 presents the performance of XGBoost classifiers with varying max depths
+on the XOR datasets. The max depth of XGBoost must be equal to the number of features to achieve better-than-random
+accuracy. Therefore, the synthetic data must capture the full high-order correlations to achieve good downstream utilities.
+
+SCM simulation datasets offer sustainable high-order correlations We adapt the simulation method from TabPFN (Holl-
+mann et al., 2025), which is a breakthrough in tabular data classification. TabPFN generates large-scale realistic simulation
+data and pretrains a foundation model for in-context learning. By learning on only the simulation data, TabPFN still offers
+strong generalization to real-world data. This simulation pipeline employs Structural Causal Models (SCMs). An SCM
+defines a directed acyclic graph where each node corresponds to a feature, and the edges capture causal dependencies. The
+features are then generated by sampling values according to these dependencies that can represent complex interactions and
+non-linear relationships. The label is calculated by a prior function of features, inducing high-order correlations between the
+label and the feature set. As a result, increasing the max depth of XGBoost can lead up to a 10% accuracy gap (Figure 13,
+Appendix C.1). Compared to the previous XOR setting, this is a more realistic scenario: features are correlated; modeling
+a subset of the joint distribution can translate into gains for downstream tasks. In our experiments, we implement three
+   2
+       https://www.openml.org/search?type=data&id=1459
+   3
+       https://www.openml.org/search?type=data&id=1483
+
+                                                              16
+                         Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+           1.0                Adult                                      1.0           ACS-Income
+Accuracy   0.8                                                           0.8
+
+
+
+
+                                                              Accuracy
+           0.6                                                           0.6
+
+           0.4                                                           0.4
+                 2        4        6                                           2        4        6
+                     Xgboost Max depth                                             Xgboost Max depth
+           1.0            Shopping                                       1.0           Breast-Cancer
+
+           0.8                                                           0.8
+Accuracy
+
+
+
+
+                                                              Accuracy
+           0.6                                                           0.6
+
+           0.4                                                           0.4
+                 2        4        6                                           2        4        6
+                     Xgboost Max depth                                             Xgboost Max depth
+           1.0               Higgs                                       1.0               Bank
+
+           0.8                                                           0.8
+Accuracy
+
+
+
+
+                                                              Accuracy
+
+
+
+
+           0.6                                                           0.6
+
+           0.4                                                           0.4
+                 2        4        6                                           2        4        6
+                     Xgboost Max depth                                             Xgboost Max depth
+             Figure 9. Datasets with low-order correlations. These are widely used in prior evaluations.
+
+
+
+
+           1.0
+                     Artificial-Characters                               1.0
+                                                                                       Person-Activity
+
+           0.8                                                           0.8
+Accuracy
+
+
+
+
+                                                              Accuracy
+
+
+
+
+           0.6                                                           0.6
+           0.4                                                           0.4
+           0.2                                                           0.2
+                     2          4           6                                      2          4          6
+                            Max depth                                                     Max depth
+                           Figure 10. Datasets with high-order correlations – our focus.
+
+
+
+                                                         17
+                   Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+                  Figure 11. XOR dataset with 2 features. The colors represent classes.
+
+
+
+
+                 XOR-1-features                                          XOR-2-features
+           1.0                                                     1.0
+Accuracy
+
+
+
+
+                                                        Accuracy
+
+
+
+
+           0.8                                                     0.8
+           0.6                                                     0.6
+           0.4                                                     0.4
+                 2       4      6                                        2       4      6
+                 Xgboost Max depth                                       Xgboost Max depth
+                 XOR-3-features                                          XOR-4-features
+           1.0                                                     1.0
+Accuracy
+
+
+
+
+                                                        Accuracy
+
+
+
+
+           0.8                                                     0.8
+           0.6                                                     0.6
+           0.4                                                     0.4
+                 2       4      6                                        2       4      6
+                 Xgboost Max depth                                       Xgboost Max depth
+                                 Figure 12. XOR Simulation Datasets.
+
+
+
+
+                                                   18
+                                     Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+non-linear prior function: Tree, Neural Network (NN), and Random Fourier Features (RFF). Each dataset includes 50K
+samples.
+
+
+                         1.0              Tree                                          1.0       Neural-Network
+
+                         0.8                                                            0.8
+              Accuracy
+
+
+
+
+                                                                             Accuracy
+                         0.6                                                            0.6
+
+                         0.4                                                            0.4
+                               2        4        6                                            2        4        6
+                                   Xgboost Max depth                                              Xgboost Max depth
+                                                        1.0Random-Fourier-Features
+
+                                                        0.8
+                                             Accuracy
+
+
+
+
+                                                        0.6
+
+                                                        0.4
+                                                              2        4        6
+                                                                  Xgboost Max depth
+                                                        Figure 13. SCM Simulation Datasets.
+
+
+C.2. Evaluation Metrics
+We consider the following metrics to evaluate the quality of synthetic data.
+
+Downstream utility The downstream utility reflects how well the synthetic data capture the correlation between features
+and labels. These metrics are the most important ones for studying high-order correlations. For consistency, we use the same
+SOTA classifier TabICL (Qu et al., 2025) for all datasets. TabICL is a transformer-based foundation model that has been
+pretrained on 82 million tabular datasets with in-context learning. It has demonstrated superior performance on a wide range
+of tabular datasets while requiring little-to-no hyperparameter tuning. For all methods, we fit TabICL on the generated
+synthetic data and evaluate on the same real test set.
+
+Fidelity of statistical properties To capture the statistical properties, we consider the Wasserstein distance. We denote
+k-WD as the average Wasserstein distance of all k-dimensional marginal distributions. The collection of k-attribute subsets:
+
+                                                          Ck = { S ⊆ F : |S| = k },
+
+where F is the set of features/attributes including the label. The average Wasserstein distance of k-dimensional marginals is
+defined as:
+                                                          1 X
+                                    k − WD(D, D′ ) =               W D D(XS ), D′ (XS ) ,
+                                                                                          
+                                                         |Ck |
+                                                                      S∈Ck
+                  ′
+where D and D are the real and synthetic datasets, respectively; XS is the subset of features in S; and W D(·, ·) is the
+Wasserstein distance between two distributions. We use the Python package POT to compute the Wasserstein distance.
+
+Representation-level alignment Evaluating the alignment on the representation space is common for text and image gen-
+eration (Lin et al., 2024; Xie et al., 2024). The alignment reflects how well the synthetic data cover the real data distribution
+
+                                                                        19
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+in the representation space which can capture somewhat high-dimensional dependencies. While the representation space is
+achieved directly from foundation models in text and image domains, tabular data is challenged by strong distribution-shift
+across datasets. Therefore, we train an autoencoder for each dataset using the private dataset directly with a reconstruction
+loss. It is worth noting that the autoencoder here is only used for evaluation, and is not part of the synthesis process. By
+training on the private data, we ensure that the representation space is reliable and meaningful. We then calculate precision
+and recall (Sajjadi et al., 2018) on the embeddings of real and synthetic data. Precision measures how many generated
+samples are actually close to the real data manifold, while Recall calculates how many real samples are covered by the
+generated data. The formulas of precision and recall are as follows:
+
+                                      1     X
+                      Precision =             1(∃y ∈ Dreal , ∥ϕ(x) − ϕ(y)∥2 ≤ rk (ϕ(y), ϕ(Dreal )))
+                                    |Dsyn |
+                                          x∈Dsyn
+
+
+
+where ϕ is the encoder of the autoencoder that maps the raw data to the representation space; rk (ϕ(y), ϕ(Dreal )) is the
+distance from ϕ(y) to its k-th nearest neighbor in the set ϕ(Dreal ). We set k = 5 in our experiments. Recall is defined
+symmetrically by swapping Dsyn and Dreal .
+
+
+                                    1      X
+                       Recall =              1(∃x ∈ Dsyn , ∥ϕ(y) − ϕ(x)∥2 ≤ rk (ϕ(x), ϕ(Dsyn )))
+                                  |Dreal |
+                                         y∈Dreal
+
+
+C.3. Implementations
+Our code, datasets, and instructions are available at https://anonymous.4open.science/r/tabpe-A11C. We
+split each dataset into 70% training, 15% validation, and 15% test sets, determined by fixed random seeds. All the methods
+are fitted on the same training set and evaluated on the same test set. The validation set is used for hyperparameter tuning
+for all methods. We generally do not account for the privacy budget for hyperparameter tuning. For the baselines, we
+reuse the code from a recent benchmark (Chen et al., 2025b) and follow their hyperparameter settings. For baselines that
+require discretization for numerical features, we employ PrivTree (Zhang et al., 2016), which yields better performance
+than uniform binning, according to (Chen et al., 2025b). For baselines using statistical queries, we use marginal queries, as
+they are the most commonly used in prior work and the most important for capturing high-order correlations. Rather than
+fixing the degree of marginal queries at 2, as is common in many previous setups, we treat it as a tunable hyperparameter
+(ranging from 2 to 5), since our datasets exhibit high-order correlations. This tuning maximizes the chance of capturing such
+correlations. The other hyperparameters of the baselines are presented in Table 3.
+By default, we run Tab-PE with the hyperparameters presented in Table 4 if not specified. For the real-world datasets, we
+generate 1K samples for the Artificial Characters dataset and 5K samples for the Person Activity dataset. For the simulation
+data, we generate 2K samples by default.
+
+D. Additional Results
+D.1. Data distribution of Tab-PE over iterations
+Figure 14 illustrates the evolutionary process of synthetic datasets generated by Tab-PE. At the beginning (iteration 0),
+the synthetic data is mostly random. As the algorithm progresses, the synthetic data gradually aligns with the private data
+distribution.
+
+D.2. SCM Simulation Datasets
+Table 5 presents the performance of all methods on the SCM simulation datasets. Tab-PE consistently outperforms all
+baselines for the downstream utility metrics. Table 6 presents the fidelity metrics. For the fidelity metrics, Tab-PE offers
+the best performance for the NN and RFF datasets, while AIM achieves the best for the Tree dataset. In the embedding
+space, Tab-PE achieves the best precision, demonstrating that the synthetic samples generated by Tab-PE are indeed close to
+the real data at the representation level. Overall, these results indicate the effectiveness of Tab-PE in capturing high-order
+correlations.
+
+                                                             20
+         Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+    Method       Hyperparameter                     Value
+                 Consistent Iteration               501
+    PrivSyn
+                 Max update iteration               50
+                 Graph construction parameter       6
+                 Sample size                        400
+    PrivMRF      Estimation iteration               3000
+                 Size penalty                       1e-8
+                 Max clique size                    1e+7
+                 Synthesis size                     1024
+                 Learning rate                      1e-3
+    GEM
+                 Max iteration                      500
+                 Max selection round                5 · number of attributes
+                 Random Projection Number           2e+6
+                 Categorical optimization rate      3e-3
+                 Numerical optimization rate        6e-3
+    RAP++        Top q                              5
+                 Categorical optimization step      1
+                 Numerical optimization step        3
+                 Upsample rate                      10
+                 Mutation rate                      50
+                 Crossover rate                     50
+    PrivGSD
+                 Upsample number                    1e+5
+                 Number of iterations               1e+6
+                 Max model size                     100
+    AIM          Max iteration                      1000
+                 Max marginal size                  2.5e+5
+                   Table 3. Hyperparameters of the baselines.
+
+
+
+
+Hyperparameter                             Value
+Number of iterations T                     15
+Number of sampling iterations Tsampling    5
+Variation degree m                         3
+Mutation rate initial value µinit          0.5
+Mutation rate final value µfinal           0.02
+Categorical mutation rate µcat             Polynomial decay from µinit to 0.02
+Numerical mutation rate µnum               Polynomial decay from µinit to 0.02
+Decay factor γ                             0.2
+Categorical weight λ                       1/3
+Privacy budget ϵ                           1.0
+Privacy delta δ                            1/(|Dreal | · ln(|Dreal |))
+                  Table 4. Default hyperparameters of Tab-PE.
+
+
+
+
+                                      21
+                  Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+Figure 14. Synthetic Datasets generated by Tab-PE over iterations for the XOR dataset with 2 features.
+
+
+
+
+                                                 22
+                                 Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+                          ML Downstream (↑)                            Fidelity (↓)                        Embedding (↑)
+  Prior    Method
+                         Accuracy     AUC Score           5-WD            6-WD            7-WD          Precision      Recall
+           UB           81.41 ± 0.09  90.17 ± 0.45     0.126 ± 0.004   0.164 ± 0.005   0.202 ± 0.005   98.05 ± 0.22 97.74 ± 0.09
+           PrivSyn      51.04 ± 0.00       -           0.182 ± 0.008   0.235 ± 0.007   0.288 ± 0.007   65.61 ± 0.98 98.08 ± 0.17
+           PrivMRF      65.68 ± 0.52  71.26 ± 0.82     0.139 ± 0.001   0.178 ± 0.001   0.216 ± 0.000   92.11 ± 0.61 98.34 ± 0.13
+           GEM          56.66 ± 0.67  60.47 ± 0.47     0.187 ± 0.008   0.241 ± 0.008   0.295 ± 0.008   59.65 ± 1.15 97.92 ± 0.18
+  Tree
+           RAP++        64.77 ± 1.09  69.77 ± 1.49     0.190 ± 0.013   0.234 ± 0.015   0.278 ± 0.015   93.21 ± 1.11 23.94 ± 3.32
+           PrivGSD      61.99 ± 0.37  66.22 ± 0.85     0.141 ± 0.011   0.181 ± 0.011   0.221 ± 0.011   84.79 ± 0.77 91.74 ± 0.28
+           AIM          65.40 ± 0.26  71.19 ± 0.10     0.128 ± 0.009   0.167 ± 0.009   0.206 ± 0.009   93.47 ± 0.45 98.33 ± 0.04
+           Tab-PE       68.78 ± 0.30  75.24 ± 0.36     0.132 ± 0.008   0.170 ± 0.008   0.208 ± 0.009   98.63 ± 0.31 79.61 ± 1.33
+           UB           96.58 ± 0.10  96.58 ± 0.10     0.119 ± 0.012   0.156 ± 0.012   0.192 ± 0.012   98.02 ± 0.16 97.77 ± 0.05
+           PrivSyn      51.97 ± 16.18 50.59 ± 22.57    0.204 ± 0.010   0.255 ± 0.009   0.306 ± 0.008   66.31 ± 0.08 97.93 ± 0.36
+           PrivMRF      84.78 ± 0.71  92.75 ± 0.77     0.131 ± 0.011   0.171 ± 0.013   0.211 ± 0.014   92.89 ± 0.29 98.41 ± 0.25
+           GEM          74.26 ± 0.81  82.61 ± 0.47     0.219 ± 0.026   0.275 ± 0.024   0.330 ± 0.023   57.55 ± 0.76 98.24 ± 0.13
+  NN
+           RAP++        85.16 ± 1.21  93.06 ± 1.10     0.179 ± 0.018   0.221 ± 0.020   0.263 ± 0.022   94.00 ± 0.26 21.81 ± 2.22
+           PrivGSD      82.47 ± 0.40  90.86 ± 0.49     0.147 ± 0.004   0.187 ± 0.004   0.227 ± 0.005   84.96 ± 0.42 91.17 ± 0.56
+           AIM          85.23 ± 0.40  93.26 ± 0.57     0.129 ± 0.014   0.168 ± 0.016   0.207 ± 0.017   93.10 ± 0.26 98.36 ± 0.23
+           Tab-PE       89.36 ± 0.42  96.37 ± 0.25     0.125 ± 0.010   0.163 ± 0.010   0.199 ± 0.010   98.57 ± 0.39 81.27 ± 1.75
+           UB           81.12 ± 0.19  81.12 ± 0.19     0.113 ± 0.003   0.152 ± 0.003   0.191 ± 0.002   98.12 ± 0.18 97.55 ± 0.16
+           PrivSyn      50.96 ± 2.61  50.56 ± 4.13     0.173 ± 0.005   0.227 ± 0.005   0.281 ± 0.005   66.83 ± 0.59 97.77 ± 0.44
+           PrivMRF      60.11 ± 0.15  63.68 ± 0.29     0.122 ± 0.005   0.162 ± 0.005   0.202 ± 0.005   93.06 ± 0.16 98.55 ± 0.07
+           GEM          53.76 ± 0.99  55.53 ± 0.95     0.187 ± 0.019   0.243 ± 0.019   0.298 ± 0.018   57.80 ± 3.26 98.51 ± 0.21
+  RFF
+           RAP++        59.00 ± 1.32  62.13 ± 1.72     0.178 ± 0.006   0.221 ± 0.005   0.263 ± 0.005   0.270 ± 0.007 25.84 ± 2.99
+           PrivGSD      57.08 ± 0.07  59.70 ± 0.15     0.137 ± 0.004   0.179 ± 0.004   0.220 ± 0.003   85.13 ± 0.24 90.80 ± 0.79
+           AIM          59.60 ± 1.32  62.76 ± 1.41     0.125 ± 0.004   0.165 ± 0.005   0.204 ± 0.005   93.41 ± 0.31 98.50 ± 0.16
+           Tab-PE       64.10 ± 0.40  69.19 ± 0.45     0.120 ± 0.008   0.160 ± 0.008   0.198 ± 0.008   98.57 ± 0.39 81.27 ± 1.75
+Table 5. The experiment is configured with ϵ = 1.0. The degree hyperparameter of baselines varies from 2 to 5, the best-performing
+results of the baselines are reported. The best and second-best results are highlighted in bold and underline, respectively.
+
+
+
+
+                                                               23
+                                  Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+                                                                         Fidelity (↓)
+  Prior     Method
+                            1-WD            2-WD            3-WD            4-WD            5-WD            6-WD            7-WD
+            UB           0.026 ± 0.002   0.046 ± 0.003   0.070 ± 0.004   0.089 ± 0.004   0.126 ± 0.004   0.164 ± 0.005   0.202 ± 0.005
+            PrivSyn      0.030 ± 0.004   0.064 ± 0.008   0.103 ± 0.009   0.131 ± 0.008   0.182 ± 0.008   0.235 ± 0.007   0.288 ± 0.007
+            PrivMRF      0.030 ± 0.003   0.051 ± 0.005   0.076 ± 0.006   0.102 ± 0.002   0.139 ± 0.001   0.178 ± 0.001   0.216 ± 0.000
+            GEM          0.036 ± 0.006   0.070 ± 0.009   0.109 ± 0.011   0.135 ± 0.009   0.187 ± 0.008   0.241 ± 0.008   0.295 ± 0.008
+  Tree
+            RAP++        0.052 ± 0.001   0.088 ± 0.004   0.124 ± 0.008   0.146 ± 0.011   0.190 ± 0.013   0.234 ± 0.015   0.278 ± 0.015
+            PrivGSD      0.036 ± 0.007   0.060 ± 0.011   0.084 ± 0.012   0.103 ± 0.011   0.141 ± 0.011   0.181 ± 0.011   0.221 ± 0.011
+            AIM          0.028 ± 0.005   0.048 ± 0.009   0.072 ± 0.011   0.091 ± 0.008   0.128 ± 0.009   0.167 ± 0.009   0.206 ± 0.009
+            Tab-PE       0.030 ± 0.004   0.051 ± 0.007   0.076 ± 0.009   0.095 ± 0.007   0.132 ± 0.008   0.170 ± 0.008   0.208 ± 0.009
+            UB           0.024 ± 0.006   0.042 ± 0.009   0.065 ± 0.011   0.083 ± 0.012   0.119 ± 0.012   0.156 ± 0.012   0.192 ± 0.012
+            PrivSyn      0.028 ± 0.004   0.065 ± 0.008   0.108 ± 0.010   0.149 ± 0.009   0.201 ± 0.011   0.256 ± 0.013   0.309 ± 0.014
+            PrivMRF      0.030 ± 0.003   0.051 ± 0.006   0.076 ± 0.008   0.093 ± 0.009   0.131 ± 0.011   0.171 ± 0.013   0.211 ± 0.014
+            GEM          0.037 ± 0.010   0.072 ± 0.012   0.115 ± 0.015   0.165 ± 0.029   0.219 ± 0.026   0.275 ± 0.024   0.330 ± 0.023
+  NN
+            RAP++        0.050 ± 0.006   0.086 ± 0.011   0.119 ± 0.016   0.137 ± 0.016   0.179 ± 0.018   0.221 ± 0.020   0.263 ± 0.022
+            PrivGSD      0.036 ± 0.003   0.058 ± 0.004   0.083 ± 0.004   0.108 ± 0.006   0.147 ± 0.004   0.187 ± 0.004   0.227 ± 0.005
+            AIM          0.024 ± 0.002   0.042 ± 0.003   0.064 ± 0.003   0.094 ± 0.002   0.129 ± 0.002   0.165 ± 0.003   0.201 ± 0.003
+            Tab-PE       0.028 ± 0.005   0.048 ± 0.008   0.071 ± 0.010   0.089 ± 0.010   0.125 ± 0.010   0.163 ± 0.010   0.199 ± 0.010
+            UB           0.020 ± 0.004   0.035 ± 0.005   0.056 ± 0.005   0.075 ± 0.004   0.113 ± 0.003   0.152 ± 0.003   0.191 ± 0.002
+            PrivSyn      0.026 ± 0.004   0.058 ± 0.005   0.097 ± 0.006   0.120 ± 0.006   0.173 ± 0.005   0.227 ± 0.005   0.281 ± 0.005
+            PrivMRF      0.023 ± 0.005   0.041 ± 0.008   0.064 ± 0.008   0.084 ± 0.005   0.122 ± 0.005   0.162 ± 0.005   0.202 ± 0.005
+            GEM          0.036 ± 0.005   0.068 ± 0.008   0.105 ± 0.010   0.135 ± 0.020   0.187 ± 0.019   0.243 ± 0.019   0.298 ± 0.018
+  RFF
+            RAP++        0.050 ± 0.005   0.084 ± 0.008   0.116 ± 0.009   0.136 ± 0.007   0.178 ± 0.006   0.221 ± 0.005   0.263 ± 0.005
+            PrivGSD      0.032 ± 0.002   0.053 ± 0.002   0.078 ± 0.002   0.098 ± 0.005   0.137 ± 0.004   0.179 ± 0.004   0.220 ± 0.003
+            AIM          0.026 ± 0.002   0.045 ± 0.002   0.067 ± 0.002   0.088 ± 0.004   0.125 ± 0.004   0.165 ± 0.005   0.204 ± 0.005
+            Tab-PE       0.022 ± 0.006   0.039 ± 0.009   0.061 ± 0.009   0.081 ± 0.008   0.120 ± 0.008   0.160 ± 0.008   0.198 ± 0.008
+Table 6. The experiment is configured with ϵ = 1.0. The degree hyperparameter of baselines varies from 2 to 5. The best and second-best
+results are highlighted in bold and underline, respectively.
+
+
+
+
+                                                                  24
+                                Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+D.3. Real-world Datasets with High-Order Correlations
+Table 7 presents the Wasserstein distances across low- to high-order ones. Consistently, Tab-PE outperforms the baselines
+on high-order Wasserstein distances (5-WD, 6-WD, and 7-WD). This indicates that Tab-PE is more effective in capturing
+high-order correlations.
+
+                                                                  Fidelity (↓)
+  Dataset      Method
+                              1-WD            2-WD            3-WD          4-WD              5-WD            6-WD            7-WD
+               UB          0.013 ± 0.005   0.027 ± 0.008   0.046 ± 0.010 0.068 ± 0.010     0.088 ± 0.011   0.107 ± 0.011   0.124 ± 0.012
+               PrivSyn     0.016 ± 0.003   0.053 ± 0.004   0.103 ± 0.004 0.162 ± 0.004     0.224 ± 0.005   0.287 ± 0.005   0.347 ± 0.006
+               PrivMRF     0.013 ± 0.002   0.050 ± 0.003   0.099 ± 0.003 0.157 ± 0.003     0.218 ± 0.004   0.279 ± 0.004   0.337 ± 0.004
+  Artificial   GEM         0.091 ± 0.007   0.152 ± 0.010   0.211 ± 0.012 0.273 ± 0.013     0.337 ± 0.014   0.402 ± 0.015   0.465 ± 0.015
+  Characters   RAP++       0.039 ± 0.010   0.072 ± 0.015   0.111 ± 0.017 0.156 ± 0.019     0.201 ± 0.021   0.243 ± 0.023   0.283 ± 0.024
+               PrivGSD     0.026 ± 0.000   0.047 ± 0.001   0.078 ± 0.001 0.118 ± 0.002     0.161 ± 0.002   0.204 ± 0.002   0.245 ± 0.002
+               AIM         0.011 ± 0.000   0.040 ± 0.001   0.082 ± 0.001 0.134 ± 0.001     0.191 ± 0.003   0.247 ± 0.002   0.301 ± 0.002
+               Tab-PE      0.029 ± 0.006   0.056 ± 0.009   0.087 ± 0.010 0.123 ± 0.011     0.158 ± 0.011   0.191 ± 0.012   0.220 ± 0.013
+               UB          0.011 ± 0.001   0.024 ± 0.001   0.046 ± 0.001 0.075 ± 0.001     0.108 ± 0.001   0.142 ± 0.001   0.176 ± 0.001
+               PrivSyn     0.010 ± 0.002   0.060 ± 0.002   0.134 ± 0.003 0.218 ± 0.003     0.303 ± 0.003   0.385 ± 0.004   0.463 ± 0.004
+               PrivMRF     0.008 ± 0.001   0.025 ± 0.001   0.055 ± 0.001 0.094 ± 0.002     0.138 ± 0.003   0.185 ± 0.004   0.233 ± 0.004
+               GEM         0.065 ± 0.003   0.114 ± 0.001   0.164 ± 0.002 0.218 ± 0.003     0.275 ± 0.005   0.333 ± 0.006   0.392 ± 0.007
+  Person       RAP++       0.034 ± 0.001   0.063 ± 0.001   0.097 ± 0.002 0.135 ± 0.002     0.176 ± 0.003   0.216 ± 0.003   0.256 ± 0.004
+  Activity     PrivGSD     0.032 ± 0.002   0.057 ± 0.002   0.088 ± 0.001 0.124 ± 0.001     0.161 ± 0.001   0.199 ± 0.001   0.237 ± 0.002
+               AIM         0.009 ± 0.001   0.023 ± 0.001   0.049 ± 0.001 0.085 ± 0.002     0.125 ± 0.002   0.168 ± 0.002   0.213 ± 0.002
+               Tab-PE      0.012 ± 0.003   0.026 ± 0.003   0.050 ± 0.003 0.082 ± 0.002     0.116 ± 0.002   0.150 ± 0.002   0.183 ± 0.001
+                                           Table 7. ϵ = 1.0. Additional results on fidelity.
+
+
+
+D.4. Real-world Datasets with Low-Order Correlations
+We further evaluate the methods on well-known real-world datasets with low-order correlations. Compared to Adult, Breast
+Cancer is a more challenging dataset with 30 features and only ∼500 samples. In this setting, we configure Tab-PE to run
+for 30 iterations generating 2K samples and 20 iterations generating 100 samples, respectively for the Adult and Breast
+Cancer datasets. The results are presented in Table 8. Consistent with the prior evaluations (Chen et al., 2025b), AIM
+offers the leading performance across most metrics. Tab-PE remains competitive on the downstream utilities with only
+1% accuracy drop compared to AIM. For low-order correlations, the marginal-based methods are sufficient to capture the
+essential relationships between features and labels. This explains why AIM, RAP, GSD, and PrivMRF perform well on
+these datasets. Overall, these results indicate that while Tab-PE is primarily designed for high-order correlations, it remains
+competitive on datasets dominated by low-order correlations.
+
+D.5. Compute Efficiency
+We present the running time and test accuracy of the baselines while varying the degree of marginal queries in Figure 15.
+Generally, increasing the degree of marginal queries does not significantly improve the accuracy. As the degree increases,
+the number of queries grows exponentially. For PrivMRF, the test performance peaks at the degree of 4 at 84% and remains
+stable at 83.5%. For GEM, the accuracy drops as the degree increases, due to the high noise to answer the large number of
+queries. The running time of GEM significantly increases at the degree of 5. For RAP++, the accuracy slightly increases
+from 84 to 84.45 at the degree of 4 then drops as the degree increases. The running time of RAP++ is not significantly
+affected by the degree of queries. For AIM, the accuracy remains approximately at 82% for all degrees that are less than
+6. A degree that is too high (≥ 6) causes the method to collapse without producing any meaningful patterns. For GSD,
+the maximum degree is 3 due to the high compute resource requirement. In particular, at the degree of 4, GSD requires
+more than 200GB of GPU memory, which is not affordable for us. Theoretically, the running time of methods that rely
+on marginal queries grows exponentially as the number of queries increases. However, in practice, the running time of
+some methods is still affordable and do not change significantly. This is because some implementations limit the number of
+queries to a fixed number to make sure the noise is not too large to yield reliable query answers. As a result, they may not be
+able to fully model the high-order correlations. In summary, these results indicate the limitations of marginal-based methods
+in both efficiency and effectiveness in capturing high-order correlations.
+
+                                                                  25
+                                       Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+
+
+                                      PrivMRF                                                                                            GEM
+                     0.84                                          97.5                                                                                         1500
+
+
+
+
+                                                                                                                                                                        Running Time (s)
+                                                                                                         0.7
+
+
+
+                                                                      Running Time (s)
+                     0.83                                          95.0
+
+
+
+
+                                                                                              Accuracy
+          Accuracy
+
+
+
+
+                                 Accuracy                                                                                Accuracy                               1000
+                                 Running Time                      92.5                                                  Running Time
+                     0.82                                                                                0.6
+                                                                   90.0                                                                                         500
+                     0.81                                          87.5                                  0.5                                                    0
+                             2    4        6                 8                                                 2             3                      4       5
+                                       Degree                                                                                        Degree
+                                       RAP++                                                                                                  AIM
+                     0.845                                         190                                   0.8                                                        300
+
+
+
+
+                                                                                                                                                                        Running Time (s)
+                                                                      Running Time (s)
+
+                                                                                              Accuracy
+          Accuracy
+
+
+
+
+                     0.840                 Accuracy     185                                                                                                         200
+                                           Running Time                                                  0.6
+                     0.835                                                                                               Accuracy                                   100
+                                                        180
+                                                                                                         0.4             Running Time
+                     0.830                                                                                                                                          0
+                             2     4       6                 8                                                 2           4                6           8
+                                       Degree                                                                                           Degree
+                                                                                         GSD
+                                                       0.8                                                               800
+                                                                                                                           Running Time (s)
+
+
+
+
+                                                       0.7
+                                            Accuracy
+
+
+
+
+                                                                   Accuracy                                              600
+                                                                   Running Time
+                                                       0.6                                                               400
+
+                                                       0.5                                                               200
+                                                             1.0   1.5              2.0 2.5                        3.0
+                                                                                   Degree
+Figure 15. Running Time and Test Accuracy of the baselines while varying the degree of marginal queries. The trivial accuracy (random
+guessing) is 50%.
+
+
+
+
+                                                                                         26
+                                  Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                              ML Downstream (↑)                                           Fidelity (↓)                          Embedding (↑)
+  Dataset     Method
+                             Accuracy      Macro F1                          1-WD            2-WD              3-WD          Precision      Recall
+              UB            84.41 ± 0.57  75.68 ± 1.54                    0.014 ± 0.003   0.027 ± 0.006     0.041 ± 0.008   94.50 ± 0.14 94.09 ± 0.29
+              PrivSyn       75.77 ± 0.00 43.11 ± 0.00                     0.011 ± 0.002   0.034 ± 0.003     0.061 ± 0.003   45.34 ± 1.54 89.34 ± 0.17
+              PrivMRF       83.15 ± 0.43 76.85 ± 0.64                     0.017 ± 0.005   0.033 ± 0.009     0.052 ± 0.012   84.15 ± 0.25 93.74 ± 0.21
+              GEM           79.17 ± 2.32 69.63 ± 1.48                     0.037 ± 0.002   0.073 ± 0.005     0.109 ± 0.006   0.185 ± 0.004 76.48 ± 2.32
+  Adult
+              RAP++         80.87 ± 0.59 72.22 ± 1.25                     0.023 ± 0.002   0.043 ± 0.003     0.066 ± 0.004   61.08 ± 4.24 80.64 ± 1.53
+              PrivGSD       82.09 ± 0.11 75.90 ± 0.43                     0.017 ± 0.001   0.033 ± 0.002     0.052 ± 0.003   74.45 ± 0.47 80.81 ± 0.41
+              AIM           83.36 ± 0.41 76.10 ± 1.41                     0.017 ± 0.001   0.034 ± 0.001     0.053 ± 0.001   87.06 ± 0.75 93.18 ± 0.21
+              Tab-PE        82.22 ± 0.51 73.66 ± 0.87                     0.049 ± 0.004   0.086 ± 0.007     0.118 ± 0.010   34.27 ± 1.57 77.25 ± 7.42
+              UB            97.68 ± 1.64 97.56 ± 1.73                     0.078 ± 0.006   0.130 ± 0.011     0.175 ± 0.016   97.48 ± 0.73 95.64 ± 0.78
+              PrivSyn       51.60 ± 8.03 38.99 ± 6.92                     0.216 ± 0.010   0.353 ± 0.013     0.464 ± 0.014   60.39 ± 7.34 21.78 ± 7.84
+              PrivMRF       60.41 ± 3.37 37.63 ± 1.33                     0.180 ± 0.015   0.306 ± 0.022     0.410 ± 0.027   51.01 ± 11.29 16.83 ± 8.23
+  Breast      GEM           50.74 ± 13.88 44.91 ± 12.27                   0.181 ± 0.006   0.306 ± 0.007     0.409 ± 0.008   69.60 ± 11.83 28.64 ± 8.97
+  Cancer      RAP++         84.81 ± 4.43 83.97 ± 4.45                     0.227 ± 0.023   0.369 ± 0.032     0.483 ± 0.039   64.62 ± 3.48  9.63 ± 4.71
+              PrivGSD       60.02 ± 3.13 37.49 ± 1.24                     0.235 ± 0.013   0.379 ± 0.018     0.493 ± 0.021   60.30 ± 5.38 21.27 ± 1.91
+              AIM           89.25 ± 4.75 87.82 ± 6.17                     0.198 ± 0.009   0.332 ± 0.010     0.441 ± 0.011   68.17 ± 6.03 12.65 ± 4.86
+              Tab-PE        88.48 ± 3.53 87.01 ± 4.74                     0.162 ± 0.007   0.272 ± 0.010     0.366 ± 0.012   69.02 ± 6.14 15.24 ± 3.11
+Table 8. Comparison on low-order real-world datasets under ϵ = 1. The best and second-best results are highlighted in bold and underline,
+respectively. UB refers to the upper bound performance trained on real data.
+
+
+
+
+D.6. VARIATION API Study
+For consistency, this section presents the results on the Artificial Characters dataset with ϵ = 1.0.
+
+D.6.1. D ECAY S CHEDULE S TUDY
+Figure 16 illustrates the linear and polynomial decay schedules for the mutation rate. Generally, the polynomial decay
+provides a higher mutation rate at the early stage for exploration while maintaining a smaller mutation rate at the later
+iterations for better refinement. This leads to better performance of the polynomial schedule over the linear decay, as shown
+in Figure 17.
+Polynomial schedule outperforms linear decay. We study the impact of different probability decay schedules in the
+VARIATION API. As shown in Fig. 17, App. D.6.1, the polynomial schedule consistently outperforms the linear decay,
+used in Lin et al. (2025), across all metrics. The polynomial schedule allows more aggressive exploration at the beginning
+and more focused refinement at the end, leading to better overall performance, illustrated in Fig. 16, App. D.6.1. We present
+additional performance analysis on different decay factors in App. D.6.1 (Fig. 22 and 23). Generally, a moderate initial
+mutation rate µinit (0.5-0.7) and decay factor γ (0.2 - 0.5) yield the best performance and consistently outperform the linear
+decay (γ = 1.0).
+
+
+                                                                                               Linear
+                                                                  0.20                         Polynomial
+                                            Variance Multiplier
+
+
+
+
+                                                                  0.15
+                                                                  0.10
+                                                                  0.05
+                                                                         2.5   5.0      7.5 10.0 12.5
+                                                                                     Iteration
+                                         Figure 16. Visualization of different decay schedules.
+
+
+
+                                                                                 27
+                                         Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                               0.5                                                    0.20                Linear ( init = 0.1)
+                                                                                                          Linear ( init = 0.2)
+                               0.4
+               Val. Accuracy
+                                                                                      0.15                Linear ( init = 0.3)
+                                                   Linear ( init = 0.1)                                   Linear ( init = 0.4)
+
+
+
+
+                                                                               1-WD
+                               0.3                 Linear ( init = 0.2)               0.10                Polynomial
+                                                   Linear ( init = 0.3)
+                               0.2                 Linear ( init = 0.4)               0.05
+                                                   Polynomial
+                                     0        5         10           15                      0        5        10           15
+                                               Iteration                                               Iteration
+                                                       0.6                     Linear ( init = 0.1)
+                                                         0.5                   Linear ( init = 0.2)
+                                                                               Linear ( init = 0.3)
+                                                         0.4                   Linear ( init = 0.4)
+                                                  5-WD
+
+                                                                               Polynomial
+                                                         0.3
+                                                         0.2
+                                                               0          5        10            15
+                                                                           Iteration
+                                 Figure 17. The performance of Tab-PE with different mutation rate decay schedules.
+
+
+
+D.6.2. VARIATION OPERATORS
+We compare the proposed random walk strategy and a genetic algorithm-based design from an existing work – PrivGSD (Liu
+et al., 2023). It is worth noting there are significant differences between Private Evolution and PrivGSD. PrivGSD is a
+method that heavily relies on marginal queries. PrivGSD first defines a set of marginal queries and privately answers them.
+Then it uses a genetic algorithm to search for a synthetic dataset that minimizes the error compared to the noisy answers.
+Therefore, PrivGSD still inherits the limitations of marginal query-based approaches in capturing high-order correlations.
+In contrast, Tab-PE does not rely on marginal queries, our evolutionary process is directly guided by the private data at
+each iteration. In this comparison, we adapt the genetic algorithm-based design from PrivGSD to our VARIATION API
+interface. More specifically, the original operators in PrivGSD work at dataset levels, while Tab-PE’s VARIATION API
+requires sample-level operators. To achieve this, we remove the random selection of samples from the dataset, and instead
+we apply the operators to all samples in the synthetic dataset. Additionally, PrivGSD performs mutation only one attribute
+at a time, which leads to very slow convergence (∼200K iterations). This is not affordable for Private Evolution, as the
+privacy budget is consumed at each iteration. Therefore, we modify the mutation operator to allow all attributes at once. The
+crossover operator is kept the same as in PrivGSD. Figure 6 presents the results. This confirms that the simple random-walk
+design in Tab-PE is effective and efficient.
+
+D.7. Extremely High-Dimensional Dataset (Flattened MNIST)
+In this experiment, we rescale the original MNIST images from 28×28 to 14×14 and then flatten them into 196-dimensional
+vectors. We set the privacy budget ϵ to 1.0 and generate 300 synthetic images. We set the order of marginal queries to 2
+for the baselines, as higher-order queries are not affordable for such a high-dimensional dataset. For Tab-PE, we run for
+100 iterations with 30 sampling iterations and 20 variations. Such a large number of iterations and variations is necessary
+for this extremely high-dimensional dataset, as the search space is huge. For the classification accuracy, we employ a tiny
+CNN model with only 2 convolutional layers and 1 fully-connected layer. Fig. 18 provides some samples generated by the
+methods. It is expected that the marginal methods are not able to successfully reproduce the digit patterns, which requires
+extremely high-order understanding of pixels. In contrast, Tab-PE can capture the high-order correlations and generate
+samples that are visually similar to the real data. This demonstrates the effectiveness of Tab-PE in capturing high-order
+correlations even in extremely high-dimensional datasets.
+
+                                                                          28
+                                   Differentially Private Synthetic Data via APIs 4: Tabular Data
+Real
+GEM
+RAP
+Tab-PE
+
+
+
+
+Figure 18. Samples generated by the methods for the flattened MNIST dataset with ϵ = 1.0 . The first row corresponds to the real data.
+The remaining rows correspond to the synthetic data generated by the baselines and Tab-PE.
+
+
+
+D.8. Additional High-Order Real-World Datasets
+We compare Tab-PE with AIM on several high-order real-world datasets, including Insurance4 , Monk5 , and Walking
+Activity6 . Tab. 9 provides the results on the downstream utility. Tab-PE consistently outperforms AIM on all datasets,
+demonstrating the effectiveness of Tab-PE in capturing high-order correlations in real-world scenarios.
+
+
+                                           Dataset               Method      Test Accuracy
+                                                                 AIM             89.86
+                                           Insurance
+                                                                 Tab-PE          93.24
+                                                                 AIM             61.54
+                                           Monk
+                                                                 Tab-PE          64.84
+                                                                 AIM             40.56
+                                           Walking Activity
+                                                                 Tab-PE          47.80
+                         Table 9. Performance of Tab-PE and AIM on additional high-order real-world datasets.
+
+
+
+
+D.9. Hyperparameter Sensitivity Analysis
+For consistency, this section presents the results on the Artificial Characters dataset with ϵ = 1.0. For the hyperparameter
+sensitivity analysis, we vary one hyperparameter while keeping the others fixed as the default ones presented in the
+implementation if not specified. Due to expensive computational costs of calculating high-order Wasserstein distances, we
+use 1-WD only. The high-order Wasserstein distances’ trends are usually consistent with the downstream utility, as shown in
+the main paper.
+
+
+Number of synthetic samples With fewer samples, the histogram counts are generally larger, which causes the noise to
+be less significant. However, too few samples may not be able to represent all high-dimensional correlations. If the number
+of samples is too large, the noise has more impact and can change the order of sample rankings. Figure 19 presents the
+performance of Tab-PE while varying the number of synthetic samples. At ϵ = 1.0, 10% and 20% of the size of the private
+dataset achieve the best performance.
+     4
+       https://www.kaggle.com/datasets/mosapabdelghany/medical-insurance-cost-dataset
+     5
+       https://archive.ics.uci.edu/dataset/70/monk+s+problems
+     6
+       https://archive.ics.uci.edu/dataset/286/user+identification+from+walking+activity
+
+                                                                  29
+                                                       Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+
+                                   Accuracy vs Amount of Synthetic Data                                0.10
+                                                                                                            1-WD vs Amount of Synthetic Data
+                                                                                                                      Tab-PE
+                            0.500
+                                                                                                       0.08
+            Test Accuracy   0.475
+                                                                 Best baseline
+
+
+
+
+                                                                                                1-WD
+                            0.450                                                                      0.06
+                                                                 Tab-PE
+                            0.425                                                                      0.04
+                            0.400
+                                                                                                       0.02
+                                      0.0       0.2      0.4 0.6 0.8        1.0                               0.0    0.2    0.4 0.6 0.8         1.0
+                                                        |Dsyn|/|Dpriv|                                                     |Dsyn|/|Dpriv|
+                                          Figure 19. Tab-PE performance while varying the number of synthetic samples Dsyn .
+
+
+Number of iterations A larger number of iterations T allows more refinement of the synthetic data, but also leads to a
+larger noise scale σ. Figure 20 presents the performance of Tab-PE under different settings of the number of iterations T .
+Tab-PE needs around 15-20 iterations to achieve good performance.
+
+                                    Accuracy vs Number of Iterations (T)                                 1-WD vs Number of Iterations (T)
+                                   0.50                                                              0.07                                 Tab-PE
+                                   0.45                                                              0.06
+                   Test Accuracy
+
+
+
+
+                                   0.40                                                              0.05
+                                                                                              1-WD
+
+
+
+                                   0.35                                                              0.04
+                                   0.30                            Best baseline                     0.03
+                                                                   Tab-PE
+                                   0.25                                                              0.02
+                                            5    10 15 20 25                     30                           5     10 15 20 25                 30
+                                                 Number of Iterations (T)                                           Number of Iterations (T)
+                                                 Figure 20. Tab-PE performance while varying the number of iterations T .
+
+
+Number of sampling iterations The number of sampling iterations Tsampling controls how many times we employ the
+sampling-with-replacement strategy. Figure 21 presents the performance of Tab-PE under different configurations of
+Tsampling . Generally, combining both sampling and ranking (i.e., 0 < Tsampling < T ) yields better performance than only
+ranking (i.e., Tsampling = 0) or only sampling (i.e., Tsampling = T ). The best performance is achieved when using 20-40% of
+iterations for the sampling strategy.
+
+                                                Accuracy vs (Tsampling/T)                                            1-WD vs (Tsampling/T)
+                                0.50                                                                                  Tab-PE
+                                                                                                     0.045
+                                0.48
+                Test Accuracy
+
+
+
+
+                                                      Best baseline                                  0.040
+                                                                                              1-WD
+
+
+
+
+                                0.46                  Tab-PE
+                                0.44                                                                 0.035
+                                0.42                                                                 0.030
+                                          0.0     0.2       0.4 0.6       0.8      1.0                        0.0    0.2    0.4 0.6       0.8      1.0
+                                                            Tsampling/T                                                     Tsampling/T
+                                      Figure 21. Tab-PE performance while varying the number of sampling iterations Tsampling .
+
+
+                                                                                         30
+                                                  Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+Mutation rate initial value µinit This parameter controls the noise level in the random walk strategy. A larger mutation
+rate enables more exploration, but also makes it harder for local refinement. Figure 22 presents the performance of Tab-PE
+with various values of µinit . A moderate value around 0.5-0.8 provides the best utility.
+
+                                                 Accuracy vs init                                                   1-WD vs init
+                                 0.50                                                             0.045                                       Tab-PE
+                                 0.48                                                             0.040
+                 Test Accuracy
+
+
+
+
+                                 0.46                                Best baseline                0.035
+
+
+
+
+                                                                                           1-WD
+                                                                     Tab-PE
+                                                                                                  0.030
+                                 0.44
+                                                                                                  0.025
+                                 0.42
+                                                                                                  0.020
+                                                0.4         0.6        0.8      1.0                           0.4      0.6              0.8         1.0
+                                                              init                                                         init
+
+                            Figure 22. Tab-PE performance while varying the mutation initial rate µinit in VARIATION API.
+
+
+Decay factor γ This parameter controls how fast the mutation rate decays. A smaller γ leads to a faster decay. A value at
+1.0 is equal to a linear decay. Figure 23 presents the performance of Tab-PE with different settings of γ. A value around
+0.5-0.75 achieves the best performance and outperforms the linear decay.
+
+                                               Test Accuracy vs                                                       1-WD vs
+                           0.50                                                                      0.045                                      Tab-PE
+                           0.48
+           Test Accuracy
+
+
+
+
+                                                                                                     0.040
+                                                      Best baseline
+                           0.46
+                                                                                              1-WD
+
+
+
+
+                                                      Tab-PE ( init = 0.5)                           0.035
+                           0.44
+                                                                                                     0.030
+                           0.42
+                                         0.2      0.4        0.6       0.8    1.0                            0.2     0.4          0.6         0.8      1.0
+
+                                        Figure 23. Tab-PE performance while varying γ in the mutation rate schedule decay.
+
+
+Categorical-numerical weight λ This parameter controls the relative importance of categorical features and numerical
+features in the variation generation. A larger λ means more focus on categorical features. A value of 0 means only numerical
+features are considered. Tab. 10 presents the performance of Tab-PE with different settings of λ. Without considering
+categorical features (i.e., λ = 0), the performance is significantly worse. The performance is fairly stable across different
+values of λ that are larger than 0, which indicates the robustness of Tab-PE to this parameter. A moderate value around
+0.333 achieves the best performance.
+
+                                                             λ                0.0      0.1        0.(333)     1.0
+                                                             Val AUC         0.510    0.630        0.631     0.630
+                                                             Val F1          0.266    0.350        0.354     0.348
+      Table 10. Performance of Tab-PE while varying the categorical weight λ on the Artificial Characters dataset with ϵ = 1.0.
+
+
+
+Hyperparameter search In Figure 24, we explore 144 settings of hyperparameters for the second stage (Tab-PE
+with ranking), the hyperparameters are chosen from the following sets: number of iterations (epochs) ∈ {15, 20, 30, 50},
+num samples ∈ {2k, 5k, 10k}, variation degree (m = num variations) ∈ {3, 5, 7}, and mutation rate initial value (µinit ) ∈
+
+                                                                                      31
+                                 Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+{0.15, 0.25, 0.35, 0.5}. The mutation rate in this experiment is set by a linear decay schedule. Note that from the figure,
+smaller values of all hyperparameters generally do better. This inspires us to employ the polynomial decay schedule for the
+mutation rate, which enables a larger mutation rate at early iterations and a smaller mutation rate at later iterations.
+
+
+
+
+                   Figure 24. Hyperparameter search for Tab-PE on the Artificial Characters dataset for ϵ = 1.0.
+
+
+Hyperparameter configuration across privacy settings In Figure 25 for ϵ = 1.0 (left-most column) we order all 144
+hyperparameters according to their achieved accuracy. 0 corresponds to the best setting of hyperparameters, 1 corresponds
+to the second best setting, and so on. The lines are colored according to their performance on ϵ = 1.0. The same line
+corresponds to the same setting of hyperparameters. We note that the same hyperparameters that are good for ϵ = 1.0 are
+also good for ϵ = 3.0 and ϵ = 10.0.
+
+
+
+
+                        Figure 25. Ordering of the best hyperparameters for ϵ = 1.0, ϵ = 3.0 and ϵ = 10.0.
+
+
+D.10. Oversampling Study
+Following the simple recipe from PrivGSD (Liu et al., 2023), we conduct oversampling by randomly duplicating the samples.
+Figure 26 shows that the performance does not change significantly by oversampling.
+
+D.11. Noisy class distribution
+We remove the assumption that the class distribution is public. Instead, we spend a bit of privacy budget to estimate the class
+distribution. To simplify, we spend ϵcount out of ϵ for this estimation. Let Nc be the count vector where Nc [i] corresponds to
+the number of samples of class i. Since each sample is only counted once, the sensitivity of this counting process is 1. To
+achieve (ϵcount , δ)-DP, we simply add noise, drawn from N (0, σ 2 ) to each count, where the noise multiplier is calculated by
+
+                                                                32
+                                               Differentially Private Synthetic Data via APIs 4: Tabular Data
+
+                                                                            Accuracy vs Oversampling Ratio
+                                                                     0.50
+                                                                     0.48
+
+
+
+
+                                                     Test Accuracy
+                                                                     0.46                      Best baseline
+                                                                                               Tab-PE
+                                                                     0.44
+                                                                     0.42
+                                                                             0   200 400 600 800 1000
+                                                                                 Oversampling ratio (%)
+                                              Figure 26. Tab-PE performance while enhancing by oversampling.
+
+
+the analytic Gaussian Mechanism (Balle & Wang, 2018). In practice, our implementation uses the diffprivlib library
+to calculate this noise scale. We conduct an experiment spending 0.02 of the total privacy budget (ϵ = 1.0) to privately
+estimate the class counts. Figure 27 presents the results of this experiment. Overall, the performance does not change much
+with the assumption that the class distribution is publicly available.
+
+                                       Artificial Character Dataset                                                             SCM (NN) Dataset
+                                 0.5                                                                                  0.9
+           Validation Accuracy
+
+
+
+
+                                                                                                Validation Accuracy
+                                 0.4                                                                                  0.8
+
+                                 0.3                                                                                  0.7
+
+                                 0.2            Tab-PE (noisy class counts)                                           0.6          Tab-PE (noisy class counts)
+                                                Tab-PE (clean class counts)                                                        Tab-PE (clean class counts)
+                                                Best baseline                                                                      Best baseline
+                                 0.1                                                                                  0.5
+                                       0       5                       10           15                                      0      5               10       15
+                                                   Iteration                                                                           Iteration
+                                               Figure 27. Tab-PE performance with noisy and clean class counts.
+
+
+E. Limitations & Future Work
+Although the results are promising, there are still limitations. First, while Tab-PE consistently outperforms the baselines in
+capturing high-order correlations with better ML utilities, it underperforms on low-order fidelity, which primarily reflects
+low-order statistics. Second, the gap between Tab-PE and the upper bound (non-private) remains large. This gap is
+significantly larger than the current gaps of datasets with low-order correlations. Therefore, there is still room for further
+improvements. Third, Tab-PE currently implements a basic distance function on raw attribute scaled values without any
+embedding or attribute weighting. This can suffer in extreme cases where the data is sparse and most of the attributes are
+uninformative. While embedding in image and text domains can be achieved by pretrained foundation models, tabular data
+is very challenging because of strong distribution shifts across datasets. We leave this for future work. Additionally, we only
+explored simple designs of the Private Evolution APIs. More advanced APIs may further boost the performance.
+
+
+
+
+                                                                                          33
+

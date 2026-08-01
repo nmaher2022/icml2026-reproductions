@@ -1,0 +1,3 @@
+Fitting TabICL on 5000 AIM-synthetic rows, evaluating on 24729 test rows...
+AIM synthetic data (person_activity) -> TabICL test accuracy: 48.32%, macro F1: 22.62
+Saved eval.json

@@ -1,0 +1,11 @@
+# vendored upstream clones (linked, not committed -- see repro-harness's no_vendored_code gate)
+DPSDA_upstream/
+DPSDA_upstream_aim/
+
+# scratch downloaded/cached data (re-fetchable from the same URLs used in the scripts)
+data_cache/
+
+# large, redundant per-iteration artifacts -- log.txt + final eval/timing JSON are the evidence
+# that matters; per-iteration checkpoint pickles and per-iteration synthetic CSVs are not
+results/*/checkpoint/
+results/*/synthetic_tab/

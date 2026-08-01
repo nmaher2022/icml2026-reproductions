@@ -1,0 +1,8 @@
+{
+  "dataset": "person_activity",
+  "elapsed_seconds": 1170.7459921836853,
+  "degree": 2,
+  "num_bins": 20,
+  "epsilon": 1.0,
+  "delta": 7.434136520415306e-07
+}

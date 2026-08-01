@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -220,11 +221,29 @@ def gate_raw_results_present(folder: Path) -> dict:
 
 def gate_no_vendored_code(folder: Path) -> dict:
     nested_git = list(folder.rglob(".git"))
-    if nested_git:
+    tracked = [p for p in nested_git if not _is_git_ignored(p.parent)]
+    if tracked:
         return gate("no_vendored_code", "hard", "FAIL",
-                     f"Found nested .git at {nested_git[0].relative_to(folder)} -- third-party code "
-                     "may be vendored instead of linked (Step 7 says link + clone instructions, don't vendor).")
+                     f"Found nested .git at {tracked[0].relative_to(folder)} that is NOT gitignored -- "
+                     "third-party code may be vendored instead of linked (Step 7 says link + clone "
+                     "instructions, don't vendor).")
+    if nested_git:
+        return gate("no_vendored_code", "hard", "PASS",
+                     f"Found {len(nested_git)} nested .git dir(s), but all are gitignored (linked clones, "
+                     "not vendored).")
     return gate("no_vendored_code", "hard", "PASS", "No nested .git directories found.")
+
+
+def _is_git_ignored(path: Path) -> bool:
+    path = path.resolve()
+    try:
+        result = subprocess.run(
+            ["git", "check-ignore", "-q", str(path)],
+            cwd=path.parent, capture_output=True, timeout=10,
+        )
+        return result.returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        return False
 
 
 def run_audit(folder: Path, repo_path: str | None, orid: str | None) -> dict:
