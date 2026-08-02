@@ -67,3 +67,21 @@ confirmed: `icml2026-repro`, `paper-CoAHlJuMdh`, `arxiv:2505.17370`.
 
 Next: Step 7 (mirror into `nmaher2022/icml2026-reproductions` monorepo via
 `scripts/scaffold_reproduction.py add`), Step 8 (harness self-audit).
+
+## Step 8 complete (harness self-audit)
+`harness-testing/audit_harness.py ellipsoidal-tsf-CoAHlJuMdh` — 0 hard failures, 0 warnings (PASS).
+Report: `harness-testing/audits/CoAHlJuMdh.json`.
+
+Found a real gap in the harness itself while running this: `INCONCLUSIVE` has now been used as a
+verdict by two reproductions (SpectralCIT and this one) but was never added to the harness's
+documented vocabulary (`verdict_checklist.md` said "use exactly these four") or to
+`audit_harness.py`'s `VERDICT_TERMS` check. Fixed at the harness level (not just this paper):
+`verdict_checklist.md`, `SKILL.md`, `briefing_template.md`, and `audit_harness.py` all updated to
+formally include `INCONCLUSIVE` as a fifth vocabulary term, with criteria for when it applies vs.
+REFUTED. Initial audit run (before the fix) showed `verdict_vocabulary: 4/5 PASS` (still passed,
+0.8 threshold) and `smoketest_evidence: WARN` (smoketest commands were run live in-session but not
+saved to a file in the folder) — fixed the latter by writing `smoketest.log` with the actual
+smoketest transcript. Final audit: PASS, 0 warnings.
+
+**Ellipsoidal TSF (CoAHlJuMdh) reproduction fully complete**: all 8 harness steps done, published,
+mirrored, audited clean. See VERDICTS.md for final verdicts.

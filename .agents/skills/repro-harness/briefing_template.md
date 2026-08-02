@@ -22,7 +22,8 @@ memory / repo README for the folder convention).
   version (few iterations, tiny dims) and check for shape errors, NaNs, sane magnitudes, sign
   errors. Only scale up once clean.
 - All work happens in `<working-folder>/`. Don't touch other folders in this repo.
-- Verdict vocabulary (see `verdict_checklist.md`): VERIFIED / TOY-VERIFIED / REFUTED / BLOCKED.
+- Verdict vocabulary (see `verdict_checklist.md`): VERIFIED / TOY-VERIFIED / REFUTED / BLOCKED /
+  INCONCLUSIVE.
   State the scale run next to every verdict. Never round a toy-scale pass up to VERIFIED. Report
   blocked claims explicitly, never fake or silently skip them.
 - Self-check before finishing: reread the exact claim text and your own numbers/plots side by

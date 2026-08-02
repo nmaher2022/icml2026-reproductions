@@ -1,0 +1,46 @@
+Step 3 smoketest evidence (run before any full-scale claim run) — commands + output preserved
+from the actual session transcript, saved after the fact into this log per the harness's Step 8
+smoketest-evidence gate.
+
+=== data_gen.py standalone smoketest (no NaNs, sane std vs. paper's own stated Lorenz std~8) ===
+$ ../.venv/bin/python data_gen.py
+lorenz63 base traj std [7.7917733 8.838523  8.362217 ] Xtr (4068, 96) Xte (1161, 96) train_std 7.771777629852295 nan? False
+lorenz63 param traj std [7.6760244 8.730399  8.310086 ] Xtr (4068, 96) Xte (1161, 96) train_std 7.772010803222656 nan? False
+rossler base traj std [3.6664245 3.534693  2.0673184] Xtr (4068, 96) Xte (1161, 96) train_std 3.0841925144195557 nan? False
+rossler param traj std [3.8216817 3.6530252 2.6536834] Xtr (4068, 96) Xte (1161, 96) train_std 3.0842080116271973 nan? False
+chua base traj std [1.2954118  0.17453101 1.6692111 ] Xtr (4068, 96) Xte (1161, 96) train_std 1.394327163696289 nan? False
+chua param traj std [1.4269217 0.187414  1.8331201] Xtr (4068, 96) Xte (1161, 96) train_std 1.394413948059892 nan? False
+
+=== Fern/DLinear tiny (1500-step trajectory, kenc=2, dh=16, 3 epochs) forward+train smoketest ===
+data shapes (918, 96) (130, 96) (261, 96)
+fern params 28048
+  epoch 0: train_loss=6.3949 val_loss=7.7553
+  epoch 1: train_loss=4.3808 val_loss=8.5770
+  epoch 2: train_loss=3.6909 val_loss=8.9624
+fern eval {'mse': 96.62570190429688, 'wd': 52.87751770019531, 'swd': 34.50201416015625, 'ept': 3.559386968612671}
+  epoch 0: train_loss=5.0224 val_loss=7.7405
+  epoch 1: train_loss=3.3877 val_loss=7.7598
+  epoch 2: train_loss=2.8573 val_loss=7.9163
+dlin eval {'mse': 91.87124633789062, 'wd': 63.37190628051758, 'swd': 14.39813232421875, 'ept': 3.4597702026367188}
+flop report {'n_params': 28048, 'patch_size': 24, 'n_patches': 4, 'n_reflections': 8, 'fern_head_flops': 3840, 'dense_spd_flops': 2304, 'ratio': 0.6}
+{'no_rotation': True} output shape torch.Size([4, 96]) nan? False
+{'no_encoder': True} output shape torch.Size([4, 96]) nan? False
+{'no_patching': True} output shape torch.Size([4, 96]) nan? False
+
+=== run_claim1_and_3.run_one single-combo smoketest (before launching the full 18-combo run) ===
+$ timeout 90 ../.venv/bin/python -c "from run_claim1_and_3 import run_one; ..."
+53.070005655288696 {'fern': {'mse': 44.73276901245117, 'wd': 27.70806884765625, 'swd': 10.55276107788086, 'ept': 46.29026794433594}, 'dlinear': {'mse': 72.44497680664062, 'wd': 44.07636260986328, 'swd': 13.086633682250977, 'ept': 43.034454345703125}}
+
+=== run_claim2_complexity.py full standalone run (fast, seconds -- doubles as its own smoketest) ===
+p=   8 fern_head_flops=    576 dense_spd_flops=     64 dense/fern ratio=0.11 wallclock=2.669ms
+p=  16 fern_head_flops=   1152 dense_spd_flops=    256 dense/fern ratio=0.22 wallclock=3.480ms
+p=  24 fern_head_flops=   1728 dense_spd_flops=    576 dense/fern ratio=0.33 wallclock=2.815ms
+p=  48 fern_head_flops=   3456 dense_spd_flops=   2304 dense/fern ratio=0.67 wallclock=2.555ms
+p=  96 fern_head_flops=   6912 dense_spd_flops=   9216 dense/fern ratio=1.33 wallclock=4.202ms
+p= 192 fern_head_flops=  13824 dense_spd_flops=  36864 dense/fern ratio=2.67 wallclock=3.537ms
+p= 384 fern_head_flops=  27648 dense_spd_flops= 147456 dense/fern ratio=5.33 wallclock=7.560ms
+DONE
+
+Only after all of the above passed cleanly (no NaNs, sane magnitudes, correct shapes) were the full
+18/12/24-run experiment scripts (run_claim1_and_3.py, run_claim4_ablations.py, run_claim5_horizon.py)
+launched at full toy scale.

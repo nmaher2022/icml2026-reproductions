@@ -120,6 +120,9 @@ self-check):
 - **REFUTED** — ran it at a fair scale and it contradicts the claim; state the discrepancy.
 - **BLOCKED** — not attempted, and say exactly why (auth-gated dataset, missing compute, etc.) —
   never faked, never silently skipped.
+- **INCONCLUSIVE** — attempted at a fair scale, but the result neither clearly supports nor
+  contradicts the claim (e.g. the run never reached the regime the claim is actually about). See
+  `verdict_checklist.md` for the full definition and when this differs from REFUTED.
 
 Never round a TOY-VERIFIED up to VERIFIED. Never let a BLOCKED claim go unmentioned in the final
 summary. State what scale you ran at next to every verdict.

@@ -26,7 +26,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-VERDICT_TERMS = ("VERIFIED", "TOY-VERIFIED", "REFUTED", "BLOCKED")
+VERDICT_TERMS = ("VERIFIED", "TOY-VERIFIED", "REFUTED", "BLOCKED", "INCONCLUSIVE")
 INDEX_HEADING = "## Index"
 
 
@@ -141,8 +141,9 @@ def gate_verdict_vocabulary(folder: Path) -> dict:
     if frac >= 0.8:
         return gate("verdict_vocabulary", "soft", "PASS", f"{hits}/{len(rows)} verdict rows use the standard vocabulary.")
     return gate("verdict_vocabulary", "soft", "WARN",
-                 f"Only {hits}/{len(rows)} verdict rows clearly use VERIFIED/TOY-VERIFIED/REFUTED/BLOCKED "
-                 "-- check whether prose verdicts still map cleanly to one of the four.")
+                 f"Only {hits}/{len(rows)} verdict rows clearly use "
+                 "VERIFIED/TOY-VERIFIED/REFUTED/BLOCKED/INCONCLUSIVE "
+                 "-- check whether prose verdicts still map cleanly to one of the five.")
 
 
 def _paragraphs(text: str) -> list[str]:

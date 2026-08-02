@@ -1,6 +1,6 @@
 # Verdict vocabulary and pre-submission self-check
 
-## Vocabulary (use exactly these four; don't invent synonyms)
+## Vocabulary (use exactly these five; don't invent synonyms)
 
 - **VERIFIED** — reproduced at (or acceptably close to) the paper's own scale, and the direction
   *and* magnitude match the claim.
@@ -14,6 +14,16 @@
 - **BLOCKED** — not attempted, because of a concrete access/compute obstacle (dataset auth wall,
   no GPU, missing credential). Name the obstacle. Confirm it's still real (e.g. a quick web check
   that the dataset isn't simply dead) so "blocked" isn't a stand-in for "didn't get to it."
+- **INCONCLUSIVE** — attempted at a fair scale, but the result neither clearly supports nor
+  clearly contradicts the claim, and forcing it into VERIFIED/TOY-VERIFIED/REFUTED would overstate
+  the evidence either way. Two legitimate cases seen in practice (confirmed twice, SpectralCIT's
+  Claim 3/5 and Ellipsoidal TSF's Claim 5): (1) the run was too small/short to reach the regime the
+  claim is actually about (e.g. a claim about behavior "past a collapse point" when nothing
+  collapsed at toy scale), or (2) the metric pins at a degenerate value across all conditions,
+  giving no signal either way. Don't use INCONCLUSIVE as a soft landing for "didn't look closely
+  enough" — it still requires the same self-check rigor as the other four, and the writeup must
+  say specifically what would need to change (more scale, a different metric) to get a real
+  verdict.
 
 Mixed results (e.g. one sub-metric matches, another doesn't — see the BiMU Claim 2 OOD-AUC-matches
 but accuracy-doesn't case) don't get forced into a single label: state each sub-result's verdict
