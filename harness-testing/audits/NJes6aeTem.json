@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "audit": "repro-harness Tier-1 (see harness-testing/AUDIT.md)",
+  "timestamp": "2026-08-02T12:19:18.899072+00:00",
+  "folder": "/home/rec1/Desktop/AI_Safety/ICML_reproduce/stand-NJes6aeTem",
+  "orid": "NJes6aeTem",
+  "overall": "WARN",
+  "hard_failures": 0,
+  "warnings": 1,
+  "gates": [
+    {
+      "name": "paper_source",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "OpenReview PDF reference found."
+    },
+    {
+      "name": "briefing_exists",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "PAPER_BRIEFING.md present."
+    },
+    {
+      "name": "smoketest_evidence",
+      "severity": "soft",
+      "status": "WARN",
+      "summary": "Log files exist but none look like a smoketest (by name or by being much smaller than the largest log) -- confirm Step 3 actually ran a small config first."
+    },
+    {
+      "name": "self_audit_log",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "BUGFIX_LOG.md present."
+    },
+    {
+      "name": "verdict_vocabulary",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "8/8 verdict rows use the standard vocabulary."
+    },
+    {
+      "name": "blocked_claims_disclosed",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "Every 'blocked' mention has an accompanying reason."
+    },
+    {
+      "name": "index_row_present",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "Folder is linked from the top-level README's Index table."
+    },
+    {
+      "name": "raw_results_present",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "Non-empty raw result files found at folder root (e.g. uci_run.log)."
+    },
+    {
+      "name": "no_vendored_code",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "No nested .git directories found."
+    }
+  ],
+  "note": "Tier-1 only -- run the Tier-2 qualitative review in AUDIT.md before trusting this alone."
+}

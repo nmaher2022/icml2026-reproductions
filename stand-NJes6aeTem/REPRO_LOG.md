@@ -110,7 +110,22 @@ individual `add_file()` calls only — per `feedback-trackio-artifact-project-sc
 `add_dir()` a whole reproduction folder. Verified clean afterward: 605KB / 15 files in the private
 artifacts bucket (`huggingface_hub.bucket_info`), matching the curated set exactly.
 
-## NEXT ACTIONS
-1. Step 7 — mirror into `nmaher2022/icml2026-reproductions` as `stand-NJes6aeTem/` via
-   `scripts/scaffold_reproduction.py add` (direct commit + push, pre-authorized).
-2. Step 8 — run `harness-testing/audit_harness.py stand-NJes6aeTem`.
+## STATUS UPDATE (2026-08-02, later same day): Steps 7-8 complete — harness pipeline DONE
+
+Step 7: mirrored into `nmaher2022/icml2026-reproductions` via `scripts/scaffold_reproduction.py
+add`, filled the generated `README.md` stub's TODOs from `VERDICTS.md`, removed the unused empty
+scaffold dirs (`patches/`, `configurations/`, `logs/`, `results/` — this repro uses the flat-file
+convention like most others), committed (`49d8cfc`) and pushed to `origin main`.
+
+Step 8: ran `harness-testing/audit_harness.py stand-NJes6aeTem` — 0 hard failures, 1 soft warning
+(`smoketest_evidence`: no separately-saved smoketest log file, though BUGFIX_LOG.md #4 documents
+one was run; informative, not disqualifying per AUDIT.md's own framing). Wrote
+`harness-testing/audits/NJes6aeTem.json`. Did a lightweight Tier-2 spot-check (full independent
+pass not due yet per AUDIT.md's "every 2-3 reproductions" cadence — last full pass was
+`PROJECT_TIER2_AUDIT_2026-08-01.md`): cross-checked Eq. 13's dynamic acceptance-rate schedule and
+the α=0.1 default directly against `pdftotext` output of the v2 PDF (Appendix A.1) — both the
+`PAPER_BRIEFING.md` transcription and the bug-#4 fix are verbatim-faithful to the source text
+("Our STAND implementation varies the acceptance rate... as follows" is unconditional, confirming
+the fix to apply Eq. 13 regardless of `hierarchical_shrinkage`).
+
+All 8 harness steps for this reproduction are now complete.
