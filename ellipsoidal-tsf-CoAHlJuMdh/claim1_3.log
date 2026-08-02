@@ -1,0 +1,19 @@
+[  65.2s] lorenz63_base seed=0 fern_mse=44.7328 dlin_mse=72.4450 fern_ept=46.3 dlin_ept=43.0
+[ 119.3s] lorenz63_base seed=1 fern_mse=44.5301 dlin_mse=55.5655 fern_ept=40.1 dlin_ept=58.0
+[ 160.8s] lorenz63_base seed=2 fern_mse=38.8833 dlin_mse=67.5228 fern_ept=45.0 dlin_ept=56.3
+[ 205.7s] lorenz63_param seed=0 fern_mse=42.9799 dlin_mse=52.0608 fern_ept=39.5 dlin_ept=55.3
+[ 254.6s] lorenz63_param seed=1 fern_mse=46.7786 dlin_mse=71.4284 fern_ept=41.4 dlin_ept=51.1
+[ 305.9s] lorenz63_param seed=2 fern_mse=33.3833 dlin_mse=48.2553 fern_ept=55.0 dlin_ept=67.6
+[ 347.1s] rossler_base seed=0 fern_mse=5.9113 dlin_mse=4.2976 fern_ept=65.3 dlin_ept=87.7
+[ 377.2s] rossler_base seed=1 fern_mse=5.3955 dlin_mse=4.6174 fern_ept=55.8 dlin_ept=87.3
+[ 406.0s] rossler_base seed=2 fern_mse=4.4509 dlin_mse=3.7110 fern_ept=71.4 dlin_ept=88.8
+[ 447.3s] rossler_param seed=0 fern_mse=6.0183 dlin_mse=6.7861 fern_ept=67.4 dlin_ept=88.8
+[ 473.1s] rossler_param seed=1 fern_mse=7.1993 dlin_mse=7.0898 fern_ept=57.2 dlin_ept=88.4
+[ 527.0s] rossler_param seed=2 fern_mse=4.8108 dlin_mse=7.0287 fern_ept=71.5 dlin_ept=87.5
+[ 564.0s] chua_base seed=0 fern_mse=0.4369 dlin_mse=0.0396 fern_ept=85.1 dlin_ept=96.0
+[ 647.3s] chua_base seed=1 fern_mse=0.6028 dlin_mse=0.0547 fern_ept=88.3 dlin_ept=96.0
+[ 737.9s] chua_base seed=2 fern_mse=0.2429 dlin_mse=0.0721 fern_ept=92.8 dlin_ept=96.0
+[ 788.9s] chua_param seed=0 fern_mse=0.7133 dlin_mse=0.1005 fern_ept=82.4 dlin_ept=95.7
+[ 843.4s] chua_param seed=1 fern_mse=0.4952 dlin_mse=0.1215 fern_ept=89.3 dlin_ept=95.7
+[ 885.5s] chua_param seed=2 fern_mse=0.5179 dlin_mse=0.0909 fern_ept=80.4 dlin_ept=95.9
+DONE in 885.5s

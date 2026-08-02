@@ -1,0 +1,13 @@
+[  60.6s] h= 24 seed=0 fern_mse=8.6293 dlin_mse=12.2210 fern_swd=1.6618 dlin_swd=3.5066
+[ 113.2s] h= 24 seed=1 fern_mse=8.1208 dlin_mse=11.8150 fern_swd=1.0146 dlin_swd=3.3890
+[ 158.9s] h= 24 seed=2 fern_mse=9.3104 dlin_mse=9.9670 fern_swd=1.1272 dlin_swd=2.3986
+[ 210.7s] h= 48 seed=0 fern_mse=19.6926 dlin_mse=44.4203 fern_swd=3.6297 dlin_swd=9.8244
+[ 253.7s] h= 48 seed=1 fern_mse=23.7274 dlin_mse=40.2358 fern_swd=4.9070 dlin_swd=10.4168
+[ 297.2s] h= 48 seed=2 fern_mse=35.8940 dlin_mse=35.0812 fern_swd=7.7316 dlin_swd=4.5068
+[ 342.6s] h= 96 seed=0 fern_mse=53.1808 dlin_mse=67.1141 fern_swd=20.6811 dlin_swd=16.3055
+[ 416.8s] h= 96 seed=1 fern_mse=39.8586 dlin_mse=65.6519 fern_swd=10.2778 dlin_swd=15.1622
+[ 449.2s] h= 96 seed=2 fern_mse=41.0927 dlin_mse=54.1318 fern_swd=9.9995 dlin_swd=6.8144
+[ 496.8s] h=192 seed=0 fern_mse=54.4376 dlin_mse=64.6795 fern_swd=22.9484 dlin_swd=20.2090
+[ 551.6s] h=192 seed=1 fern_mse=53.7891 dlin_mse=68.9024 fern_swd=20.3234 dlin_swd=21.0330
+[ 604.3s] h=192 seed=2 fern_mse=40.2255 dlin_mse=59.5521 fern_swd=13.1725 dlin_swd=14.3856
+DONE in 604.3s

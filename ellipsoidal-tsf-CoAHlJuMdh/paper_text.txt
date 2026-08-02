@@ -1,0 +1,1335 @@
+                                                                              Ellipsoidal time series forecasting
+
+
+                                                                                                  Qilin Wang 1
+
+
+                                                                 Abstract                                      survives. Chaotic systems are sensitively dependent on
+                                                                                                               initial conditions—the Lyapunov time (for nearby trajec-
+                                             We argue that long-term forecasting requires
+                                                                                                               tories to diverge by factor e) is short, making pointwise
+                                             learning local Jacobians with explicit spectral
+                                                                                                               prediction impossible. However, dissipative chaotic sys-
+                                             structure, going beyond simple conditional mean
+arXiv:2505.17370v6 [cs.LG] 2 May 2026
+
+
+
+
+                                                                                                               tems (e.g., Lorenz-63 (Lorenz, 1963)) retain stable geom-
+                                             matching. Our method, Fern, invokes Brenier’s
+                                                                                                               etry: between post-Lyapunov and pre-mixing, geometric
+                                             theorem to directly parameterize the Jacobian as
+                                                                                                               accuracy remains achievable even when pointwise accu-
+                                             a symmetric positive semi-definite (SPD) factor-
+                                                                                                               racy fails. Most problematic are non-stationary shocks:
+                                             ization, treating forecasting as the optimal trans-
+                                                                                                               piecewise-ergodic regimes: with distinct distributional sig-
+                                             port of probability mass from a fixed Gaussian
+                                                                                                               natures, where shocks trigger switches.
+                                             source to data-dependent ellipsoids. This formu-
+                                             lation reduces the computational cost of eigen-                   Real-world systems can mix all three: stochastic regime
+                                             decomposition from cubic to linear time while                     switching, short chaotic bursts, and slow parameter drift
+                                             providing interpretable, geometry-aware projec-                   can all coexist in e.g. finance. This inspires a worldview
+                                             tions. To rigorously evaluate robustness, we in-                  seeing data-generating process (DGP) as a time-varying,
+                                             troduce a synthetic benchmark with controlled                     nonlinear dynamics Ft (·) and several design principles: we
+                                             non-stationary shocks alongside new metrics like                  should (1) focus on local geometry: under our assumption,
+                                             Effective Prediction Time (EPT). Fern demon-                      each local region is predictable post shocks, albeit with
+                                             strates exceptional stability, outperforming base-                different manifold geometries. The transport needs to be
+                                             lines like DLinear and Koopa by over two orders                   data-dependent and geometry-aware of the surroundings;
+                                             of magnitude (up to 790×) on nonstationary set-                   (2) trade symbolic interpretability for robustness to regime
+                                             tings where standard benchmarks fail to expose                    shifts. Specialist models—whether equation discovery or
+                                             model brittleness.                                                global attractor (set of states the system evolves toward)
+                                                                                                               reconstruction—can break down when regimes shift. (3)
+                                                                                                               seek uncertainty quantification, geometric diagnostics and
+                                        1. Introduction                                                        understand the model’s failure modes under nonstationary
+                                                                                                               scenarios. In short, a model should provide structural in-
+                                        We believe conditional manifold transport is the core                  sights that support decision-making.
+                                        task of long term time series forecasting (LTSF): given
+                                        the current context window like [x1 , . . . , x70 ], an evenly-        This suggests direct Jacobian modelling as a candidate
+                                        sampled time-delay embedding (TDE), can one correctly                  for such a data-dependent, local method. It is consistent
+                                        locate the underlying manifold’s characteristic geometry,              with the philosophy laid out in The Bitter Lesson (Sutton,
+                                        and transport probability mass along it to future horizons             2019): largely data-driven and domain-agnostic, without
+                                        [y1 := x71 , . . . , x100 ]? When the manifold is as simple as a       hand-crafted priors such as trend-seasonal decompositions.
+                                        stable sine wave extending through time, such conditional              The local, linearized representation of the complex dynam-
+                                        prediction task is easy even at truly long horizon.                    ics exposes rich structure: Jacobian-based geometric di-
+                                                                                                               agnostics and eigenvalues and eigenvectors that capture
+                                        Yet, three entangled sources in real systems smear, disrupt            directional sensitivities. However, it is computationally pro-
+                                        or tear apart the manifold’s geometry: stochastic noise, de-           hibitive: it requires n2 Jacobian entries for an n-dimensional
+                                        terministic chaos, and non-stationary regime shifts. Noise             horizon, eigen-decomposition adds O(n3 ) cost, and even-
+                                        smears the manifold; at extremes, no invariant structure               tually, large n necessitates sacrificing parallelism for auto-
+                                             1
+                                               Independent  Researcher.AUTHORERR:              Missing         regressive generation.
+                                        \icmlcorrespondingauthor.
+                                                                                                               Our novel method solves three bottlenecks at once: (1) We
+                                        Proceedings of the 43 rd International Conference on Machine           move away from the general x to y time-evolution paradigm
+                                        Learning, Seoul, South Korea. PMLR 306, 2026. Copyright 2026           and study how Gaussian noise is transported to y (condi-
+                                        by the author(s).
+
+                                                                                                           1
+                                     Submission and Formatting Instructions for ICML 2026
+
+
+
+
+Figure 1. Lorenz-63 attractor reconstruction with Fern. Left: ground-truth trajectory colored by instantaneous speed (norm of velocity).
+Right: Fern prediction, colored by the mean patch-wise maximum eigenvalue (spectral radius of the local SPD map).
+
+
+tional on x). This angle enables a formulation to restrict our         there exists a unique, Wasserstein-2 (W2) optimal map
+search to symmetric positive (semi-)definite (SPD) Jaco-               Gθ (·; x) : Y → Y from ν to ηx such that the pushforward
+bians, with search cost down from O(n2 ) to O(Rn). Cru-                measure Gθ (·; x)♯ ν minimizes the moving cost (quadratic
+cially, we can still target arbitrary Gaussian conditional dis-        Euclidean distance) to ηx .
+tributions. (2) our trick directly parameterizes the spectral
+                                                                       Intuitively, this is stating an obvious fact: the dynamics must
+structure and eliminates O(n3 ) eigen-decomposition. (3)
+                                                                       push the 30-dim x into some distribution in the 70-dim Y
+We generate per-patch predictions in parallel using shared
+                                                                       space; for that particular distribution, there must be a cost-
+backbones. This turns the curse of dimensionality into a
+                                                                       minimal way to move a generic 70-dim N (0, I) distribution
+benefit: 14 full capacity search for 24-dim patch Jacobians
+                                                                       into that distribution. As the optimal map, it must be the
+cost a fraction vs a monolithic 14 · 24 = 336-dim Jacobian.
+                                                                       gradient of a convex potential, so in Rn it has a symmetric
+Spectral parameterization reframes analysis away from state            positive (semi) definite (SPD) Jacobian almost everywhere.
+dynamics; instead, coming from common source, eigenval-
+                                                                       Any SPD matrix admits an eigen-decomposition U ΛU ⊤
+ues are cross-patch comparable diagnostic belief signals of
+                                                                       where U is the rotation matrix formed by the eigenvectors
+ellipsoidal stretching. In Lorenz-63 system Fig. 1, ground
+                                                                       and Λ is diagonal matrix with nonnegative entries as eigen-
+truth (left) accelerates along the outer rings (deep blue) and
+                                                                       values. The trick is to parameterize the Jacobian through
+decelerates at the “bottleneck” (white). Remarkably, under
+                                                                       its spectral factors directly. We trade the expensive search
+simple Huber-loss training and no supervision on eigenval-
+                                                                       over arbitrary functions—where Jacobian spectral structure
+ues, Fern’s maximum eigenvalues (right) tend to spike
+                                                                       is a costly byproduct—for a structured search within the
+in the high-speed regions (dark orange). This reflects the
+                                                                       convex cone of SPD maps, where spectral properties are
+model’s location-dependent learned belief : it explicitly dis-
+                                                                       intrinsic parameters.
+covers that large stretching is required where the system
+moves fastest to minimize loss. Unlike probabilistic scoring
+rules such as CRPS, here structure is the diagnostic.                  Walkthrough Let z ∼ N (µ(x), Σ(x)) be the latent z-
+                                                                       space lower-dim Gaussian encoder of information from x.
+                                                                       Let y0 ∼ N (0, I) in a y-space be the fixed common source.
+2. Methods                                                             For any target mean µ and covariance (an SPD matrix)
+The key is Brenier’s theorem (Brenier, 1991): between                  Σ = AA⊤ (where A = U ΛU ⊤ and Λ ≻ 0), the squared
+source distribution ν and target distribution ηx (a Gaus-              2-Wasserstein optimal transport from y-space N (0, I) to
+sianized neighborhood around the conditional empirical                 y-space N (µ, Σ) is attained exactly by the affine map y0 7→
+mean of y given x), under regularity conditions that ν is              µ(z) + A(z) y0 .
+absolutely continuous and η has finite second moments,                 Since translation doesn’t affect Jacobians, we can pa-
+
+                                                                   2
+                                                                                      Submission and Formatting Instructions for ICML 2026
+
+                                                  D,QSXW6HULHV                                                           E/DWHQW6SDFH7UDQVIRUPDWLRQ                                   F3DWFKZLVH*HRPHWULF)RUHFDVW
+                                                                                                                                                                                                                            
+                       ,QSXW6HULHV                                                                                                                        ,VRWURSLF*DXVVLDQ/DWHQW                   ,QSXW
+                                                                                                                                                                       $QLVRWURSLF(QFRGHG/DWHQW                 )RUHFDVW
+                                                                                                                                                                                                                                        *URXQG7UXWK
+             
+
+
+
+
+                                                                                               /DWHQW'LPHQVLRQ
+                                                                                                                                                                                                                              
+             
+9DOXH
+
+
+
+
+                                                                                                                                                                                                                              
+                                                                                                                                                                                                                            
+
+                                                                                                                                                                                                                            
+
+                                                                                                                                                                                                                                           
+                                                       7LPH6WHS                                                                                 /DWHQW'LPHQVLRQ                                                                         7LPH6WHS
+
+Figure 2. Fern forecasting mechanism. (a) Input time series to be processed by the bidirectional encoder. (b) Latent noise z ∼ N (0, I)
+is encoded as Gaussian ellipsoids. (c) Output space noise y0 ∼ N (0, I) is transformed into prediction (patches of Gaussian ellipsoids).
+
+
+rameterize this optimal map as a geometrically meaning-                                                                                                                     translation). This means we are no longer modelling the Ja-
+ful translate–rotate–scale–rotate-back sequence that re-                                                                                                                    cobian as an linearization of some implicit non-linear map;
+shapes the Gaussian ball into a Gaussian ellipsoid. For                                                                                                                     instead, for every 24-dim patch, our spectral parameters
+example, applying the shift before the rotation yields y0 7→                                                                                                                recover the exact transport to rearrange 24-dim noise to the
+U ΛU ⊤ (y0 + t) which is equivalent to the canonical form                                                                                                                   24-dim Gaussian prediction learned from entire context x.
+µ̃ + A y0 where µ̃ = At, preserving the affine structure
+                                                                                                                                                                            Using z to encode x is to avoid gradient explosion caused
+required by Brenier’s theorem while allowing the network
+                                                                                                                                                                            by schemes like s(x) ⊙ x. Embedding is via a bidirec-
+to learn the ”center” t in the unscaled noise space.
+                                                                                                                                                                            tional coupling network (inspired by ANF (Huang et al.,
+The logic then goes: say we train only on MSE, and as-                                                                                                                      2020)) where x and a fresh z ∼ N (0, I) iteratively up-
+sume the true conditional mean µ(x)—the target objective—                                                                                                                   date each other via learned scales and shifts (both of O(n)
+become N (µ(x), Σ) with unspecified Σ Gaussian errors.                                                                                                                      costs). Isotropic Gaussian z is also shaped into an ellipsoid
+Then, training with MSE yields the maximum likelihood                                                                                                                       (the purple cloud in Fig. 2b). The motivation is to ‘mould’
+estimation for that Gaussian error model. What Brenier’s                                                                                                                    the Takens embedding via simple scales and shifts so the
+theorem says is between N (0, I) and any N (µ(x), Σ), there                                                                                                                 qualitative information remains diffeomorphically, and gets
+exists a unique OT. This OT is the gradient of some convex                                                                                                                  passed onto a Gaussian latent before the final SPD projec-
+function so its Jacobian must be in the SPD class.                                                                                                                          tion. Concretely, at encoder layer i we compute a shared
+                                                                                                                                                                            features hix = Hx (xi ), hiz = Hz (z i ), and via layer heads
+When we model a SPD parameterization directly, we (1)
+                                                                                                                                                                            generate four vectors (six , tix , siz , tiz ) that drive the affine
+learn an exact OT from N (0, I) to the induced Gaussian dis-
+                                                                                                                                                                            updates z i+1 = siz ⊙ z i + tiz , xi+1 = six ⊙ xi + tix (Alg. 1).
+tribution N (µθ (x), Σθ . (2) We know SPD is the existence
+class for the exact OT to N (µ(x), Σ): searching only SPD
+class is far more efficient and principled than optimizing                                                                                                                  Algorithm 1 Fern
+over arbitrary n × n matrices with n2 free entries. (3) In                                                                                                                   Require: Windowed input x
+MSE-only case, we care if µθ (x) ≈ µ(x). Σθ is only an                                                                                                                        1: z ← N (0, I); y0 ← N (0, I)
+internal Gaussian belief state used to minimize MSE. We                                                                                                                       2: x1 ← x, z 1 ← z
+do not care if Σθ ≈ Σ. (4) The transport map conditional                                                                                                                      3: for i = 1 to Kenc = 5 do
+on x that rearranges noise into prediction is fibre-wise: we                                                                                                                  4:    hix ← Hx (xi )               // encode xi into feature hix
+iteratively encode x into lower dimensional Gaussian latent                                                                                                                            i i          i    i
+                                                                                                                                                                              5:    (sz , tz ) ← ϕx (hx ) // x-head outputs z-scale/shift
+z and draw a fresh z every forward to produce it. This is not                                                                                                                 6:    z i+1 ← siz ⊙ z i + tiz              // affine update of z
+standard OT, we don’t transport marginal distribution from                                                                                                                    7:    hiz ← Hz (z i+1 )         // encode z i+1 into feature hiz
+x-space to y-space. (5) This approach spans both pointwise                                                                                                                    8:    (six , tix ) ← ϕiz (hiz ) // z-head outputs x-scale/shift
+prediction and probabilistic prediction since model outputs                                                                                                                   9:    xi+1 ← six ⊙ xi + tix                // affine update of x
+Σθ directly;. In this paper we focus on point forecasts, and                                                                                                                 10: end for
+leave a full probabilistic evaluation (e.g., NLL/CRPS) to                                                                                                                    11: hz ← Hz (z Kenc +1 )                         // final z-feature
+future work; (6) Brenier’s theorem is quite general but we                                                                                                                   12: (Λ, ty , U ) ← ψ(hz ) // OT head: y-scale/shift/rotate
+limit scope to Gaussian to bypass technicalities and secure a                                                                                                                13: y ∗ ← Uy⊤ Λy Uy (y0 + ty )                 // SPD projection
+A key structural advantage: Between any two Gaussians,
+the unique W2 OT map is strictly affine (SPD scaling +
+                                                                                                                                                                            When directly modelling spectral components, eigenvalues
+
+                                                                                                                                                                    3
+                                    Submission and Formatting Instructions for ICML 2026
+
+Λ is a n-dim scales vector with O(n) cost. Any n×n orthog-             Mori-Zwanzig formalism (Chorin et al., 2002) helps ex-
+onal matrix U containing the eigenvectors decomposes into              plain why CI can outperform CD: it decomposes dynamics
+at most n Householder reflections x 7→ (I −2vv ⊤ )x. MLP               into: (1) A(t) the resolved states (part of the full state that
+generates R such unit-norm reflection vectors v with O(Rn)             we choose to model) chosen at time t (2) K(s) be the mem-
+cost. Even without patching, cost is between O(n2 ) and                ory kernel, i.e the systematic, history-dependent influence
+O(R · n) depending on R: R = n implies a full-capacity                 of all the unresolved variables at time s on the resolved ones
+search space sufficiently expressive to recover any rotation           (3) residual unresolved variables’ influences F(t) orthog-
+                                                                                                                      Rt
+including U ; R ≪ n or minimally R = 2 implies a reduced-              onal to A(t). Then, dt  d
+                                                                                                 A(t) = ΩA(t) + 0 K(s)A(t −
+capacity search. In short, we move from O(n3 ) to O(Rn).               s) ds + F(t), where three terms represent Markovian terms
+With patching, let p be the patch size and np = n/p be                 (now), memory (past), and noise-like exogenous forcing.
+the number of patches. Brenier’s theorem applies to 70-                What CI models offer is what Takens’ theorem offers: the
+dim to 70-dim movement, as well as 10-dim to 10-dim                    topologically faithful representation of the manifold formed
+ones, just yielding different least costly transports. Each            by all three causal terms, without identifying A(t), K(s)
+patch costs O(p2 ) for full capacity search (with total cost           and F (t). Where naive CD models fail is to carelessly di-
+O(np · p2 ) = O(n · p)) and O(R · p) for reduced-capacity              lute the resolved manifold with terms that should be in F (t),
+search (total O(np · R · p) = O(R · n)). Importantly, since            e.g. treating stochastic exogenous factor such as raining or
+each patch’s movement does not depend on the prediction                macroscopic environment, or even pure noise (spurious cor-
+from the previous patch, we make patchwise predictive                  relation) as microscopic innate dimension to model.
+transport in parallel.                                                 Take Lorenz-63 for an example. Single channel 100-dim
+                                                                       TDE of x has a 3-dim embedded structure inside it. Cross-
+3. Evaluation                                                          channel sharing with 100-dim y in the form [x, y] offers
+                                                                       zero additional information as it contains the same 3-dim
+Rethinking LTSF A fundamental tension in current LTSF                  structure up to diffeomorphism. Sharing in the mixer style
+is the ‘channel independence (CI) vs channel dependent                 where an MLP process [xi , yi ] can destroy both represen-
+(CD) Paradox.’ A common belief we called Information                   tation. Sharing with an additional noise channel e further
+Monotonicity Assumption clearly favors CD: it believes                 harms manifold integrity by injecting non-attractor variabil-
+adding correlated variables monotonically increases infor-             ity. In the absence of strong prior knowledge about which
+mation content, an the (implicit oracle) deep learner will             channels are truly informative, CI remains a conservative
+automatically separate signal from noise in finite data, and           choice that preserves a meaningful manifold representation.
+monotonically improves performance as we throw more data
+at it. Yet, benchmarks (Nie et al., 2023; Zeng et al., 2023)           The Ontological Coherence of Benchmarks Mori-
+show that CI models that reference only a variable’s own               Zwanzig formalism sheds light on where LTSF practices
+past history can outperform CD models. Unless carefully                overextend the already shaky Information Monotonicity
+designed as in (Zhang & Yan, 2023), naive inter-variable               Assumption: (1) Benchmarks consist of loosely linked cor-
+mixing hampers performances. We argue: this is not an                  related variables, often outright a bunch of environment sen-
+architectural quirk, but a consequence of dynamical                    sors. CD models default to mixing all channels—and when
+systems theory.                                                        outperformed by CI, often attribute failure to how channels
+By Takens’ embedding theorem (Takens, 1981)and its                     were blended, not whether they should be. When each chan-
+stochastic extensions (Stark et al., 1999; Stark, 2003), the           nel is further assumed relevant a priori, we risk equating
+time-delay embedding of a single observable is sufficient              representation learning with feature hoarding and drown-
+to reconstruct the full system’s attractor (up to diffeomor-           ing the resolved states A(t) in high-dimensional noise. (2)
+phism). The history of one variable [xt−L , . . . , xt ] encodes       Evaluation defaults to all correlated variables, and manifold-
+the coupling of the system’s state variables. When the intrin-         informed selection is dismissed as cherry-picking. Assum-
+sic dimension is low, even a short patching contains relevant          ing pointwise predictability encourages competition on near-
+and causal system information that is topologically accurate,          random walk datasets like Exchange, where pointwise
+meaning the embedded manifold is a stretched/compressed                forecasts are meaningless (see (Bergmeir, 2023)).
+but not torn/punctured version of the original. For a proof,           The vector autoregression (VAR) model in Econometrics
+x, y, z of the Lorenz63 system did interact with each other            also predicts a cluster of correlated variables’ future based
+every step. Yet, each coordinate shown previously in Fig.1             on every feature’s past. Yet, it is only employed when we
+is predicted conditional only on the channel’s own con-                know inflation, money supply and unemployment rate are
+text. This shows deliberate model information sharing is               causally intertwined within one economic system. Same
+not mandatory.                                                         for dynamical systems like Lorenz or Ornstein-Uhlenbeck,
+                                                                       where variables lie on one manifold. Same for vision where
+
+                                                                   4
+                                   Submission and Formatting Instructions for ICML 2026
+
+
+
+
+             Figure 3. Reconstruction of ETTh2’s HULL column: multiple consecutive zeros severely plague the dataset
+
+
+RGB channels describe one physical reality.                          Consider Fig. 3 to see how wrong a prediction can be in test
+                                                                     set: prior to step 1000, Fern predicts values that appear
+Consider Weather: local air parcel thermodynamics (dew
+                                                                     wrong to human eyes yet are likely metric-correct w.r.t mas-
+point, vapor pressure, humidity) are state variables of one
+                                                                     sive zeroes. For step 1000-1500, it correctly predicts the
+system, related by Clausius–Clapeyron and ideal gas laws.
+                                                                     emergence of a sequence of zeroes with a downtrend. Yet,
+Rainfall is exogenous—determined by cloud physics kilo-
+                                                                     to human eyes it misses the real upward trend. After step
+meters above, not air parcel conditions at time t. It is zero-
+                                                                     1500, with fewer zeros, the prediction seems more accurate
+inflated, heavy-tailed, event-driven: a different manifold.
+                                                                     albeit with a lower mean. Its correctness is evaluated on the
+Same for the slow, global variable *CO2*. In M-Z terms,
+                                                                     dual role of forecaster and predictive data janitor. Such
+the benchmark folds F(t) into A(t). Aggregating error
+                                                                     dataset rewards smoothing, and models with moving aver-
+across all channels conflates tracking air-parcel dynamics
+                                                                     age component which treat [100, 101, 102, 103, 0, 105] as a
+with guessing event counts.
+                                                                     sequence of 85 benefits while signal-sensitive ones suffers.
+Rainfall is still causal, just on a different manifold.
+Traffic exhibits a worse pathology: hundreds of free-                 Model–Data                  MSE@1       Best    Ep      ∆
+way sensors with anonymized physical identity. Spatial-
+                                                                      TST–ETTh1 (val)               6.49     9.24      6    +2.75
+temporal observables should have been grouped into a phys-            TST–ETTh1 (test)             6.85      6.21      6     -0.64
+ically meaningful vector-valued time-delay embedding, in-             TimeMixer–ETTh1 (val)        6.28      9.51      6    +3.23
+stead become a bag of unlabelled channels that gives an               TimeMixer–ETTh1 (test)       7.38      7.34      6     -0.04
+artificial “scale-up” challenge. CI models must treat each            Fern–ETTh1 (val)              8.24     12.10     6    +3.86
+sensor as isolated; CD models must pretend all 862 sensors            Fern–ETTh1 (test)            18.88     5.51      6    -13.37
+are mutually relevant. Neither is coherent. We are bench-             DLinear–ETTh1 (val)          7.12      6.22      6     -0.90
+marking a model’s ability to reject spurious cross-channel            DLinear–ETTh1 (test)         7.79      7.39      6     -0.40
+mixing. It’s like to predict room temperatures but (1) treat         Table 1. Recency bias on ETTh1 (MSE). @1 is epoch 1, Best is
+thermometers from the same house as independent and (2)              the later selected epoch; ∆ = Best − @1.
+presume sensor in a wooden house in one location provides
+relevant information about another sensor’s reading located
+                                                                     A final benchmarking hazard in real-world datasets is
+miles away in a high-rise.
+                                                                     where early-stopping decides the winner. ETT’s non-
+Data artifacts from poorly sanitized real-world data in-             stationarity—likely low-frequency trend drift—makes train-
+dependently harm benchmarking. Consider ETT: (1) sen-                ing’s tail statistically closer to validation than to test. Ta-
+tinel values (stuck sensors with exactly the same values)            ble. 1 showcases the pathology: PatchTST, TimeMixer and
+are everywhere: ETTh1 has 140 entries of 8.28, 100 en-               Fern all converge to best test MSE at epoch 6, but the
+tries of 1.76, 120 entries of 1.73; ETTh2 has 250 entries of         validation errors are universally around 45% higher than
+-31.46 for a week and 10k entries of 88.29 that persist for          at epoch one. Then (1) naive early-stopping effectively
+months. (2) zero-inflation: two columns have 22–33% zeros            compare DLinear against three expressive models locked at
+and most zeroes are not isolated but spans multiple days 4.          epoch 1; (2) fixed-epoch schemes as in (Wang et al., 2024b)
+These zeroes are hard to impute, and problematic when                inverts Fern from worst to best. Likely, expressive mod-
+exemplified in multiple windows: A sequence with 16% ze-             els try simple extrapolation first, resulting in a deceptively
+roes [100, 101, 102, 103, 0, 105] has mean ≈ 85.16 which             low initial error on validation and get locked in. One mini-
+punishes any sensible prediction of 104. Non-uniformity              mal but principled fix is a grace period where we skip first
+of distribution implies some targets will produce grossly            few epochs before checkpointing. In this experiment, all
+misleading gradients.                                                expressive models do converge at epoch 6 to the best test
+
+                                                                 5
+                                    Submission and Formatting Instructions for ICML 2026
+
+MSE under free run, when we set the grace period to 2 or 3.           tors and structured invariant measures, the problems with
+Yet, we should be aware that early stopping is an intrinsic           real-world datasets vanish: (1) no measurement errors
+determinant of leaderboard for datasets with uncontrolled             and data-quality artifacts; (2) distributional properties are
+drift.                                                                analytical, not assumed or inferred; (3) random walk and
+                                                                      non-dissipative systems are ruled out, risks of measuring
+Rethinking Benchmarking Parallel to the Informa-                      another Exchange avoided; (4) non-stationary shock is
+tion Monotonicity Assumption we have Provenance-over-                 defined by the user, recency bias between validation and
+Structure Fallacy: (1) Real-world non-stationarity is                 train is eliminated unless we deliberately allow it.
+deemed too complex to simulate, yet structural generators             Non-stationarity handling becomes a falsifiable claim with
+are dismissed as ’toy’, without specifying what dynamical             experimental intervention where the type, timing, magni-
+properties the ‘real’ data actually provides that the gener-          tude, and before/after distributions of shocks are all ex-
+ator lacks. (2) By extension, real-world sourced datasets             plicit and precise. We design three controlled non-stationary
+are treated as inherently superior—as if provenance were a            scenarios, all occurring exactly at the midpoint of the
+scientific property. (3) Benchmark breadth masquerades as             training trajectory: (1) Parameter drift: system parame-
+scientific validity—but structurally similar datasets tested          ters shift slightly (same initial conditions); (2) State pertur-
+eight times is n=1 with extra steps. (4) Winning on one               bation: state variables receive an additive shock (same pa-
+realization of non-stationarity is mistaken for mastering             rameters); (3) Regime replacement: the trajectory switches
+non-stationarity itself.                                              to a different one (different parameters and initial condi-
+We take the opposite view to all four points: (1) Current             tions). Exact numerical parameters are in Appendix 7).
+benchmarks are easy: extremely simple models rarely fail              In our view, synthetic benchmarks are software tests
+catastrophically. (2) Historical data is only one realized path       for forecasters—refusing them is like skipping sensible
+among counterfactuals; we risk leaderboard-ism over his-              edge-case tests in favour of a decades-old test suite from a
+torical path emulation, when we don’t know if a 5% better             different domain and calling it your ‘real-world’ CI/CD.
+MSE is statistically meaningful; (3) Benchmarks behave                Table 2 (shock table) evaluates Fern against five LTSF base-
+like quasi-periodic datasets; many SOTA models bake in                lines and one invariant learner: DLinear (Zeng et al., 2023),
+strong seasonal/trend priors and frequency decompositions.            TimeMixer(Wang et al., 2024b), PatchTST(Nie et al., 2023),
+We risk conflating one process with ‘real-world complex-              Koopa (Liu et al., 2023), ModernTCN (Luo & Wang, 2024)
+ity’. (4) Better MSE on artifact-riddled quasi-periodic data          and PFNN (Cheng et al., 2025) on 21 synthetic dynami-
+can’t be credibly extrapolated to unfalsifiable nonstationar-         cal systems and 2 ETTs using 336-step input and 336-step
+ity claims. In summary, we should not mistake where data              forecast horizons, averaging results over 2 random seeds.
+comes from for what it can tell you.                                  Tables 9 present tests with 4 random seed, 4 prediction hori-
+Just like nonstationarity handling, the core task of long-            zons (96, 192, 336, 720) averaged results on Fern and
+horizon forecasting, conditional manifold transport, re-              TimeMixer, PatchTST and DLinear with standard errors on
+mains a merely plausible narrative with current benchmarks            MSE. We apply a 3-epoch grace period in Table 2 but not
+until we specify a structural generator. We should do that.           Table 9 for a minimal of recency bias w.r.t ETT. Setting in
+Doing so is strictly better: DGP and shock semantics                  Appendix A.5, Appendix A.3.1.
+are known by construction, and claims about nonstationar-             Table. 2 shows that among our choices, the diffusively
+ity handling become falsifiable. Nonstationarity is rarely            blurred geometry of a stochastic system poses far fewer
+mystical for industry practitioners, and most can articu-             threats compared to non-stationary shocks or chaotic sys-
+late what makes their domain’s nonstationarity special—               tems, whose challenge is to locate relevant portion of a
+interaction structure, shock timing, regime persistence, sea-         clear chaotic manifold. Simple models such as DLinear and
+sonal coupling—with ease. By explicitly modelling the                 Koopa ranked 1st or 2nd on some stochastic systems and
+nonstationary scenarios, we eliminate two types of model              the (less problematic) ETT1. Yet, on Rossler, one of the
+failures: (1) true negatives that can’t even do well on clean         easier chaotic systems, they show MSE of 5.42 and 11.94 vs
+and noise-free generated data and (2) false positives that            Fern’s 0.019, errors 285× and 628× larger, and it worsens
+game the ‘real’ data but stumble immediately under stress.            to 790× and 714× under parameter shift. The astonishing
+                                                                      degree of brittleness negates any illusion for them to serve
+The Gold-Standard: Synthetic Benchmarking If, with                    as general forecasters, especially given the prevalence of
+Arnold, mathematics is the part of physics where experi-              short term chaos in real life. After all, forecasting is an aid
+ments are cheap, then synthetic data is forecasting where             to decision making: worst-case robustness is important, if
+the ground truth is actually true. Dismissing these con-              not more important than mean matching.
+trolled environments as ‘not real’ is akin to dismissing wind
+tunnel air as ‘not real wind’. By picking systems with attrac-        In stark contrast, Fern delivers a sweeping victory: best
+
+                                                                  6
+                                       Submission and Formatting Instructions for ICML 2026
+
+                                  fr            tm          tst            dl            kp          mtcn           pfnn
+          Dataset            MSE       WD MSE        WD MSE       WD MSE        WD MSE        WD MSE      WD MSE       WD
+          Standard Chaotic Dynamics
+          Rossler-Base     0.019 0.011 1.03 0.903 2.45 2.25 5.42 5.06 11.94 5.58 0.47 0.42 21.05 16.64
+          Rossler-Param    0.036 0.017 3.49 2.91 10.02 8.62 28.74 25.42 25.07 17.91 1.64 1.37 28.09 23.08
+          Lorenz-Base      21.66 4.41 43.21 10.09 38.89 10.56 76.55 39.34 95.50 11.05 26.02 5.96 198 120
+          Lorenz-State     19.26 3.73 48.81 10.22 40.71 10.90 70.36 35.58 97.85 13.52 28.49 5.68 210 122
+          Lorenz-Param     25.21 4.61 52.10 10.63 40.59 9.19 70.69 32.89 103 17.86 35.96 7.57 219 151
+          Lorenz96-Base      5.19 1.33 8.03 2.97 6.35 2.49 10.98 6.02 17.42 3.41 10.38 3.64 20.17 15.56
+          Lorenz96-Switch 9.56 3.14 11.96 5.34 10.73 4.73 13.68 7.80 21.61 4.59 11.78 5.25 24.42 17.90
+          Chua-Base        0.056 0.033 0.094 0.046 0.186 0.119 0.720 0.507 1.11 0.482 0.051 0.029 1.77 1.67
+          Chua-Param       0.021 0.011 0.013 0.008 0.097 0.078 0.681 0.559 0.944 0.353 0.030 0.021 2.31 2.14
+          Chua-Switch      0.178 0.106 0.174 0.123 0.318 0.230 0.770 0.591 1.11 0.584 0.099 0.068 1.74 1.64
+          Switching Linear Dynamical System
+          SLDS-Base          2.84 1.46 4.54 2.80 2.27 1.05 4.42 3.50 2.96 1.96 1.96 1.10 3.52 2.97
+          SLDS-Param         2.36 1.36 2.60 1.58 2.18 0.91 2.26 1.50 2.19 1.38 2.30 1.80 2.57 2.13
+          SLDS-Switch        4.05 2.02 7.84 4.84 9.56 5.19 4.73 3.38 4.56 3.38 9.47 5.82 8.23 6.81
+          Seasonal AR Shocks (SAR)
+          SAR-Base         0.055 0.011 0.055 0.013 0.074 0.021 0.056 0.010 0.056 0.013 0.055 0.013 1.85 1.21
+          SAR-Param        0.355 0.053 0.361 0.065 0.480 0.128 0.380 0.053 0.366 0.075 0.359 0.065 10.83 7.43
+          GARCH Volatility Shocks
+          GARCH-Base       0.227 0.220 0.234 0.201 0.271 0.174 0.264 0.190 0.255 0.217 0.261 0.210 0.255 0.208
+          GARCH-Param 0.177 0.174 0.186 0.156 0.220 0.138 0.183 0.135 0.191 0.172 0.206 0.163 0.236 0.196
+          Double-Well Potential (DW)
+          DW-Base          0.054 0.028 0.059 0.043 0.091 0.057 0.055 0.034 0.049 0.042 0.049 0.043 1.47 1.41
+          DW-Param         0.682 0.506 1.08 0.843 0.983 0.721 0.847 0.711 1.03 0.856 1.00 0.815 0.837 0.756
+          Ornstein–Uhlenbeck (OU) Diffusions
+          OU-Base          0.234 0.195 0.251 0.131 0.273 0.112 0.234 0.166 0.251 0.156 0.241 0.178 0.237 0.216
+          OU-Param         0.239 0.170 0.251 0.131 0.273 0.112 0.239 0.163 0.251 0.156 0.241 0.178 0.383 0.358
+          Real-World Benchmarks
+          ETTm1              8.97 5.37 9.12 5.63 8.83 5.49 9.71 6.25 9.22 5.69 11.14 7.11 43.69 34.25
+          ETTh1            10.97 5.75 10.51 5.23 10.97 4.83 10.39 5.00 10.75 5.55 14.52 9.01          —     —
+Table 2. Stress-testing with stochastic and chaotic systems and controlled non-stationarity. Models: fr (Fern), tm (TimeMixer), tst
+(PatchTST), dl (DLinear), kp (Koopa), mtcn (ModernTCN), pfnn (PFNN). Lower is better. Purple: best; Light Purple: second-best; Light
+Orange: diverged; ‘—’: catastrophic.
+
+
+
+MSE/WD in 19 of 21 scenarios, with a staggering 98%                         Variant                      H1 MSE↓ L63 MSE↓
+lower MSE than TimeMixer on Rössler. On Lorenz-                            Base                            10.96           21.66
+63, baselines collapse to mean-guessing early—DLinear                       No enc. + no µ upd.                 –          194.43
+at horizon 96, TimeMixer/PatchTST at 192 (Table 15)—                        Only encoder                    11.17           27.09
+while Fern maintains pointwise accuracy until horizon                       No rotation                     11.84           27.62
+720. At 720 steps—roughly 6.5 Lyapunov times, where                         No patch                        10.99           22.86
+                                                                            Reflections = 2                 11.52           26.14
+errors amplify ≈ 650× and pointwise prediction is provably                  Reflections = 24 (8-block)      10.91           23.92
+impossible—geometry persists: SWD 4.89 versus 10–40
+                                                                      Table 3. Ablations (MSE only). H1 = ETTh1, L63 = Lorenz-63,
+for baselines.                                                        pred. length 192. Full metrics (MAE etc) reported in Appendix 8.
+Fig. 4 shows the eigen-profile of Fern. When MSE is
+low (1/8 of SD), they still reveal additional insights: (1)
+spectral radius spikes at violent lobe-switching flips, coin-
+                                                                      in its mean prediction, collapses variance, and consequently
+ciding with the largest errors—the model ‘believes’ these
+                                                                      suffers when the system transitions unexpectedly.
+segments are hardest and gets validation; (2) trace spikes
+within-lobe, suggesting less dominant eigen-directions acti-          We provide simple ablation summary in Table. 3 and in Ap-
+vate during stable traversal; (3) log determinant captures            pendix full details in Table 8. We find: (i) Bidirectional en-
+volume scaling. Notably, some lowest-error regions (pale,             coder successfully compresses the input information into the
+row 2) coincide with low trace and strongly negative log-             latent space; without encoder, the model is useless, MSE and
+determinant immediately before error spikes. This suggests            SWD explode. (ii) In the ‘only encoder’ case, we disable the
+a specific failure mode: the model becomes overconfident              repeated translation in the decoder. This hurts ETTh1 and,
+
+                                                                  7
+                                     Submission and Formatting Instructions for ICML 2026
+
+
+
+
+Figure 4. Diagnostics for Lorenz-63 x. Top to bottom: forecast (orange) vs. ground truth (blue); log absolute error; mean patch-wise max
+eigenvalue; mean patch-wise sum of eigenvalues; mean patch-wise log of products of eigenvalues.
+
+
+more strongly, Lorenz, suggesting that the data-dependent              operators or Neural ODEs); we clarify scope in App. A.2.1
+translations are particularly important for chaotic systems;           and show one global learner’s catastrophic divergence on
+(iii) removing either the eigen-based rotation or the patching         conditional tasks in main text, with discussion in App. A.2.2.
+mechanism consistently degrades Lorenz performance and
+                                                                       We propose measuring WD and EPT with technical de-
+often harms ETTh1, confirming that local geometric align-
+                                                                       tails in App. A.1. Pointwise metrics penalize phase shifts:
+ment and patch-wise conditioning are both doing real work;
+                                                                       [0, 1, 2, 3] and [1, 2, 3, 4] may be intuitively similar, as are
+and (iv) increasing the number of reflections from 0 (no
+                                                                       [0, 2, 4, 6] and [2, 4, 6, 8], yet the same one-step shift yields
+rotation) to 24 monotonically improves MSE, SWD, and
+                                                                       4× MSE. They also leave no room for error: correct predic-
+EPT on all three datasets at a modest runtime cost, making
+                                                                       tions that arrive too early or too late are treated as entirely
+the 24-reflection configuration the strongest variant in this
+                                                                       wrong. DTW (Sakoe & Chiba, 1978) partially addresses
+ablation grid. This suggests that a full-complexity spectral
+                                                                       phase but is computationally heavy and non-differentiable.
+map is important, and indirectly confirms the importance of
+                                                                       The Wasserstein-2 (W2) distance provides an alternative: it
+patching, which makes a low-cost search possible.
+                                                                       measures the minimal “work” to morph one distribution into
+                                                                       another, rewarding sharp forecasts even under phase shift.
+4. Literature Review and Discussion                                    Our 1D W2 proposal coincides with ideas independently de-
+                                                                       veloped in several fields (Muskulus & Verduyn Lunel, 2011;
+The LTSF field has been dominated by Transformer vari-
+                                                                       Wiesel, 2022; Aoun et al., 2024; Botvinick-Greenhouse
+ants (Zhang & Yan, 2023; Liu et al., 2024). Foundational
+                                                                       et al., 2024; Wang et al., 2025), suggesting a convergent
+critiques (Zeng et al., 2023; Bergmeir, 2023) on model com-
+                                                                       consensus.
+plexity and evaluation paradigms catalyzed a shift to simplic-
+ity and interpretability. Recent efforts emphasize linearity           Code availability. An anonymized repository containing
+and efficiency (Xu et al., 2024b; Yang et al., 2024; Huang             the implementation and supplemental materials is avail-
+et al., 2025), and frequency-domain analysis for periodic              able at https://anonymous.4open.science/r/
+signals (Wang et al., 2024a; Wu et al., 2023). Koopman                 FernPaper-58B4.
+operator theory (Brunton et al., 2022), is another direction
+with physics-informed design priors (Liu et al., 2023; Zhang
+et al., 2025). Emerging focus on endogenous/exogenous
+structure (Qiu et al., 2025; Wang et al., 2024c) also provides
+a complementary angle to our discussion. Our ellipsoidal
+method can be extended to conformal prediction like (Xu
+et al., 2024a) in future work. Crucially, our conditional
+task differs from learning global invariants (e.g., Koopman
+
+                                                                   8
+                                  Submission and Formatting Instructions for ICML 2026
+
+Impact Statement
+This paper presents work whose goal is to advance the field
+of Machine Learning. There are many potential societal
+consequences of our work, none which we feel must be
+specifically highlighted here.
+
+
+
+
+                                                              9
+                                    Submission and Formatting Instructions for ICML 2026
+
+References                                                             Conti, P., Kneifl, J., Manzoni, A., Frangi, A., Fehr, J.,
+                                                                         Brunton, S. L., and Kutz, J. N. Veni, vindy, vici: A
+Aoun, A., Shetler, O., Raghuraman, R., Rodriguez, G. A.,
+                                                                         variational reduced-order modeling framework with un-
+  and Hussaini, S. A. Beyond correlation: optimal transport
+                                                                         certainty quantification. arXiv, 2024. URL https:
+  metrics for characterizing representational stability and
+                                                                         //arxiv.org/abs/2405.20905.
+  remapping in neurons encoding spatial memory. Frontiers
+  in Cellular Neuroscience, 17:1273283, 2024. doi: 10.                 Golub, G. H. and Van Loan, C. F. Matrix Computations.
+  3389/fncel.2023.1273283. eCollection 2023.                            Johns Hopkins University Press, Baltimore, MD, 3rd
+                                                                         edition, 1996.
+Bergmeir, C.     Common pitfalls and better prac-
+  tices in forecast evaluation for data scientists.                    Householder, A. S. Unitary triangularization of a nonsym-
+  Foresight:   The International Journal of Ap-                          metric matrix. Journal of the ACM, 5(4):339–342, 1958.
+  plied Forecasting, (70):5–12, 2023.       URL
+  https://cbergmeir.com/publications/                                  Huang, C.-W., Dinh, L., and Courville, A. Augmented
+  2023-01-01_bergmeir2023common/.                                        normalizing flows: Bridging the gap between genera-
+                                                                         tive flows and latent variable models. arXiv preprint
+Bonneel, N., Rabin, J., Peyré, G., and Pfister, H. Sliced               arXiv:2002.07101, 2020.
+  & radon wasserstein barycenters of measures. Journal
+  of Mathematical Imaging and Vision, 51(1):22–45, 2015.               Huang, Q., Zhou, Z., Yang, K., Yi, Z., Wang, X., Jiang, W.,
+  doi: 10.1007/s10851-014-0506-3.                                        and Wang, Y. Timebase: The power of minimalism in effi-
+                                                                         cient long-term time series forecasting. In Proceedings of
+Botvinick-Greenhouse, J., Oprea, M., Maulik, R., and Yang,               the 42nd International Conference on Machine Learning
+  Y. Measure-theoretic time-delay embedding, 2024. URL                  (ICML), 2025. URL https://proceedings.mlr.
+  https://arxiv.org/abs/2409.08768.                                      press/v267/huang25a.html.
+Brenier, Y. Polar factorization and monotone rearrangement
+                                                                       Jiang, R., Lu, P. Y., Orlova, E., and Willett, R. Training
+  of vector-valued functions. Communications on Pure and
+                                                                          neural operators to preserve invariant measures of chaotic
+  Applied Mathematics, 44(4):375–417, 1991.
+                                                                          attractors. In Advances in Neural Information Processing
+Brunton, S. L., Proctor, J. L., and Kutz, J. N. Discovering               Systems (NeurIPS), 2023.
+  governing equations from data by sparse identification
+                                                                       Klöwer, M., Coveney, P. V., Paxton, E. A., and Palmer,
+  of nonlinear dynamical systems. Proceedings of the Na-
+                                                                         T. N. Periodic orbits in chaotic systems simulated at
+  tional Academy of Sciences, 113(15):3932–3937, 2016.
+                                                                         low precision. Scientific Reports, 13(11410), 2023. doi:
+  doi: 10.1073/pnas.1517384113.
+                                                                         10.1038/s41598-023-37004-4.
+Brunton, S. L., Brunton, B. W., Proctor, J. L., Kaiser, E.,
+                                                                       Ko, J.-H., Koh, H., Park, N., and Jhe, W. Homotopy-based
+  and Kutz, J. N. Chaos as an intermittently forced linear
+                                                                         training of neuralodes for accurate dynamics discovery.
+  system. Nature Communications, 8(1):19, 2017. doi:
+                                                                         In Advances in Neural Information Processing Systems
+  10.1038/s41467-017-00030-8.
+                                                                        (NeurIPS), 2023.
+Brunton, S. L., Budišić, M., Kaiser, E., and Kutz, J. N. Mod-
+  ern koopman theory for dynamical systems. SIAM Re-                   Li, Z., Liu-Schiaffini, M., Kovachki, N., Liu, B., Azizzade-
+  view, 64(2):229–340, 2022. doi: 10.1137/21M1401243.                    nesheli, K., Bhattacharya, K., Stuart, A., and Anandku-
+                                                                         mar, A. Learning dissipative dynamics in chaotic systems.
+Butcher, J. C. The Numerical Analysis of Ordinary Differen-              In Advances in Neural Information Processing Systems,
+  tial Equations: Runge–Kutta and General Linear Meth-                   2022.
+  ods. John Wiley & Sons, 1987. ISBN 978-0471607856.
+  Comprehensive treatment of RK methods and Butcher’s                  Liao, S. and Wang, P. On the mathematically reliable
+  formalism.                                                             long-term simulation of chaotic solutions of lorenz equa-
+                                                                         tion in the interval [0, 10000]. Science China Physics,
+Cheng, X., He, Y., Yiming Yang, Xiao Xue, Cheng, S., Giles,              Mechanics & Astronomy, 57(2):330–335, 2014. doi:
+  D., Xiaohang Tang, and Yukun Hu. Learning chaos in a                   10.1007/s11433-013-5374-2.
+  linear way. arXiv preprint arXiv:2503.14702, 2025.
+                                                                       Liu, Y., Li, C., Wang, J., and Long, M. Koopa: Learning
+Chorin, A. J., Hald, O. H., and Kupferman, R. Optimal pre-               non-stationary time series dynamics with koopman pre-
+  diction with memory. Physica D: Nonlinear Phenomena,                   dictors. In Advances in Neural Information Processing
+  166(3-4):239–257, 2002. doi: 10.1016/S0167-2789(02)                    Systems, 2023. URL https://arxiv.org/abs/
+  00446-3.                                                               2305.18803.
+
+                                                                  10
+                                    Submission and Formatting Instructions for ICML 2026
+
+Liu, Y., Hu, T., Zhang, H., Wu, H., Wang, S., Ma, L., and              Stark, J., Broomhead, D. S., Davies, M. E., and Huke, J.
+  Long, M. itransformer: Inverted transformers are effec-                Delay embeddings for forced systems. i. deterministic
+  tive for time series forecasting. In Proceedings of the 12th           forcing. Journal of Nonlinear Science, 9(3):255–332,
+  International Conference on Learning Representations                   1999. doi: 10.1007/s003329900078.
+  (ICLR), 2024. URL https://openreview.net/
+  forum?id=JePfAI8fah.                                                 Sutton, R. S. The bitter lesson. Incomplete Ideas
+                                                                         (blog), 2019. URL http://incompleteideas.
+Lorenz, E. N. Deterministic nonperiodic flow. Journal                    net/IncIdeas/BitterLesson.html. Essay, ac-
+  of the Atmospheric Sciences, 20(2):130–141, 1963. doi:                 cessed 2025.
+  10.1175/1520-0469(1963)020⟨0130:DNF⟩2.0.CO;2.                        Takens, F. Detecting strange attractors in turbulence. In
+                                                                         Dynamical Systems and Turbulence, Warwick 1980, vol-
+Loshchilov, I. and Hutter, F. Decoupled weight decay reg-
+                                                                         ume 898 of Lecture Notes in Mathematics, pp. 366–381.
+  ularization. In International Conference on Learning
+                                                                         Springer, 1981. doi: 10.1007/BFb0091924.
+  Representations (ICLR), 2019. First formal description
+  of AdamW optimization method.                                        Teixeira, J., Reynolds, C. A., and Judd, K. Time step
+                                                                         sensitivity of nonlinear atmospheric models: Numeri-
+Luo, D. and Wang, X. Moderntcn: A modern pure convo-                     cal convergence, truncation error growth, and ensemble
+  lution structure for general time series analysis. In The              design. Journal of the Atmospheric Sciences, 64(1):175–
+  Twelfth International Conference on Learning Represen-                 189, 2007. doi: 10.1175/JAS3824.1.
+  tations, 2024. URL https://openreview.net/
+  forum?id=vpJMJerXHU. ICLR 2024 Spotlight.                            Wang, H., Pan, L., Chen, Z., Yang, D., Zhang, S., Yang, Y.,
+                                                                        Liu, X., Li, H., and Tao, D. Fredf: Learning to forecast in
+Muskulus, M. and Verduyn Lunel, S. Wasserstein distances                the frequency domain. arXiv preprint arXiv:2402.02399,
+ in the analysis of time series and dynamical systems.                  2024a. doi: 10.48550/arXiv.2402.02399. URL https:
+ Physica D: Nonlinear Phenomena, 240(1):45–58, 2011.                    //arxiv.org/abs/2402.02399.
+ ISSN 0167-2789. doi: 10.1016/j.physd.2010.08.005.
+                                                                       Wang, H., Pan, L., Lu, Y., Chu, Z., Li, X., He, S., Chen,
+Nie, Y., Nguyen, N. H., Sinthong, P., and Kalagnanam, J.                Z., Li, H., Wen, Q., and Lin, Z. Distdf: Time-series
+  A time series is worth 64 words: Long-term forecast-                  forecasting needs joint-distribution wasserstein alignment.
+  ing with transformers. In International Conference on                 arXiv preprint arXiv:2510.24574, October 2025. doi:
+  Learning Representations (ICLR), 2023. URL https:                     10.48550/arXiv.2510.24574. URL https://arxiv.
+  //openreview.net/forum?id=Jbdc0vTOcol.                                org/abs/2510.24574.
+                                                                       Wang, M. and Li, J. Interpretable predictions of chaotic
+Peyré, G. and Cuturi, M. Computational optimal transport.
+                                                                        dynamical systems using dynamical system deep learn-
+  Foundations and Trends in Machine Learning, 11(5–6):
+                                                                        ing. Scientific Reports, 14(1):3143, 2024. doi: 10.1038/
+  355–607, 2019.
+                                                                        s41598-024-27171-9.
+Qiu, X., Zhu, Y., Li, Z., Cheng, H., Wu, X., Guo, C.,                  Wang, S., Wu, H., Shi, X., Hu, T., Luo, H., Ma, L., Zhang,
+  Yang, B., and Hu, J. DAG: A dual causal network for                   J. Y., and Zhou, J. Timemixer: Decomposable multiscale
+  time series forecasting with exogenous variables. arXiv               mixing for time series forecasting. arXiv, 2024b. URL
+  preprint arXiv:2509.14933, 2025. doi: 10.48550/arXiv.                 https://arxiv.org/abs/2405.14616.
+  2509.14933.
+                                                                       Wang, Y., Wu, H., Dong, J., Qin, G., Zhang, H., Liu, Y.,
+Sakoe, H. and Chiba, S. Dynamic programming algorithm                   Qiu, Y., Wang, J., and Long, M. Timexer: Empowering
+  optimization for spoken word recognition. IEEE Trans-                 transformers for time series forecasting with exogenous
+  actions on Acoustics, Speech, and Signal Processing, 26               variables. arXiv preprint arXiv:2402.19072, February
+  (1):43–49, 1978.                                                      2024c. doi: 10.48550/arXiv.2402.19072. URL https:
+                                                                        //arxiv.org/abs/2402.19072.
+Schiff, Y., Wan, Z. Y., Parker, J. B., Hoyer, S., Kuleshov, V.,
+  Sha, F., and Zepeda-Núñez, L. Dyslim: Dynamics-stable              Wiesel, J. C. W.         Measuring association with
+  learning by invariant measure for chaotic systems. arXiv              wasserstein distances.      Bernoulli, 28(4):2816–
+  preprint arXiv:2402.04467, 2024.                                      2832,    2022.         doi:     10.3150/21-BEJ1438.
+                                                                        URL             https://projecteuclid.org/
+Stark, J. Delay embeddings for forced systems. ii. stochastic           journals/bernoulli/volume-28/issue-4/
+  forcing. Journal of Nonlinear Science, 13(5):519–577,                 Measuring-association-with-Wasserstein-distances/
+  2003. doi: 10.1007/s00332-003-0534-4.                                 10.3150/21-BEJ1438.full.
+
+                                                                  11
+                                 Submission and Formatting Instructions for ICML 2026
+
+Wu, H., Hu, T., Liu, Y., Zhou, H., Wang, J., and Long, M.
+ Timesnet: Temporal 2d-variation modeling for general
+ time series analysis. In Proceedings of the 11th Interna-
+ tional Conference on Learning Representations (ICLR),
+ 2023. URL https://openreview.net/forum?
+ id=ju_Uqw384Oq.
+Xu, C., Jiang, H., and Xie, Y. Conformal prediction
+  for multi-dimensional time series by ellipsoidal sets.
+  arXiv preprint arXiv:2403.03850, March 2024a. doi:
+ 10.48550/arXiv.2403.03850. URL https://arxiv.
+  org/abs/2403.03850.
+Xu, Z., Zeng, A., and Xu, Q. Fits: Modeling time series
+ with 10 k parameters. In Proceedings of the 12th Interna-
+  tional Conference on Learning Representations (ICLR),
+  2024b. URL https://openreview.net/forum?
+  id=bWcnvZ3qMb.
+Yang, C., Qi, Y., Li, B., and Wu, N. Fasttf: 4 parameters
+  are all you need for long-term time series forecasting,
+  2024. URL https://openreview.net/forum?
+  id=CZiP7GpmX7. Submitted to ICLR 2025 (OpenRe-
+  view).
+Zeng, A., Chen, M., Zhang, L., and Xu, Q. Are transformers
+  effective for time series forecasting? Proceedings of the
+  AAAI Conference on Artificial Intelligence, 37(9):11121–
+  11128, 2023. doi: 10.1609/aaai.v37i9.26323.
+Zhang, Y. and Yan, J. Crossformer: Transformer utiliz-
+  ing cross-dimension dependency for multivariate time
+  series forecasting. In Proceedings of the 11th Interna-
+  tional Conference on Learning Representations (ICLR),
+  2023. URL https://openreview.net/forum?
+  id=vSVLM2j9eie.
+Zhang, Y., Ma, L., Valkanas, A., Oreshkin, B. N., and
+  Coates, M. Skolr: Structured koopman operator linear rnn
+  for time-series forecasting. In Proceedings of the 42nd
+  International Conference on Machine Learning (ICML),
+  2025. URL https://openreview.net/forum?
+  id=Xg1BGlybfq.
+
+
+
+
+                                                              12
+                                      Submission and Formatting Instructions for ICML 2026
+
+A. Appendix                                                               simulate long trajectories, and chaos-tuned variants (e.g.,
+                                                                          DSDL) excel on Lorenz dataset (Wang & Li, 2024). Fern
+A.1. Distributional metrics                                               is instead a direct, multi-step forecaster for general-purpose
+For 1D distributions, W2 reduces to the L2 distance between               tasks, stress-tested on chaotic datasets only as a supplement
+sorted values (Peyré & Cuturi, 2019). In our LTSF setting,               to standard LTSF benchmarks. Also, the metric EPT we ad-
+for a single channel and horizon length H we treat y ⋆ =                  vocate for, is a common measure of one-step model stability
+(y1⋆ , . . . , yH
+                ⋆
+                  ) and y = (y1 , . . . , yH ) as H scalar samples        in chaotic dynamics, alongside variants like VPT (valid pre-
+(ignoring time order) and compute                                         diction time). We use EPT to measure dataset predictability.
+                                                                          Direct comparison between iterated and multi-step models
+                                 H
+                             1 X ∗         2                             can be misleading, as the latter are not optimized for it.
+            W22 (µ⋆ , µ) =      y(h) − y(h) ,
+                             H                                            Fern is not a governing-equation or invariant-measure
+                                h=1
+         ∗              ∗
+                                                                          learner. It aims at discrete-time conditional forecasting
+where y(1)   ≤ · · · ≤ y(H) and y(1) ≤ · · · ≤ y(H) are order             with data-driven spectral factors rather than system identifi-
+statistics. This is index-agnostic: it compares histograms,               cation, distinct from (i) sparse governing equation finding
+ignoring temporal alignment. It complements MSE by ask-                   SINDy/HAVOK/VINDy (Brunton et al., 2016; 2017; Conti
+ing: did the model predict the correct values, regardless of              et al., 2024) (ii) Neural-ODE identification (Ko et al., 2023)
+when?                                                                     (iii) invariant-measure learner (Jiang et al., 2023; Schiff
+Sliced Wasserstein Distance (SWD) extends W2 to mul-                      et al., 2024).
+tivariate distributions by projecting horizon vectors in RH
+onto L random directions and averaging the resulting 1D                   A.2.2. M ARKOV N EURAL O PERATORS
+W2 distances (Bonneel et al., 2015). In our tables, WD de-                Operator-learning approaches (PFNN, MNO (Li et al.,
+notes the 1D W2 metric (no projection), and SWD denotes                   2022)) are invariant measure learners of chaotic regimes,
+sliced W2 with L = 500 projections.                                       which pursue a complementary agenda: learning global evo-
+                                                                          lution operators for specific systems. In contrast, Fern
+Effective prediction time (EPT). We complement W2                         targets local conditional geometry for generic forecasting
+with Effective Prediction Time (EPT), defined as the first                tasks, prioritizing per-window spectral diagnostics over ex-
+forecast step at which the error exceeds one standard devia-              plicit operator recovery.
+tion of the training data. EPT quantifies reliability: if mul-
+tiple models have EPT ≈ 190 on a 336-step horizon, steps                  However, many requests insist on probing Fern’s pointwise
+t > 190 should be treated more as failure-mode analysis                   performances vs this class, and so we complied. In the main
+than actionable signal. For chaotic systems, EPT measures                 text, Table. 2 suggests PFNN performs reasonably on some
+the first horizon step where the absolute error exceeds a 1σ              smooth diffusion tasks (OU, DW), but often exhibits very
+envelope. Let ϵd be the training-set standard deviation for               large errors or outright divergence on chaotic and heavily
+dimension d. For each batch b and dimension d,                            forced settings (e.g., Rössler, Lorenz, ETTm1), under the
+                                                                          unified training protocol. To understand the performance
+                                     pred     true
+ EPTb,d = min{s ∈ {1, . . . , H} : |yb,d,s − yb,d,s | > ϵd },             against data artifacts, we test on the ETTh2 case, and the
+                                                                          reported error reaches O(109 ).
+with EPTb,d = H if the
+                    P threshold is never exceeded, and
+                 1                                                        We were initially concerned about the errors and perform
+report EPTavg = BD     b,d EPTb,d .
+                                                                          additional hyperparameter (learning rate, latent dimension
+Householder-based orthogonal parameterization. We                         size, network architecture etc) searches. Our implementa-
+parameterize an orthogonal matrix as a product of R House-                tion carefully follows the PFNN public repository. Based
+holder reflections Hi = I − 2vi vi⊤ with ∥vi ∥2 = 1, i.e.,                on (Cheng et al., 2025), the reported NRMSE is 0.49 on
+U = HR · · · H1 (Householder, 1958; Golub & Van Loan,                     ∼ 80000 samples with dt = 10−2 for Lorenz–63. Since
+1996). This yields U ⊤ U = I by construction; when R is                   the standard deviation of the Lorenz system is about 8, this
+even, det(U ) = +1.                                                       corresponds to roughly 15–20 MSE over a 100-step rollout.
+                                                                          In contrast, FERN attains an MSE of about 1.2 on 22k sam-
+A.2. App: Scope and Discussions                                           ples with a 96-step prediction horizon. We conclude that the
+                                                                          reported error on 336-step rollout is likely consistent with
+A.2.1. F E R N ’ S ROLE , CLARIFIED                                       the paper.
+What Fern is, and what Fern is not Due to frequent                        Why the difference with Markov System vs Condi-
+misunderstanding about Fern’s role as a forecast model,                   tional Forecasting? Conceptually, LTSF models take a
+we clarify: Fern is not an iterated one-step chaos spe-                   history window of shape [batch, feature, seq0:100 ] and pre-
+cialist. Such models recursively feed their own output to
+
+                                                                     13
+                                     Submission and Formatting Instructions for ICML 2026
+
+dict a future window [batch, feature, seq100:200 ], often with               Column      Total Zeros    % Zeros        Isolated      Clustered
+channel-independent parametrization, whereas Markov(-                        HUFL                58         0.33%             1             57
+type) operators act along the temporal axis, mapping                         HULL              3836        22.02%           163           3673
+[batch, seq0:1 , feature] to [batch, seq1:2 , feature] by evolving           MUFL                 0         0.00%             0              0
+the state one step at a time using only the current state in-                MULL              1067         6.13%           245            822
+formation.                                                                   LUFL              1188         6.82%           184           1004
+                                                                             LULL              5792        33.25%           414           5378
+Lorenz etc.are Markov systems but empirically past infor-                    OT                   1         0.01%             1              0
+mation helps localize the system on its attractor. The                    Table 4. Zero–inflation patterns in ETTh2. “Clustered” counts
+task of MNO is to learn the global invariant measure based                zeros that belong to runs of length > 1 (consecutive zeros). Type 1
+                                                                          columns show substantial intermittent zero bursts; Type 2 suggests
+on current state, which is a strictly more difficult problem
+                                                                          occasional missing entries.
+than learning conditional forecast distribution with recent
+information. Lorenz63 has 3 state variables, ∼ 10 vari-
+ables are enough to invoke Takens’ Embedding Theorem,                        Column      Total Zeros    % Zeros        Isolated      Clustered
+so the remaining input length serves as historical context.                  HUFL                89        0.51%             31            58
+We view this not as a flaw in PFNN per se, but as evidence                   HULL               410        2.35%            256           154
+that architectures tuned for Markovian operator learning do                  MUFL                97        0.56%             19            78
+not transfer automatically to windowed multi-horizon fore-                   MULL               236        1.35%            137            99
+casting; conversely, Fern does not currently target PDE                      LUFL                60        0.34%              1            59
+                                                                             LULL               212        1.22%              7           205
+operators and should not be read as a replacement in that                    OT                 111        0.64%             28            83
+regime.
+                                                                          Table 5. Zero–inflation patterns in ETTh1. “Clustered” counts
+                                                                          zeros that belong to runs of length > 1 (consecutive zeros).
+A.3. Additional Discussion
+Zero-inflation analysis. Tables 4, 5, and 6 detail zero
+patterns. ETTh2 and Weather are heavily affected; ETTh1                      • Shock Benchmarks: We employ a uniform 3-epoch
+is better behaved. Traffic and Electricity show similar issues                 grace period for all models. Since convergence rarely
+(analysis omitted for space).                                                  occurs within 3 epochs, this ensures models escape
+                                                                               initialization artifacts.
+Preprocessing policy. ETTh2/m2 are unfixable via impu-
+tation. Our policy is a preliminary proposal and we leave                    • Detailed Tables: We do not employ this grace pe-
+refinement to future work:                                                     riod in the detailed breakdown tables, preserving raw
+                                                                               convergence behaviours for multi-faceted analysis.
+   • Sentinel values > 10% or zeros > 15%: drop column.                      • Smoothing: While exponential smoothing of the val-
+                                                                               idation objective is a another remedy for oscillation
+   • Zeros 10–15%: apply asinh transform.                                      that empirically can solve this problem, we explicitly
+                                                                               do not employ it anywhere in this paper to ensure
+   • Longest zero run > 1 week: drop column.
+                                                                               transparency.
+   • Longest zero run > 3 hours: delete affected rows.
+                                                                          A.3.2. C OMPUTATIONAL AND M EMORY C OMPLEXITY
+   • Longest zero run ≤ 3 hours: forward–backward fill.
+                                                                          We summarize the complexity of Fern using the notation
+                                                                          from the main text. Let n denote the horizon length, p
+We apply this only to ETTh1/m1 in the shock tables (see
+                                                                          the patch dimension, and g the number of patches, so that
+App. A.5). These datasets are well-behaved, so no columns
+                                                                          n = gp. Let B be the batch size, dh the hidden width of the
+is dropped and only zero imputation and row removals
+                                                                          MLPs in the coupling blocks, Kenc the number of encoder
+are performed.
+                                                                          layers, and R the number of Householder reflections (a
+                                                                          hyperparameter, typically 2–24).
+A.3.1. C HECKPOINT S TRATEGY
+The ”Anti-Predictive” Early Stop. Table 1 (using an ear-                  Time (FLOPs). Each encoder layer operates per patch
+lier Fern variant) demonstrates that early validation error               on vectors xi , z i ∈ Rp and applies bidirectional affine cou-
+is often anti-predictive of final test error, rendering it an             plings
+unreliable proxy for generalization. Naive early stopping
+tends to trap expressive models in local minima typical of                            hix = Hx (xi ),        (siz , tiz ) = ϕix (hix ),
+Epochs 1–2. To mitigate this:                                                         hiz = Hz (z i+1 ),    (six , tix ) = ϕiz (hiz ).
+
+                                                                     14
+                                    Submission and Formatting Instructions for ICML 2026
+
+  Column             Total Zeros % Zeros Isolated Clustered            and in the dense per-patch SPD setting it would be
+  p (mbar)                      0 0.00%            0          0
+                                                                                   O B · g · (Kenc pdh + p2 dh + p2 ) .
+                                                                                                                     
+  T (degC)                      6 0.01%            4          2
+  Tpot (K)                      0 0.00%            0          0
+  Tdew (degC)                  39 0.07%           39          0        In all our experiments we use small fixed constants (Kenc =
+  rh (%)                        0 0.00%            0          0        5, dh fixed, and R ≤ p), so for fixed g and B the head cost
+  VPmax (mbar)                  0 0.00%            0          0
+  VPact (mbar)                  0 0.00%            0          0        scales linearly in the patch dimension p (and hence in the
+  VPdef (mbar)              3026 5.74%            45       2981        horizon length n = gp). For typical settings (p = 24, R =
+  sh (g/kg)                     0 0.00%            0          0        4), the Householder head is roughly p/R ≈ 6× cheaper
+  H2OC                          0 0.00%            0          0
+                                                                       than a dense p × p SPD projection.
+  (mmol/mol)
+  rho (g/m**3)                  0 0.00%            0          0
+  wv (m/s)                      0 0.00%            0          0        Memory. During training, the dominant memory cost
+  max. wv (m/s)                 1 0.00%            1          0        comes from storing activations across encoder layers and
+  wd (deg)                      1 0.00%            1          0
+  rain (mm)                50785 96.37%         177      50608         patches. We store intermediate xi , z i ∈ Rp and features
+  raining (s)              49316 93.59%         115      49201         hix , hiz of width dh for each of the Kenc layers, yielding
+  SWDR (W/m2 )             24749 46.97%           21     24728                                                       
+  PAR (µmol/m2 /s)         24614 46.71%            0     24614                          O B · g · Kenc · max(p, dh )
+  max.         PAR         24209 45.94%            0     24209
+  (µmol/m2 /s)                                                         activation memory (up to constant factors for the number of
+  Tlog (degC)                   0 0.00%            0          0
+  OT                            0 0.00%            0          0        such tensors). The spectral parameters add O(B · g · Rp)
+Table 6. Zero–inflation patterns in Weather. “Clustered” counts
+                                                                       for the Householder vectors and O(B · g · p) for eigen-
+zeros that belong to runs of length > 1 (consecutive zeros).           values and shifts. Crucially, we never materialize a dense
+                                                                       n × n SPD matrix: the map is kept in a factored House-
+                                                                       holder–diagonal–Householder form, avoiding the O(n2 )
+                                                                       memory footprint of a full covariance.
+followed by
+                                                                       A.3.3. A RCHITECTURAL D ETAILS
+     z i+1 = siz ⊙ z i + tiz ,    xi+1 = six ⊙ xi + tix .
+                                                                       Eigenvalues and translation are parameterized with differ-
+Up to constant factors (number of layers per MLP and two               entiable soft bounds for numerical stability. We use a
+heads per layer), one encoder layer costs O(pdh ) per patch,           soft-clamp that behaves linearly within [ℓ, u] and saturates
+dominated by matrix–vector products. With Kenc layers, the             smoothly outside. For the elementwise scaling used in SPD
+encoder coupling cost over a batch is                                  matrix and most bidirectional blocks, we use s ∈ [0, 5.5]
+                                                                      for sensible compromise between expressivity and gradient
+                    O B · g · Kenc pdh .                               stability, which is notoriously difficult for this kind of affine
+                                                                       coupling structure. We use block-diagonal scaling to mimic
+The OT head ψ(hz ) produces p eigenvalues, a shift vector              complex multiplication—interleaved on the x-side in 2 of
+ty ∈ Rp , and R Householder vectors in Rp , and applies the            5 encoder coupling layers to capture potential rotational
+resulting SPD map via R reflections. Generation of these               dynamics on the data side. For these we use s ∈ [−4.5, 4.5].
+parameters via a shallow MLP costs O(B · g · pdh ), and                Shift vectors ty use wider bounds [−15, 15].
+applying the Householder reflections costs O(B · g · Rp),
+so the SPD part adds                                                   A.4. App: Systemss and Datasets
+                                                                      A.4.1. C HAOTIC S YSTEMS
+                 O B · g · (pdh + Rp)
+                                                                       Prior work shows that deterministic finite-precision arith-
+FLOPs in the Householder setting. For a dense SPD per                  metic can suppress chaos and produce spurious periodic
+patch, the corresponding cost would be O(B · g · p2 ) just to          orbits in low precision, and that chaotic systems are highly
+apply the map, plus O(B · g · p2 dh ) if it is predicted by an         sensitive to numerical precision and discretization choices.
+MLP.                                                                   See, e.g., Klöwer et al. (2023) on periodic orbits at low
+                                                                       precision and mitigation via stochastic rounding; Teixeira,
+Putting these together, the total time complexity of Fern
+                                                                       Reynolds & Judd (2007) on decoupling times and truncation-
+with Householder SPD is
+                                                                       error growth; and Liao (2014) on the joint impact of trunca-
+   TFern = O B · g · (Kenc pdh + pdh + Rp)
+                                              
+                                                       (1)             tion and round-off errors on long-time chaotic simulations.
+                                                                      (Klöwer et al., 2023; Teixeira et al., 2007; Liao & Wang,
+          = O B · g · (Kenc + 1) pdh + B · g · Rp . (2)                2014). Therefore, all chaotic ODE datasets (Lorenz63,
+
+                                                                  15
+                                     Submission and Formatting Instructions for ICML 2026
+
+Rössler, Chua, Lorenz96) were generated in float64                     Switching linear (SLDS). A 1-D switching linear dynam-
+using the 4th-order Runge-Kutta (RK4) method (Butcher,                  ical system (SLDS) with two linear-Gaussian regimes, spec-
+1987) and then converted to standard float32 Pytorch                    ified by (A1 , Q1 ) and (A2 , Q2 ) and Markov self-transition
+Tensor. Pilot runs observed materially larger forecast errors           probabilities p11 , p22 (A1, Q1, A2, Q2, p11, p22 in code).
+across all models with float64.                                         Let st ∈ {1, 2} be the latent regime:
+
+Lorenz63. A canonical 3-D system modeling atmospheric                           xt+1 = Ast xt + ηt ,      ηt ∼ N (0, Qst ),
+convection:
+                                                                                 P[st+1 = i | st = i] = pii ,   i ∈ {1, 2}.
+   ẋ = σ(y − x),     ẏ = x(ρ − z) − y,    ż = xy − βz,               This yields piecewise-linear dynamics with regime switches
+                                                                        driven by a 2-state Markov chain.
+Rössler.   A 3-D system with a folded-band attractor:
+                                                                        Seasonal AR. A 1-D discrete-time process with an autore-
+       ẋ = −y − z,   ẏ = x + ay,    ż = b + z(x − c),                gressive term and an explicit seasonal component of period
+                                                                        S (S) and slowly drifting amplitude. With AR coefficient ϕ
+                                                                        (phi), innovation scale σ (sigma), initial seasonal ampli-
+Chua’s Circuit A 3-D piecewise-linear circuit model with                tude a0 (a0), and linear drift rate amp drift per step,
+a double-scroll attractor:                                              we write
+                     
+  ẋ = α y − x − h(x) ,      ẏ = x − y + z,     ż = −β y,                         at = a0 + t · amp drift per step,
+with
+                                                                                      
+                                                                          xt = at cos 2πt
+                                                                                       S    + ϕ xt−1 + σ εt ,    εt ∼ N (0, 1).
+       h(x) = m1 x + 12 (m0 − m1 ) |x + 1| − |x − 1| .
+                                                    
+                                                                        This models a gradually drifting seasonal pattern on top of
+                                                                        an AR(1) background.
+Lorenz96. A d-dimensional toy model for mid-latitude
+atmospheric dynamics, with cyclic nearest-neighbour cou-                GARCH(1,1). A discrete-time volatility process with con-
+pling and constant forcing forcing = F (parameter                       ditionally Gaussian returns and autoregressive conditional
+forcing in code, dimension dim):                                        variance, parameterized by (ω, α, β) (omega, alpha,
+                                                                       beta in code):
+ ẋj = xj+1 − xj−2 xj−1 − xj + F,              j = 1, . . . , d,
+                                                                                      xt = σt εt ,     εt ∼ N (0, 1),
+with indices taken modulo d (e.g. x0 = xd , x−1 = xd−1 ).
+                                                                                        σt2 = ω + αx2t−1 + βσt−1
+                                                                                                             2
+                                                                                                                 .
+A.4.2. S TOCHASTIC S YSTEM                                              Here xt represents heavy-tailed, volatility-clustered “re-
+Ornstein–Uhlenbeck (OU). A 1-D mean-reverting diffu-                    turns”, while σt2 evolves as a GARCH(1,1) variance process.
+sion with linear drift towards a long-run mean µ and Gaus-
+sian noise, with parameters (θ, µ, σ) (theta, mu, sigma                 Weather 21 meteorological indicators at 10 min intervals
+in code):                                                               (Max Planck Institute, Germany, 2020).
+                                                                       To investigate the air parcel as a complete system, we select
+               dXt = θ µ − Xt dt + σ dWt ,                              the related variables: Selected 14 columns: ’p (mbar)’,
+                                                                        ’T (degC)’, ’Tpot (K)’, ’Tdew (degC)’, ’rh (%)’, ’VPmax
+integrated with an Euler–Maruyama scheme using step size                (mbar)’, ’VPact (mbar)’, ’sh (g/kg)’, ’H2OC (mmol/mol)’,
+dt.                                                                     ’rho (g/m**3)’, ’wv (m/s)’, ’max. wv (m/s)’, ’wd (deg)’,
+                                                                        ’Tlog (degC)’ and eliminate stochastic forcing variables
+Double-well SDE. A 1-D bistable diffusion in a double-                  such as rainfall from the model. We apply robust centering
+well potential, parameterized by a shape parameter a and                and scaling with median and MAD.
+noise scale σ (a, sigma in code):
+                                                                        A.5. App: Experiments Setup
+              dXt = aXt − Xt3 dt + σ dWt .
+                             
+                                                                        Training setup For numerical convenience we optionally
+                               3
+              √ drift aXt − Xt creates two metastable
+The deterministic                                                       use an isotropic base z ∼ N (0, aI) and y0 ∼ N (0, aI)
+wells around ± a, with noise-driven transitions between                 with a scalar a > 0; In both experiments we use a =
+wells.                                                                  0.1, this simply rescales the eigenvalues in Λ (equivalently
+
+                                                                   16
+                                  Submission and Formatting Instructions for ICML 2026
+     √
+Ã = a A,        Σ = ÃÃ⊤ .) and does not change the SPD          Intro to Shock Experiments See Table.7 for detailed sys-
+Jacobian structure or the optimal-transport interpretation.        tem parameters. We record the state after every integration
+                                                                   step, so the sampling interval of the time series equals the
+We call multiple horizon experiments the detailed table and
+                                                                   solver step size dt. Since train, validation, test split is 0.7,
+the main test shock experiments as shock table. Detailed
+                                                                   0.2, 0.1, shock frac=0.35 of full data indicates the shock
+table and shock experiments use different setting (though
+                                                                   happens at 50% of the train data.
+uniformly applied to all models in respective experiments)
+for comprehensive and varied angles. We discuss important
+points:
+
+  • optimizer: all models are implemented in PyTorch and
+    trained with AdamW (Loshchilov & Hutter, 2019) with
+    no weight decay.
+
+  • learning rate: shock table uses 3 × 10−4 , and detailed
+    table uses 9 × 10−4 .
+
+  • epochs and patience: both 50 epochs with patience
+    = 5.
+
+  • batch size: 95 for the shock table, and 128 for main
+    tables.
+
+  • grace period (validation is logged but cannot trigger
+    early-stopping): = 3 for shock tables, = 0 (disabled)
+    for detailed tables.
+
+  • training objective: only Huber loss (δ = 1.0) for both.
+
+  • evaluation objective: 0.1·MSE + 1.0·MAE + 0.1·SWD
+    for both, note the SWD difference described right be-
+    low.
+
+  • SWD vs WD: (no projection for shock tables, n = 500
+    projections for detailed tables). No projection reduces
+    SWD to 1D W2 loss so we label ‘WD’ in shock tables.
+
+  • validating objective smoothing (for early stop): we
+    propose this earlier but don’t implement it in any
+    experiments.
+
+  • input length (x-space dim): both tables use {336}
+
+  • forecast horizon (y-space dim): shock tables use {336},
+    detailed table use {96, 192, 336, 720}.
+
+  • seeds: shock tables {7, 1955}, detailed tables
+    {7,1955,2023,4}.
+
+  • data split: shock tables 70%/20%/10% split (to make
+    reconstruction and visualization test set easier) and
+    detailed tables 70%/10%/20% split.
+
+  • pre-processing: only zero removal and imputations
+    enabled for ETTh1 and ETTm1 for shock tables. No
+    sentinel value correction for both experiments.
+
+  • common practices: all datasets on all experiments are
+    processed without any drop last setting
+
+                                                              17
+                                           Submission and Formatting Instructions for ICML 2026
+
+
+
+
+          System         Scenario                    dt     steps     Parameters / shock description
+          Main chaotic benchmarks (no shock).
+          Lorenz-63      main                      0.01     25000     sigma = 10, rho = 28, beta = 8/3.
+          Rössler       main                      0.01     25000     a = 0.2, b = 0.2, c = 5.7.
+          Chua           main                      0.005    35000     alpha = 15.6, beta = 28.0, m0 = −8/7, m1 = −5/7.
+          Synthetic shock scenarios (code identifiers PremadeID.*).
+          Lorenz-63       LORENZ BASE                  0.01 35999     Baseline Lorenz-63, no shock; default sigma = 10, rho = 28, beta = 8/3.
+          Lorenz-63      LORENZ PARAM              0.01     35999     Parameter shock (shock kind = "param"): sigma : 10 → 10.1, rho :
+                                                                      28 → 28.1, beta : 8/3 → 8.1/3.
+          Lorenz-63      LORENZ STATE              0.01     35999     State shock (shock kind = "state eps"): shock eps = 0.9; ODE param-
+                                                                      eters as in LORENZ BASE.
+          Lorenz-63      LORENZ SWITCH             0.01     35999     Switch shock (shock kind = "switch"): switch update sets rho :
+                                                                      28 → 28.1 and initial cond : [1.0, 0.98, 1.1] → [1.002, 0.982, 1.102].
+          Rössler       ROSSLER BASE              0.01     35999     Baseline Rössler, no shock; a = 0.2, b = 0.2, c = 5.7.
+          Rössler       ROSSLER PARAM             0.01     35999     Parameter shock (shock kind = "param"): a : 0.2 → 0.25, b : 0.2 →
+                                                                      0.25, c : 5.7 → 5.75.
+          Lorenz-96      LORENZ96 BASE             0.007    55000     Baseline Lorenz-96; dim = 6, forcing = 8.0, method = ”rk4”.
+          Lorenz-96      LORENZ96 SWITCH           0.007    55000     Switch shock (shock kind = "switch"): switch update sets forcing :
+                                                                      8.0 → 9.0 and initial cond = [0.99, 1.02, 1.02, 1.03, 1.01, 1.01] (with
+                                                                      dim = 6, method=”rk4”).
+          Chua           CHUA BASE                 0.005    35999     Baseline Chua, no shock; alpha = 15.6, beta = 28.0, m0 = −8/7, m1 =
+                                                                      −5/7.
+          Chua           CHUA PARAM                0.005    35999     Parameter shock (shock kind = "param"): alpha : 15.6 → 15.9, beta :
+                                                                      28.0 → 28.5, m0 : −8/7 → −8.1/7, m1 : −5/7 → −5.2/7.
+          Chua           CHUA SWITCH               0.005    35999     Switch shock (shock kind = "switch"):                 switch update sets
+                                                                      initial cond = [0.11, 0.01, 0.02]; other parameters as in CHUA BASE.
+          OU             OU BASE                    0.5     25000     Baseline Ornstein–Uhlenbeck; initial cond = [0.0], theta = 0.2, mu =
+                                                                      0.0, sigma = 0.3, method = ”euler”.
+          OU             OU PARAM                   0.5     25000     Parameter shock (shock kind = "param"): mu : 0.0 → 0.5; other OU param-
+                                                                      eters as in OU BASE.
+          SLDS           SLDS BASE                 0.01     25000     Baseline switching linear dynamical system; A1 = 0.9, Q1 = 0.05, A2 =
+                                                                      0.98, Q2 = 0.35, p11 = 0.94, p22 = 0.95.
+          SLDS           SLDS PARAM                0.01     25000     Parameter shock (shock kind = "param"): A1 : 0.9 → 0.83, Q1 : 0.05 →
+                                                                      0.50, A2 : 0.98 → 0.97, Q2 : 0.35 → 0.30, p11 : 0.94 → 0.96, p22 :
+                                                                      0.95 → 0.92.
+          SLDS           SLDS SWITCH               0.01     25000     Switch shock (shock kind = "switch"): switch update sets A1 =
+                                                                      0.87, Q1 = 0.07, A2 = 0.99, Q2 = 0.45, p11 = 0.90, p22 = 0.95.
+          Double-well    DOUBLEWELL BASE            0.5     25000     Baseline double-well SDE (Euler API, step size 0.5); a = 1.5, sigma =
+                                                                      0.25, seed = 1955.
+          Double-well    DOUBLEWELL PARAM           0.5     25000     Parameter shock (shock kind = "param"): a : 1.5 → 1.0, sigma :
+                                                                      0.25 → 0.35.
+          Double-well    DOUBLEWELL SWITCH          0.5     25000     Switch shock (shock kind = "switch"): switch update sets a =
+                                                                      1.0, sigma = 0.35 (same target as DOUBLEWELL PARAM).
+          Seasonal AR    SEASONAL AR BASE          0.01     25000     Baseline seasonal AR process (discrete-time; dt/method kept for API): S =
+                                                                      24, phi = 0.5, sigma = 0.2, a0 = 1.0, amp drift per step = 0.
+          Seasonal AR    SEASONAL AR PARAM         0.01     25000     Parameter shock (shock kind = "param"): a0 : 1.0 → 1.4, sigma :
+                                                                      0.2 → 0.35, phi : 0.5 → 0.8.
+          GARCH(1,1)     GARCH BASE                0.01     25000     Baseline GARCH(1,1) volatility model (discrete-time; dt/method kept for API):
+                                                                      omega = 0.01, alpha = 0.06, beta = 0.90.
+          GARCH(1,1)     GARCH PARAM               0.01     25000     Parameter shock (shock kind = "param"): omega : 0.01 → 0.03, alpha :
+                                                                      0.06 → 0.15, beta : 0.90 → 0.70.
+          KS             KS BASE                   0.01     25000     Baseline Kuramoto–Sivashinsky; nx = 64, Lx = 22.0, nu = 1.0, method =
+                                                                      ”etdrk4”.
+          KS             KS PARAM                  0.01     25000     Parameter shock (shock kind = "param"): nu : 1.0 → 0.80 (other KS
+                                                                      parameters as in KS BASE).
+Table 7. Parameter settings for the main chaotic benchmarks (top block) and all synthetic shock scenarios used in our experiments (bottom
+block). Shock scenarios are instantiated via PremadeID.* in make source, with shock frac fixed to 0.35 so that shocks are
+applied after the first 35% of the trajectory.
+
+
+
+
+                                                                              18
+                                   Submission and Formatting Instructions for ICML 2026
+
+A.6. App: Ablation, Footprint and Detail Tables
+Short Note Compute footprint tables and detailed abla-
+tion table is place along side the detailed tables. Training
+logs are retained for transparency and available upon re-
+quest. detailed tables and shock tables use different proto-
+cols, see A.5. Each table is internally consistent within its
+regime; We therefore avoid direct quantitative comparisons
+across regimes unless we explicitly re-run models under a
+matched setup.
+
+
+
+
+                                                                19
+                                        Submission and Formatting Instructions for ICML 2026
+
+                       Variant (dataset)                                  MSE↓ MAE↓            WD↓ EPT↑ Time (s)
+                       Base (ETTh1)                                        10.96     1.88       5.75 63.34               —
+                       Base (Lorenz63)                                     21.66     2.39       4.41 241.25              —
+                       No encoder & no mean updates (Lorenz63)            194.43    10.99 189.47       17.10        492.73
+                       Only encoder (ETTh1)                                11.17     1.87       5.86 63.00 378.93
+                       Only encoder (Lorenz63)                             27.09     2.85       6.17 214.10 1127.98
+                       No rotation (ETTh1)                                 11.84     1.90       7.72 66.00          617.55
+                       No rotation (Lorenz63)                              27.62     2.94       6.19 203.60         846.38
+                       No patching (ETTh1)                                 10.99     1.84       5.38 64.10 422.65
+                       No patching (Lorenz63)                              22.86     2.50       4.47 231.10 1239.11
+                       Reflection = 2 (ETTh1)                              11.52     1.89       6.02 64.30          429.67
+                       Reflection = 2 (Lorenz63)                           26.14     2.79       6.51 199.10         889.23
+                       Reflection = 24 (8-block) (ETTh1)                   10.91     1.87       5.21 63.00          432.86
+                       Reflection = 24 (8-block) (Lorenz63)                23.92     2.70       5.70 213.00         930.42
+Table 8. Ablations of FERN components at prediction length 192 on ETTh1, and Lorenz-63. Base uses reflection=8 and patch size P=24;
+Bold marks the best (lowest) MSE, MAE, WD.
+
+
+                                   fr                       tm                        tst                           dl
+                Data          MSE MAE WD               MSE MAE WD                  MSE MAE WD              MSE MAE WD
+                Lorenz 21.82± 2.13      2.17 2.23 30.94± 5.62   3.19 11.11 30.11± 2.92      3.28 9.60 67.76± 1.12    6.07 38.22
+                Rossler 0.04± 0.01      0.11 0.02 6.01± 0.26    1.09 5.20 8.33± 0.36        1.43 7.25 11.64± 0.45    1.82 10.20
+                Chua    0.08± 0.13      0.08 0.05 0.20± 0.21    0.16 0.15 0.49± 0.13        0.32 0.37 0.39± 0.02     0.30 0.24
+                ETTh1 6.60± 0.11        1.53 2.64 6.83± 0.16    1.52 2.83 6.62± 0.14        1.54 2.77 7.04± 0.06     1.53 2.75
+                ETTm1 5.80± 0.25        1.45 2.85 5.27± 0.22    1.39 2.60 5.36± 0.42        1.37 2.44 6.31± 0.11     1.39 3.65
+Table 9. Aggregated errors across prediction horizons H ∈ {96, 192, 336, 720} with input length=336. Baselines: fr = FERN, tm =
+TimeMixer, tst = PatchTST, dl = DLinear. Values are means over 4 seeds [7, 1955, 2023, 4]; tiny ± indicates standard error computed
+from per-horizon standard errors (see text). *Weather is normalized. Best and second-best values across models for each row/metric are
+highlighted via and .
+
+
+
+
+Model        Dataset Training time Params (M) GFLOPs (G)
+Fern           L63          16.0             1.025         0.0035
+Fern           m1            83              1.025         0.0035
+TimeMixer      L63          21.0             0.886         0.0463
+TimeMixer      m1           120              0.886         0.0463
+PatchTST       L63          10.0             2.008         0.0308
+PatchTST       m1           110              2.008         0.0308
+DLinear        L63           2.5             0.679         0.0007
+DLinear        m1            27              0.679         0.0007
+Table 10. Compute footprint on 52k steps for Lorenz63 (336-
+in-336-out) in minutes and ETTm1 (96-in-336-out) in seconds.
+GFLOPs are reported per sample per step.
+
+
+
+
+                                                                     20
+                                       Submission and Formatting Instructions for ICML 2026
+
+
+                      Data Hor. Model                    MSE                MAE               SWD              EPT
+                                     Fern      0.0007 ± 0.00 0.0191 ± 0.01 0.0007 ± 0.00                             96
+                                     TimeMixer 0.0015 ± 0.00 0.0259 ± 0.00 0.0014 ± 0.00                             96
+                              96
+                                     PatchTST 0.0063 ± 0.00 0.0509 ± 0.01 0.0057 ± 0.00                              96
+                                     DLinear   0.0168 ± 0.00 0.0796 ± 0.01 0.0167 ± 0.00                             96
+                               Fern      0.0011 ± 0.00 0.0257 ± 0.00 0.0009 ± 0.00                                192
+                               TimeMixer 0.0349 ± 0.01 0.1199 ± 0.01 0.0319 ± 0.01                                192
+                           192
+                               PatchTST 0.1242 ± 0.06 0.1924 ± 0.05 0.1091 ± 0.05                                 192
+                      Chua     DLinear   0.0265 ± 0.01 0.1183 ± 0.02 0.0246 ± 0.01                                192
+                                  Fern      0.0010 ± 0.00 0.0225 ± 0.00 0.0004 ± 0.00                             336
+                                  TimeMixer 0.0045 ± 0.00 0.0479 ± 0.01 0.0028 ± 0.00                             336
+                              336
+                                  PatchTST 0.0278 ± 0.01 0.1060 ± 0.02 0.0215 ± 0.01                              336
+                                  DLinear   0.1590 ± 0.01 0.2703 ± 0.01 0.0813 ± 0.01                             336
+                                  Fern      0.3301 ± 0.51 0.2386 ± 0.17 0.1994 ± 0.33 474 ± 73
+                                  TimeMixer 0.7624 ± 0.82 0.4475 ± 0.26 0.5685 ± 0.64 427 ± 80
+                              720
+                                  PatchTST 1.7924 ± 0.52 0.9209 ± 0.11 1.3499 ± 0.43 228 ± 45
+                                  DLinear   1.3719 ± 0.09 0.7314 ± 0.03 0.8305 ± 0.07 119 ± 2
+                               Avg Fern                     0.0832             0.0765            0.0504         274.4
+                                   TimeMixer               0.20083            0.16030           0.15115         262.7
+                                   PatchTST                0.48767            0.31755           0.37155         213.0
+                                   DLinear                 0.39355            0.29990           0.23828         185.6
+Table 11. Chua’s circuit, dt=5e-3, step=35,000. Values are mean ± s.e. across 4 seeds. Higher is better for EPT, lower is better for the rest.
+
+
+
+
+                    Data      Hor. Model                  MSE                MAE                SWD              EPT
+                                     Fern            0.0032 ± 0.00 0.0445 ± 0.01            0.0030 ± 0.00              96
+                                     TimeMixer       0.1033 ± 0.07 0.2454 ± 0.09            0.0963 ± 0.07              96
+                              96
+                                     PatchTST        0.1846 ± 0.10 0.3155 ± 0.09            0.1700 ± 0.10              96
+                                     DLinear         0.3036 ± 0.09 0.3343 ± 0.06            0.2908 ± 0.08              96
+                                Fern                 0.0066 ± 0.00 0.0618 ± 0.01            0.0055 ± 0.00           192
+                                TimeMixer            0.1124 ± 0.03 0.2689 ± 0.03            0.1016 ± 0.03           192
+                            192
+                                PatchTST             0.5704 ± 0.14 0.5893 ± 0.09            0.4762 ± 0.14           192
+                    Rossler     DLinear              3.6638 ± 1.14 1.0719 ± 0.19            3.2148 ± 1.11       179 ± 8
+                                  Fern       0.0830 ± 0.03 0.1988 ± 0.04 0.0567 ± 0.02                          332 ± 4
+                                  TimeMixer 14.9881 ± 0.84 2.4916 ± 0.09 12.8596 ± 0.74                         162 ± 3
+                              336
+                                  PatchTST 23.9804 ± 1.43 3.3559 ± 0.12 20.8028 ± 1.51                           69 ± 1
+                                  DLinear   34.3263 ± 1.34 4.3221 ± 0.09 29.8861 ± 1.22                          60 ± 1
+                                  Fern               0.0548 ± 0.04 0.1258 ± 0.03            0.0160 ± 0.01 677 ± 44
+                                  TimeMixer          8.8210 ± 0.60 1.3566 ± 0.06            7.7532 ± 0.47 557 ± 21
+                              720
+                                  PatchTST           8.5990 ± 0.19 1.4545 ± 0.02            7.5545 ± 0.16 539 ± 3
+                                  DLinear            8.2653 ± 0.34 1.5395 ± 0.09            7.3939 ± 0.29 594 ± 24
+                               Avg Fern                       0.0369             0.1077             0.0203         324.2
+                                   TimeMixer                  6.0062             1.0906             5.2027         251.8
+                                   PatchTST                   8.3336             1.4288             7.2509         223.9
+                                   DLinear                   11.6398             1.8170            10.1964         232.4
+ Table 12. Rossler, dt=1e-2, step=25,000. Values are mean ± s.e. across 4 seeds. Higher is better for EPT, lower is better for the rest.
+
+
+
+                                                                     21
+                         Submission and Formatting Instructions for ICML 2026
+
+
+       Data      Hor.     Model             MSE             MAE           SWD               EPT
+                          Fern      6.68 ± 0.05 1.50 ± 0.01 2.88 ± 0.09                  34.11 ± 0.68
+                          TimeMixer 6.85 ± 0.43 1.47 ± 0.04 3.02 ± 0.28                  39.40 ± 1.31
+                 96
+                          PatchTST 5.87 ± 0.14 1.43 ± 0.03 2.48 ± 0.08                   41.45 ± 1.15
+                          DLinear   6.62 ± 0.06 1.45 ± 0.01 2.77 ± 0.10                  38.53 ± 1.15
+                          Fern      6.21 ± 0.19 1.49 ± 0.03 1.81 ± 0.13                  61.29 ± 7.42
+                          TimeMixer 6.82 ± 0.08 1.49 ± 0.02 2.21 ± 0.10                  70.84 ± 4.58
+                 192
+                          PatchTST 6.12 ± 0.24 1.48 ± 0.03 1.81 ± 0.11                   78.49 ± 8.21
+       ETTh1              DLinear   7.39 ± 0.17 1.51 ± 0.03 2.36 ± 0.17                  81.34 ± 6.13
+                          Fern      6.41 ± 0.33 1.54 ± 0.03 3.25 ± 0.34                  68.77 ± 7.36
+                          TimeMixer 6.06 ± 0.20 1.43 ± 0.01 3.27 ± 0.28                  72.88 ± 1.20
+                 336
+                          PatchTST 6.81 ± 0.47 1.56 ± 0.05 3.75 ± 0.63                   69.49 ± 1.49
+                          DLinear   6.39 ± 0.05 1.48 ± 0.01 3.16 ± 0.11                  74.75 ± 2.14
+                          Fern      7.09 ± 0.20 1.57 ± 0.06 2.60 ± 0.19 112.16 ± 18.48
+                          TimeMixer 7.57 ± 0.45 1.69 ± 0.07 2.80 ± 0.35 125.88 ± 2.06
+                 720
+                          PatchTST 7.67 ± 0.14 1.70 ± 0.05 3.03 ± 0.15 121.38 ± 1.47
+                          DLinear   7.77 ± 0.15 1.67 ± 0.05 2.70 ± 0.11 124.28 ± 0.78
+       Simple Average Fern                       6.60           1.53           2.64              69.08
+                      TimeMixer                  6.83           1.52           2.83              77.25
+                      PatchTST                   6.62           1.54           2.77              77.70
+                      DLinear                    7.04           1.53           2.75              79.72
+Table 13. ETTh1. Values are mean ± s.e. across 4 seeds. Higher is better for EPT, lower is better for the rest.
+
+
+
+
+        Data      Hor. Model               MSE              MAE          SWD               EPT
+                         Fern      2.67 ± 0.03 1.07 ± 0.03 0.95 ± 0.08                  44.32 ± 1.27
+                         TimeMixer 2.91 ± 0.64 0.98 ± 0.09 1.07 ± 0.45                  46.79 ± 2.80
+                  96
+                         PatchTST 3.03 ± 0.36 1.04 ± 0.06 1.14 ± 0.31                   43.57 ± 0.35
+                         DLinear   2.33 ± 0.11 0.91 ± 0.03 1.01 ± 0.11                  43.32 ± 2.22
+                  Fern      6.86 ± 0.69 1.59 ± 0.06 5.30 ± 0.58                         66.75 ± 1.64
+                  TimeMixer 5.77 ± 0.48 1.62 ± 0.09 4.32 ± 0.38                         69.97 ± 4.67
+              192
+                  PatchTST 6.60 ± 1.60 1.54 ± 0.13 4.96 ± 1.45                          67.17 ± 2.99
+        ETTm1     DLinear   7.10 ± 0.33 1.50 ± 0.04 5.60 ± 0.36                         69.99 ± 1.90
+                      Fern      6.42 ± 0.56 1.57 ± 0.05 3.45 ± 0.72                   105.69 ± 4.66
+                      TimeMixer 6.04 ± 0.32 1.55 ± 0.08 3.61 ± 0.41                   107.72 ± 3.85
+                  336
+                      PatchTST 5.75 ± 0.22 1.45 ± 0.06 2.31 ± 0.50                    101.94 ± 4.42
+                      DLinear   7.98 ± 0.23 1.56 ± 0.04 5.37 ± 0.28                   111.09 ± 0.47
+                      Fern      7.26 ± 0.43 1.58 ± 0.05 1.68 ± 0.18 162.74 ± 16.46
+                      TimeMixer 6.35 ± 0.15 1.41 ± 0.03 1.39 ± 0.28 207.69 ± 15.89
+                  720
+                      PatchTST 6.06 ± 0.14 1.44 ± 0.02 1.35 ± 0.22 212.47 ± 9.95
+                      DLinear   7.82 ± 0.07 1.58 ± 0.00 2.61 ± 0.15 186.79 ± 13.50
+                   Avg Fern                     5.80           1.45           2.85              94.88
+                       TimeMixer                5.27           1.39           2.60             108.04
+                       PatchTST                 5.36           1.37           2.44             106.29
+                       DLinear                  6.31           1.39           3.65             102.80
+Table 14. ETTm1. Values are mean ± s.e. across 4 seeds. Higher is better for EPT, lower is better for the rest.
+
+
+
+                                                       22
+                         Submission and Formatting Instructions for ICML 2026
+
+
+
+
+      Data      Hor. Model                MSE               MAE            SWD                EPT
+                       Fern            0.47 ± 0.15 0.50 ± 0.08 0.21 ± 0.06                96.00 ± 0.00
+                       TimeMixer       0.18 ± 0.01 0.33 ± 0.01 0.10 ± 0.01                96.00 ± 0.00
+                96
+                       PatchTST        1.17 ± 0.31 0.83 ± 0.09 0.86 ± 0.22                96.00 ± 0.00
+                       DLinear        54.04 ± 3.03 4.92 ± 0.17 33.48 ± 1.79               50.42 ± 2.88
+                 Fern        2.06 ± 0.69 0.83 ± 0.13 0.33 ± 0.09 175.23 ± 6.90
+                 TimeMixer 16.91 ± 16.46 2.45 ± 1.20 8.55 ± 8.93 136.16 ± 56.75
+             192
+                 PatchTST    6.90 ± 2.06 1.91 ± 0.29 2.52 ± 0.80 179.67 ± 12.43
+      Lorenz     DLinear    79.25 ± 2.61 6.78 ± 0.15 48.51 ± 1.24  19.76 ± 0.18
+                    Fern              21.25 ± 8.18 2.39 ± 0.41 3.49 ± 1.38 187.03 ± 12.57
+                    TimeMixer         55.97 ± 2.09 5.10 ± 0.07 25.41 ± 1.99   92.78 ± 7.91
+                336
+                    PatchTST          60.96 ± 9.40 5.43 ± 0.44 25.12 ± 2.81 105.74 ± 14.05
+                    DLinear           61.06 ± 1.31 5.64 ± 0.12 30.28 ± 0.37   79.80 ± 1.02
+                    Fern       63.52 ± 2.25 4.96 ± 0.20 4.89 ± 0.57 293.46 ± 14.90
+                    TimeMixer 50.71 ± 15.19 4.91 ± 0.40 10.39 ± 3.56 247.14 ± 13.47
+                720
+                    PatchTST   51.41 ± 6.62 4.94 ± 0.24 9.89 ± 2.96 254.76 ± 29.58
+                    DLinear    76.69 ± 1.48 6.96 ± 0.11 40.59 ± 0.29   24.01 ± 3.50
+                 Avg Fern                      21.82            2.17            2.23             187.93
+                     TimeMixer                 30.94            3.19           11.11             143.02
+                     PatchTST                  30.11            3.28            9.60             159.04
+                     DLinear                   67.76            6.07           38.22              43.50
+Table 15. Lorenz. Values are mean ± s.e. across 4 seeds. Higher is better for EPT, lower is better for the rest.
+
+
+
+
+                                                       23
+

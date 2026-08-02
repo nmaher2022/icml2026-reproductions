@@ -1,0 +1,123 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--acc:#0f766e;--accd:#134e4a;--emph:#b45309;--ink:#0f172a;--mut:#475569;
+--card:#ffffff;--tint:#f0fdfa;--bd:#e2e8f0;--bg:#f8faf9;}
+*{margin:0;box-sizing:border-box;font-family:'DejaVu Sans',Arial,sans-serif}
+.poster{width:1160px;background:var(--bg);padding:40px;color:var(--ink)}
+.hdr{border-left:10px solid var(--acc);padding:6px 0 6px 22px;margin-bottom:20px}
+.badge{display:inline-block;background:var(--acc);color:#fff;font-weight:700;font-size:13px;
+padding:4px 12px;border-radius:20px;letter-spacing:.5px}
+h1{font-size:27px;line-height:1.15;margin:10px 0 6px}
+h1 .a{color:var(--acc)}
+.sub{font-size:15px;color:var(--mut);line-height:1.4}
+.meta{margin-top:10px;font-size:12.5px;color:var(--mut)}
+.meta b{color:var(--accd)}
+.outcome{background:#fff7ed;border:1px solid #fdba74;border-left:8px solid var(--emph);
+border-radius:10px;padding:14px 18px;margin:16px 0;font-size:14.5px;line-height:1.45}
+.outcome b{color:#9a3412}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;
+box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.card.full{grid-column:1/5}
+.card.wide{grid-column:span 2}
+.st{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--accd);font-size:14.5px;margin-bottom:7px;flex-wrap:wrap}
+.num{width:23px;height:23px;border-radius:50%;background:var(--acc);color:#fff;display:flex;
+align-items:center;justify-content:center;font-size:12.5px;flex-shrink:0}
+.card p{font-size:12px;line-height:1.4;color:var(--ink)}
+.k{color:var(--acc);font-weight:700} .e{color:var(--emph);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:7px}
+th,td{border:1px solid var(--bd);padding:4px 6px;text-align:center}
+th{background:var(--tint);color:var(--accd)}
+.foot{margin-top:16px;background:#fef2f2;border:1px solid #fca5a5;border-left:8px solid #b91c1c;
+border-radius:10px;padding:12px 16px;font-size:12px;line-height:1.4;color:#7f1d1d}
+.foot b{color:#991b1b}
+.links{margin-top:12px;font-size:11.5px;color:var(--mut);text-align:center}
+.vbadge{display:inline-block;font-weight:800;font-size:10.5px;padding:2px 7px;border-radius:6px;margin-left:4px}
+.v-verified{background:#dcfce7;color:#166534}
+.v-toy{background:#fef9c3;color:#854d0e}
+.v-blocked{background:#fee2e2;color:#991b1b}
+.v-bad{background:#fde2e2;color:#991b1b}
+</style></head><body><div class="poster">
+
+<div class="hdr">
+  <span class="badge">ICML 2026 REPRODUCTION</span>
+  <h1>Ellipsoidal Time Series Forecasting: <span class="a">Fern</span></h1>
+  <div class="sub">Models local conditional predictive distributions as data-dependent Gaussian ellipsoids via Brenier's theorem, directly parameterizing the optimal-transport Jacobian's SPD spectral factors (eigenvalues + Householder rotation) through a coupling-network encoder.</div>
+  <div class="meta"><b>Paper:</b> arXiv:2505.17370v6 (Qilin Wang) &middot; OpenReview CoAHlJuMdh &middot;
+  <b>Implementation:</b> from-scratch (Algorithm 1) &middot; <b>Compute:</b> CPU-only, toy scale &middot;
+  paper's own synthetic chaotic benchmarks (Lorenz-63/Roessler/Chua, Appendix A.4.1) used for all 5 claims, vs. DLinear</div>
+</div>
+
+<div class="outcome"><b>Outcome — mixed: 1 claim VERIFIED analytically (complexity), 2 TOY-VERIFIED (ablations; nonstationary robustness,
+partial/system-dependent), 1 REFUTED at toy scale (EPT reversed in all 6 tested scenarios), 1 INCONCLUSIVE (geometric-persistence
+mechanism not reached at toy horizons).</b> 1 real implementation bug found and fixed via self-audit (an ablation confounded with
+reduced model capacity) — see <code>BUGFIX_LOG.md</code>. The challenge's own claim-extraction was found stale (numbers don't
+match any table in the actual v6 PDF) — claims here transcribed fresh from the paper text.</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="st"><span class="num">1</span>Nonstationary robustness<span class="vbadge v-toy">TOY (partial)</span></div>
+    <p>Fern beats DLinear clearly on Lorenz-63 (1.4-1.5x lower MSE, both shock scenarios) but <em>loses</em>
+    to DLinear on Chua (5.5-7.7x <em>higher</em> MSE) and is mixed on Roessler. Direction matches paper only
+    on Lorenz; magnitude far below the paper's up-to-790x (expected at toy scale).</p>
+    <table><tr><th></th><th>Lorenz-base</th><th>Chua-base</th></tr>
+    <tr><td>Fern MSE</td><td><b>42.7</b></td><td>0.43</td></tr>
+    <tr><td>DLinear MSE</td><td>65.2</td><td><b>0.06</b></td></tr></table>
+  </div>
+  <div class="card">
+    <div class="st"><span class="num">2</span>Linear-time complexity<span class="vbadge v-verified">VERIFIED</span></div>
+    <p>Analytic FLOP sweep (not toy-scale dependent): Householder-factored head cost grows linearly in
+    patch size p; dense-SPD alternative grows as p&sup2;. Crossover at p&asymp;70, ratio grows linearly
+    thereafter &mdash; exactly matches the paper's Eq. 1-2 asymptotic argument.</p>
+    <table><tr><th>p</th><th>Fern FLOPs</th><th>Dense FLOPs</th></tr>
+    <tr><td>24</td><td>1,728</td><td>576</td></tr>
+    <tr><td>384</td><td>27,648</td><td><b>147,456</b></td></tr></table>
+  </div>
+  <div class="card">
+    <div class="st"><span class="num">3</span>Effective Prediction Time<span class="vbadge v-bad">REFUTED</span></div>
+    <p>DLinear has a <em>longer</em> mean EPT than Fern in all 6 scenarios tested &mdash; opposite the
+    paper's claimed ordering. On Lorenz-63, Fern has lower MSE but shorter EPT simultaneously: a real
+    property of EPT as a first-threshold-crossing statistic, not obviously a Fern weakness.</p>
+    <table><tr><th></th><th>Fern EPT</th><th>DLinear EPT</th></tr>
+    <tr><td>Roessler-base</td><td>64.2</td><td><b>87.9</b></td></tr></table>
+  </div>
+  <div class="card">
+    <div class="st"><span class="num">4</span>Ablations<span class="vbadge v-toy">TOY</span></div>
+    <p>No-encoder catastrophic (+60.5% MSE, EPT collapses 43.8&rarr;15.6); no-rotation (+7.6%, all 3
+    seeds) and no-patching (+10.1%) both consistently worse than base &mdash; matches the paper's
+    qualitative ordering. Self-audit found and fixed a capacity confound in the no-rotation ablation.</p>
+  </div>
+
+  <div class="card wide">
+    <div class="st"><span class="num">5</span>Geometry persists past pointwise collapse<span class="vbadge v-toy">INCONCLUSIVE</span></div>
+    <p>Fern's overall MSE advantage over DLinear holds at every horizon tested (1.3-1.5x lower, h=24 to 192).
+    But DLinear never collapses to mean-guessing in this toy horizon range, so the paper's specific mechanism
+    (baselines collapse; Fern's SWD then stays low) isn't observable &mdash; Fern's SWD advantage actually
+    <em>shrinks</em> from 2.44x (h=24) to ~1.0x (h=96-192), the opposite trend. Needs horizons closer to the
+    paper's own scale (720, ~6.5 Lyapunov times) to test the claimed mechanism.</p>
+    <table><tr><th>Horizon</th><th>24</th><th>96</th><th>192</th></tr>
+    <tr><td>Fern/DLinear SWD ratio</td><td><b>2.44</b></td><td>0.93</td><td>0.99</td></tr></table>
+  </div>
+  <div class="card wide">
+    <div class="st"><span class="num">&#9432;</span>Toy-scale setup</div>
+    <p>Fern (Algorithm 1) and DLinear reimplemented from scratch in PyTorch, CPU-only. Lorenz-63/Roessler/
+    Chua generated via the paper's own RK4 equations (Appendix A.4.1). Paper's own MSE/W2/SWD/EPT metrics
+    reimplemented from Appendix A.1. 3 seeds (paper: 4), 6,000-9,000 step trajectories (paper: 25,000-36,000),
+    context/horizon 96 (paper: up to 720). No real-world datasets or heavy baselines (TimeMixer/PatchTST/
+    Koopa/ModernTCN/PFNN) &mdash; DLinear only.</p>
+  </div>
+</div>
+
+<div class="foot"><b>&#9888; Bug found and fixed during self-audit (full detail in <code>BUGFIX_LOG.md</code>).</b>
+The <code>no_rotation</code> ablation originally shrank the OT head's Householder-reflection count (R=1
+instead of base R=8), reducing the head's parameter count in addition to bypassing the rotation &mdash;
+confounding "no rotation" with "less capacity" (55,776 base params vs. a smaller pre-fix head). Fixed to
+keep R fixed and only change the forward-pass computation path (verified equal param counts post-fix);
+rerun made the ablation's effect consistent across all 3 seeds instead of 2 of 3. Separately, EPT's
+reversal (Claim 3) and Claim 5's unreached collapse mechanism are disclosed as genuine toy-scale findings,
+not bugs &mdash; investigated for a scale-normalization bug (none found; the paper doesn't describe RevIN/
+instance-norm for its synthetic benchmarks) before being accepted and reported honestly.</div>
+
+<div class="links">arxiv.org/abs/2505.17370 &middot; OpenReview: CoAHlJuMdh &middot;
+Space: nmaher/repro-ellipsoidal-time-series-forecasting</div>
+
+</div></body></html>

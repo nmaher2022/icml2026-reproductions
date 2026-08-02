@@ -1,0 +1,13 @@
+[  35.2s] seed=0 base         mse=44.7328 ept=46.3
+[  52.0s] seed=0 no_rotation  mse=49.1787 ept=36.2
+[  69.0s] seed=0 no_encoder   mse=70.8410 ept=17.4
+[ 113.8s] seed=0 no_patching  mse=42.2478 ept=48.8
+[ 148.2s] seed=1 base         mse=44.5301 ept=40.1
+[ 168.8s] seed=1 no_rotation  mse=48.3276 ept=39.9
+[ 175.0s] seed=1 no_encoder   mse=64.5298 ept=16.4
+[ 199.3s] seed=1 no_patching  mse=47.3133 ept=40.3
+[ 234.0s] seed=2 base         mse=38.8833 ept=45.0
+[ 252.8s] seed=2 no_rotation  mse=40.3595 ept=44.5
+[ 258.4s] seed=2 no_encoder   mse=70.3604 ept=12.9
+[ 278.4s] seed=2 no_patching  mse=51.5360 ept=24.0
+DONE in 278.4s
