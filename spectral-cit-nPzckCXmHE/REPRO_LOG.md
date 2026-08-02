@@ -97,3 +97,21 @@ confirms the learned representations do recover the claimed spectral directions,
 Verdict corrected to **TOY-VERIFIED**. See `BUGFIX_LOG.md` entry 4 and `VERDICTS.md` Claim 4 for
 the full write-up; push is pre-authorized in this repo (see `.claude/settings.json` /
 `.agents/skills/repro-harness/SKILL.md`), no confirmation pause needed for this commit.
+
+## Status as of 2026-08-02 (complete)
+All 8 harness steps done. Fully committed and pushed (`7acbac6` initial mirror, `78ae3a3` Claim 4
+revision), git status clean, monorepo index row present. Logbook confirmed live at
+`nmaher/repro-toward-scalable-and-valid-conditional-independence-testing-with-spectral-representations`
+(space status RUNNING).
+
+**Automated judge re-check (GLM-5.2, judged 2026-08-01T13:29:13Z, quality: medium)** — pulled from
+the `ICML-2026-agent-repro/verdicts` dataset (`verdicts.json`, keyed by HF space_id):
+Claims 1/2/3/4 = **toy**, Claim 5 = **inconclusive** — matches this repro's own VERDICTS.md
+(TOY-VERIFIED x4, INCONCLUSIVE x1) with no disagreements. Judge explicitly agrees the Claim 5
+Tanh-vs-Identity ablation is confounded (Identity collapses the MLP to a single linear map,
+conflating "loss of boundedness" with "loss of nonlinear capacity") and correctly notes Claim 4's
+recovery test used a bespoke linear/Gaussian ground-truth benchmark rather than the paper's own.
+Judge's overall note: "real but reduced-scale experimental evidence... broadly supports the
+qualitative behavior of the paper's theorems and algorithm, while honestly disclosing that key
+quantitative and asymptotic aspects were not fully reproduced." Nothing further pending on this
+reproduction.
