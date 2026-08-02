@@ -85,3 +85,7 @@ smoketest transcript. Final audit: PASS, 0 warnings.
 
 **Ellipsoidal TSF (CoAHlJuMdh) reproduction fully complete**: all 8 harness steps done, published,
 mirrored, audited clean. See VERDICTS.md for final verdicts.
+
+## Session complete (2026-08-02)
+Commits: `6241bd7` (paper folder + monorepo mirror), `3454b78` (Step 8 audit + harness
+INCONCLUSIVE-vocabulary fix). Both pushed to `origin/main`. Nothing pending on this paper.
