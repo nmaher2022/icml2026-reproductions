@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "audit": "repro-harness Tier-1 (see harness-testing/AUDIT.md)",
+  "timestamp": "2026-08-02T15:19:13.999708+00:00",
+  "folder": "/home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3",
+  "orid": "SOlPHMdSY3",
+  "overall": "PASS",
+  "hard_failures": 0,
+  "warnings": 0,
+  "gates": [
+    {
+      "name": "paper_source",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "OpenReview PDF reference found."
+    },
+    {
+      "name": "briefing_exists",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "PAPER_BRIEFING.md present."
+    },
+    {
+      "name": "smoketest_evidence",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "Found a log that looks like a smoketest."
+    },
+    {
+      "name": "self_audit_log",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "BUGFIX_LOG.md present."
+    },
+    {
+      "name": "verdict_vocabulary",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "5/5 verdict rows use the standard vocabulary."
+    },
+    {
+      "name": "blocked_claims_disclosed",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "Every 'blocked' mention has an accompanying reason."
+    },
+    {
+      "name": "index_row_present",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "Folder is linked from the top-level README's Index table."
+    },
+    {
+      "name": "raw_results_present",
+      "severity": "soft",
+      "status": "PASS",
+      "summary": "Non-empty results found under results/."
+    },
+    {
+      "name": "no_vendored_code",
+      "severity": "hard",
+      "status": "PASS",
+      "summary": "No nested .git directories found."
+    }
+  ],
+  "note": "Tier-1 only -- run the Tier-2 qualitative review in AUDIT.md before trusting this alone."
+}

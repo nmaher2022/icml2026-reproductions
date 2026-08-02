@@ -1,0 +1,4 @@
+[smoke_relog] C_W=0.25  layer1=0.3450 ... layer5=0.0004824  (0.3s)
+[smoke_relog] C_W=2.0  layer1=0.3450 ... layer5=1.976  (0.3s)
+[smoke_relog] C_W=4.0  layer1=0.3450 ... layer5=31.62  (0.4s)
+[smoke_relog] wrote /home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3/results/depth_sweep_smoke_relog.json

@@ -16,7 +16,7 @@ and Figure 1 for Claim 5 — these are mislabeled. The paper's actual figures fo
 are **Figure 3** and **Figure 2** respectively (verified directly against the source PDF; see
 `PAPER_BRIEFING.md`).
 
-## Claims reproduced
+## Verdict
 
 | # | Claim (paper section) | Verdict | Scale |
 |---|---|---|---|

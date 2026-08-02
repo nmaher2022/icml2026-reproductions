@@ -1,0 +1,8 @@
+[relu_toy_relog] width=   10  diag_mean= 1.358147  offdiag_mean= 0.299806  (10.6s)
+[relu_toy_relog] width=   20  diag_mean= 1.351848  offdiag_mean= 0.324109  (9.1s)
+[relu_toy_relog] width=   40  diag_mean= 1.382186  offdiag_mean= 0.328178  (9.9s)
+[relu_toy_relog] width=   80  diag_mean= 1.382659  offdiag_mean= 0.326763  (12.6s)
+[relu_toy_relog] width=  160  diag_mean= 1.391910  offdiag_mean= 0.331046  (26.6s)
+[relu_toy_relog] width=  320  diag_mean= 1.389594  offdiag_mean= 0.329888  (77.9s)
+[relu_toy_relog] analytic infinite-width: diag=1.380000 offdiag=0.329881
+[relu_toy_relog] wrote /home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3/results/width_sweep_relu_toy_relog.json

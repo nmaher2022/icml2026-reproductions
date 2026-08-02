@@ -1,0 +1,4 @@
+[smoke_relog] width=    8  diag_mean= 1.142235  offdiag_mean= 0.344290  (0.1s)
+[smoke_relog] width=   16  diag_mean= 0.648638  offdiag_mean= 0.132585  (0.1s)
+[smoke_relog] analytic infinite-width: diag=1.035000 offdiag=0.188598
+[smoke_relog] wrote /home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3/results/width_sweep_smoke_relog.json
