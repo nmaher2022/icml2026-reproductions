@@ -1,0 +1,64 @@
+Installed 13 packages in 164ms
+breast-cancer: n=286 features=9 pos_frac=0.297
+hepatitis: n=155 features=19 pos_frac=0.794
+soybean: n=47 features=35 pos_frac=0.362
+tic-tac-toe: n=958 features=9 pos_frac=0.653
+vote: n=435 features=16 pos_frac=0.386
+zoo: n=101 features=16 pos_frac=0.406
+{
+  "STAND": {
+    "per_dataset_mean_accuracy": {
+      "breast-cancer": 0.6655172413793105,
+      "hepatitis": 0.7580645161290323,
+      "soybean": 0.99,
+      "tic-tac-toe": 0.9401041666666667,
+      "vote": 0.7229885057471265,
+      "zoo": 1.0
+    },
+    "overall_mean_accuracy": 0.8461124049870228
+  },
+  "STAND-hs": {
+    "per_dataset_mean_accuracy": {
+      "breast-cancer": 0.6224137931034484,
+      "hepatitis": 0.8516129032258064,
+      "soybean": 0.99,
+      "tic-tac-toe": 0.915625,
+      "vote": 0.7839080459770115,
+      "zoo": 1.0
+    },
+    "overall_mean_accuracy": 0.8605932903843777
+  },
+  "DecisionTree": {
+    "per_dataset_mean_accuracy": {
+      "breast-cancer": 0.6206896551724137,
+      "hepatitis": 0.8,
+      "soybean": 0.99,
+      "tic-tac-toe": 0.8739583333333332,
+      "vote": 0.9436781609195402,
+      "zoo": 1.0
+    },
+    "overall_mean_accuracy": 0.8713876915708813
+  },
+  "RandomForest": {
+    "per_dataset_mean_accuracy": {
+      "breast-cancer": 0.7086206896551724,
+      "hepatitis": 0.8741935483870968,
+      "soybean": 1.0,
+      "tic-tac-toe": 0.9520833333333334,
+      "vote": 0.9574712643678162,
+      "zoo": 1.0
+    },
+    "overall_mean_accuracy": 0.9153948059572365
+  },
+  "XGBoost": {
+    "per_dataset_mean_accuracy": {
+      "breast-cancer": 0.6775862068965517,
+      "hepatitis": 0.8451612903225806,
+      "soybean": 0.99,
+      "tic-tac-toe": 0.9984375,
+      "vote": 0.9494252873563218,
+      "zoo": 1.0
+    },
+    "overall_mean_accuracy": 0.9101017140959091
+  }
+}
