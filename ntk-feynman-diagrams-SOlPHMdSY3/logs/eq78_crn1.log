@@ -1,0 +1,36 @@
+[crn1] 20000/200000 CRN inits  (250.2s elapsed)
+[crn1] 40000/200000 CRN inits  (491.4s elapsed)
+[crn1] 60000/200000 CRN inits  (737.1s elapsed)
+[crn1] 80000/200000 CRN inits  (1005.2s elapsed)
+[crn1] 100000/200000 CRN inits  (1257.2s elapsed)
+[crn1] 120000/200000 CRN inits  (1493.9s elapsed)
+[crn1] 140000/200000 CRN inits  (1728.2s elapsed)
+[crn1] 160000/200000 CRN inits  (1968.2s elapsed)
+[crn1] 180000/200000 CRN inits  (2211.4s elapsed)
+[crn1] 200000/200000 CRN inits  (2444.9s elapsed)
+[crn1] n=   20  E[Th00_2]=0.444630  E[Th00_3]=0.482987
+[crn1] n=   30  E[Th00_2]=0.444761  E[Th00_3]=0.484250
+[crn1] n=   50  E[Th00_2]=0.444840  E[Th00_3]=0.484890
+[crn1] n=   80  E[Th00_2]=0.444791  E[Th00_3]=0.485330
+[crn1] n=  120  E[Th00_2]=0.444785  E[Th00_3]=0.485690
+[crn1] n=  160  E[Th00_2]=0.444783  E[Th00_3]=0.485649
+[crn1] n=  200  E[Th00_2]=0.444783  E[Th00_3]=0.485698
+[crn1] total wall time 2446.8s for 200000 CRN inits x 7 widths
+
+=== Eq. 78 layer-2 ingredients (intercepts, R^2 of 1/n fit) ===
+K^(2)=0.216783  Theta^(2)=0.444796  K^(3)=0.156342  Theta^(3)=0.485938
+Theta^{1}(2) = -0.000789  (R^2=0.0381)
+K^{1}(2)     = 0.049657  (R^2=0.3547)
+V_aaaa        = 0.041332  (R^2=0.0038)
+D_aaaa        = 0.023739  (R^2=0.6865)
+F_aaaa        = 0.026514  (R^2=0.0535)
+
+Gaussian brackets at K^(2): <sp^2>=0.741006  <d2Omega>=0.405548  <d4Omega>=-0.464812  <d2(sp^2)>=-1.496985
+
+Eq.78 terms: 1=-0.000584 2=0.010069 3=-0.002401 4=-0.017768 5=-0.039691
+
+PREDICTED Theta^{1}(3) = -0.050375
+MEASURED  Theta^{1}(3) = -0.040932  (R^2=0.4382)
+relative error = 0.2307
+
+wrote /home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3/results/eq78_crn1.json

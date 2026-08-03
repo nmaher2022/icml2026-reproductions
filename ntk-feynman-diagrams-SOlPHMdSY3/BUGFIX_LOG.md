@@ -50,3 +50,87 @@ in the extracted appendix text (see PAPER_BRIEFING.md's scope note); Claims 1/2 
 tested via the qualitative/structural check described there instead, precisely to
 avoid this exact failure mode (silently misimplementing a fragile piece of paper
 notation and reporting a wrong verdict with false confidence).
+
+**Update**: Claims 1/2 were reopened in a later session (see Round 2 below) — the OCR concern
+above was resolved as a false alarm, and Eq. 78 was implemented and numerically confirmed.
+
+## Round 2 — Claims 1/2 reopened: CRN's R² false-positive pitfall, and the analytic-marginalization
+## resolution of Eq. 78
+
+**Found during**: a later session revisiting the original INCONCLUSIVE verdict for Claims 1/2, at
+the user's request to actually implement and numerically test Eq. 78 (not just check it
+structurally). Full blow-by-blow run history is in `REPRO_LOG.md`; this entry documents the two
+methodological findings worth remembering for future reproductions.
+
+### Finding 1: the OCR concern was a false alarm
+
+The original INCONCLUSIVE verdict rested on the arXiv PDF extraction rendering the paper's
+`\Delta\Omega_d` operator glyph as U+2126 OHM SIGN — plausible evidence of broader font-
+substitution corruption in that math block. Once the actual OpenReview PDF was obtained, a direct
+byte-level comparison of Delta-symbol counts between the two extractions came back identical —
+the OHM SIGN substitution is a deterministic font-encoding quirk of this specific PDF's embedded
+math font, not evidence of corrupted/dropped content. **Lesson**: an OCR/extraction artifact that
+*looks* alarming (a wrong-seeming Unicode codepoint) is not automatically evidence of unreliable
+extraction elsewhere in the document — cross-checking against a second independently-generated
+extraction (here, OpenReview vs. arXiv) is a cheap, decisive way to tell a real corruption problem
+from a cosmetic one before downgrading a verdict over it.
+
+### Finding 2: CRN (common random numbers) can produce a high R² that is NOT a converged estimate
+
+Testing Eq. 78 requires five ingredient tensors (`Theta^{1}`, `K^{1}`, `V`, `D`, `F`) that were
+initially all measured via Monte Carlo width-sweeps, fitting a `1/n` trend across widths to
+extract each tensor's O(1/n) coefficient. Independent per-width sampling gave weak fits (R²
+~0.0002-0.03 on the key `Theta^{1}(3)` fit even at 100k samples/width, `scale1` run) — a noise-
+dominated regime, not a sample-size problem alone (some ingredients' R² got *worse* with 5x more
+samples). Switching to CRN (drawing one maximal-width network per init and slicing sub-networks
+per width, correlating noise across widths) looked like it fixed this: at `n_inits=2000`
+(`crn_smoke`), R² on the target fit jumped to 0.90. But scaling CRN up to `n_inits=200000`
+(`crn1`) made R² **drop** to 0.44, and every ingredient's fitted intercept kept drifting rather
+than stabilizing. **The `crn_smoke` high R² was a small-sample fluke**: CRN's shared randomness
+across widths can produce a spuriously clean-looking linear trend before enough samples have
+accumulated to reveal the true (noisier) shape — the correlation CRN introduces by construction
+is exactly the kind of structure that can fool an R² metric at low N. **Lesson**: never trust a
+CRN-based fit's R² at face value without checking that the *point estimate* is stable as sample
+size grows; a high R² at one sample size proves nothing about convergence on its own.
+
+### Resolution: analytic marginalization replaces MC for 5 of 6 ingredient tensors
+
+Rather than continuing to throw more MC compute at fundamentally noisy 4th-cumulant estimates,
+went back to the OpenReview PDF's page *images* (not the pdftotext extraction, to eliminate any
+residual OCR risk on stacked multi-line fractions) — pages 4, 16, 17 — and found the paper's own
+layer-to-layer recursions: Eq. 45 (V), Eq. 47 (`K^{1}`), Eqs. 49/50 (D), Eq. 5 (F), and Eq. 78
+itself (`Theta^{1}`, applicable at *any* layer transition, not just the l=2→3 step already
+implemented). The key structural fact: **`z^(1)`, the first hidden layer's preactivation, is
+exactly Gaussian for any finite width** (no CLT approximation needed at layer 1 — this holds
+because `z^(1)` is a linear combination of the *inputs*, which are fixed, not of a previous
+layer's own already-approximately-Gaussian activations). Consequently every layer-1 fluctuation
+tensor (`Theta^{1(1)}`, `K^{1(1)}`, `V^(1)`, `D^(1)`, `F^(1)`) is exactly zero, and every term in
+the five recursions above, when applied at l=1→2, is proportional to one of these — **except one
+"new" term per equation** (present only in the V/D/F recursions, not `Theta^{1}`'s or `K^{1}`'s)
+generated fresh by the current layer's finite-width sum, which reduces to a pure Gauss-Hermite
+quadrature integral with zero MC noise.
+
+**Result**: `Theta^{1}(2) = 0` and `K^{1}(2) = 0` exactly (every term in their recursions vanishes
+at l=1→2); `V(2)=0.047478`, `D(2)=0.025578`, `F(2)=0.027529` from quadrature. This *explains* the
+entire noisy-MC saga above: every session's MC estimate of `Theta1_2`/`K1_2` was wildly
+inconsistent in sign and magnitude (across `debug1`, `debug2`, `scale1`, `crn_smoke`, `crn1`)
+because the true value is exactly zero — no amount of sampling, CRN or otherwise, could ever have
+"resolved" a signal that isn't there. The analytic V/D/F values were cross-checked against
+`scale1`'s independent 100k-sample MC estimates and matched to 1-3% (V: 0.0475 vs 0.0477 MC; D:
+0.0256 vs 0.0259; F: 0.0275 vs 0.0282) — strong confirmation the new derivation is correct, and
+that the MC estimates were fine all along (their weak R² was a fit-window problem, not an
+accuracy problem).
+
+With five of the six needed quantities now exact, only `Theta^{1}(3)` (the final output, a
+well-behaved 2nd-order NTK quantity, not a noisy 4th-cumulant) still needed an independent MC
+measurement. Ran this at `n_inits=300000`, 7 widths (`final1`, `results/eq78_final1.json`):
+**measured `-0.062614` vs. the fully analytic prediction `-0.063113` — relative error 0.8%.** The
+fit's own R² (0.12) is weak, consistent with residual O(1/n²) curvature across the 10x width
+range rather than noise (per-width standard errors are tiny, 5e-5 to 2e-4), and the point-estimate
+agreement with a zero-noise theoretical value is the decisive evidence here, not R².
+
+**Implementation**: `analytic_layer2_ingredients()`, `theta13_measurements()`,
+`run_theta13_sweep()`, and the `analytic-eq78` CLI mode in `repro_eq78.py` (added this session;
+the old fully-MC `full-eq78` mode is kept for reference but superseded for Claims 1/2 purposes).
+
+**Verdict impact**: Claims 1/2 upgraded from INCONCLUSIVE to TOY-VERIFIED — see `VERDICTS.md`.

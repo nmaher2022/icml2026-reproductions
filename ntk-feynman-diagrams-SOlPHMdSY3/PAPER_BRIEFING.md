@@ -88,9 +88,13 @@ orders in 1/n, not just leading order.
 3. `(1/(8 n_{l-1})) * sum_{b1..b4} V_{(b1 b2)(b3 b4)}^(l) * <d^4(DeltaOmega_d,12)/dz_b1..dz_b4>_{K^(l)}`
 4. `(C_W^{(l+1)}/(2 n_{l-1})) * sum_{b1,b2} <d^2(sigma'_1 sigma'_2)/dz_b1 dz_b2>_{K^(l)} * D_{b1 b2 1 2}^(l)`
 5. `(C_W^{(l+1)}/n_{l-1}) * sum_{b1,b2} <d^2(sigma'_1 sigma'_2)/dz_b1 dz_b2>_{K^(l)} * F_{b1 1 b2 2}^(l)`
-(`DeltaOmega_d,12` is a paper-defined operator tied to the dNTK-derivative object — re-derive its
-exact definition from Appendix C/D via `grep -n "Omega" paper_text.txt` during implementation if
-needed; not reproduced here to avoid transcribing it wrong from OCR'd math.)
+(`DeltaOmega_d,12` is a paper-defined operator tied to the dNTK-derivative object, Appendix C/D.
+**Update, later reopened-work session**: the "OHM SIGN" OCR concern that originally blocked
+implementing this was resolved as a false alarm — confirmed byte-identical against the OpenReview
+PDF, a deterministic font-encoding quirk, not corruption. Eq. 78 was subsequently implemented and
+numerically tested at the l=1→2 layer transition; see VERDICTS.md's Claims 1/2 section and
+`REPRO_LOG.md`/`BUGFIX_LOG.md` for the full derivation and result — Claims 1/2 are now
+TOY-VERIFIED, not INCONCLUSIVE.)
 
 **Section 5.2 — Gradient stability (Theorem 5.1, proof App. H):** criticality operators
 `(chi_perp)_{ab} = C_W^{(l+1)} <sigma'_a sigma'_b>_{K^(l)} = 1`,
@@ -132,19 +136,20 @@ while the *off-diagonal* (distinct-input) one is not.
   no need to implement the diagrammatic recursion solver itself. This is the primary, most
   tractable target for VERIFIED/TOY-VERIFIED verdicts with real numbers.
 - **Claims 1, 2** describe the diagrammatic derivation of Eq. 15/78 itself (a symbolic/analytic
-  result, not directly an "experiment" in the paper). Plan: test Eq. 78 empirically by measuring
-  the layer-l cumulants (D, F, V, K^{1}) it needs as inputs directly via Monte Carlo at a given
-  layer of a small simulated network, using Eq. 78 to *predict* Theta^{1}(l+1), then independently
-  measuring Theta^{1}(l+1) via a two-width MC extrapolation of the same network's empirical NTK
-  and comparing predicted vs. measured. Use a non-scale-invariant activation (tanh or GeLU) so the
-  predicted correction is nonzero (a meaningful test, not the degenerate ReLU zero-case already
-  covered by Claim 3). If the exact `DeltaOmega_d` operator definition can't be pinned down
-  precisely enough from the OCR'd appendix text to implement Eq. 78 with confidence, downgrade
-  Claim 2 to INCONCLUSIVE (not REFUTED) and say exactly what was missing — do not guess at a
-  physics-paper's operator definition and silently risk a wrong implementation being reported as
-  a verified/refuted result. Claim 1 (that the *rules* are sound, more so than one specific
-  recursion output) rides on Claim 2's result plus a structural check of Theorem 4.1-4.3's proof
-  sketches against the stated rules (i)-(v); note this dependency explicitly in the verdict.
+  result, not directly an "experiment" in the paper). Original plan: test Eq. 78 empirically by
+  measuring the layer-l cumulants (D, F, V, K^{1}) it needs as inputs directly via Monte Carlo at
+  a given layer of a small simulated network, using Eq. 78 to *predict* Theta^{1}(l+1), then
+  independently measuring Theta^{1}(l+1) via MC extrapolation and comparing predicted vs.
+  measured, with tanh chosen so the predicted correction is nonzero (not the degenerate ReLU
+  zero-case already covered by Claim 3). **Executed in a later reopened-work session** (the OCR
+  concern below was resolved as a false alarm): five of the six needed quantities (`Theta^{1}(2)`,
+  `K^{1}(2)`, `V(2)`, `D(2)`, `F(2)`) turned out to be exactly derivable analytically — no MC
+  needed — via the paper's own layer-recursions plus the fact that layer-1 preactivations are
+  exactly Gaussian at any finite width; only the final `Theta^{1}(3)` needed an independent MC
+  measurement, which matched the analytic prediction to 0.8%. Result: TOY-VERIFIED. See
+  VERDICTS.md and `BUGFIX_LOG.md` Round 2 for the full derivation. Claim 1 (that the *rules* are
+  sound, more so than one specific recursion output) rides on Claim 2's confirmed result plus a
+  structural check of Theorem 4.1-4.3's proof sketches against the stated rules (i)-(v).
 
 ## Known access blockers
 - OpenReview: bot-walled, arXiv used instead (see cross-check note above). Not a claim blocker,

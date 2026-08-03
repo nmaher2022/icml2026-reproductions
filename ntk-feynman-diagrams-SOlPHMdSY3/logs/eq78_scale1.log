@@ -1,0 +1,25 @@
+[scale1] n=   20  E[Th00_2]=0.445009  E[Th00_3]=0.482901  (124.2s)
+[scale1] n=   30  E[Th00_2]=0.445151  E[Th00_3]=0.483863  (120.6s)
+[scale1] n=   50  E[Th00_2]=0.444803  E[Th00_3]=0.484565  (129.8s)
+[scale1] n=   80  E[Th00_2]=0.444849  E[Th00_3]=0.484921  (153.7s)
+[scale1] n=  120  E[Th00_2]=0.444722  E[Th00_3]=0.485727  (226.4s)
+[scale1] n=  160  E[Th00_2]=0.444895  E[Th00_3]=0.485441  (302.2s)
+[scale1] n=  200  E[Th00_2]=0.444692  E[Th00_3]=0.485498  (411.4s)
+
+=== Eq. 78 layer-2 ingredients (intercepts, R^2 of 1/n fit) ===
+K^(2)=0.216783  Theta^(2)=0.444796  K^(3)=0.156342  Theta^(3)=0.485938
+Theta^{1}(2) = -0.004276  (R^2=0.1274)
+K^{1}(2)     = -0.105605  (R^2=0.6133)
+V_aaaa        = 0.047685  (R^2=0.0026)
+D_aaaa        = 0.025868  (R^2=0.0320)
+F_aaaa        = 0.028186  (R^2=0.0140)
+
+Gaussian brackets at K^(2): <sp^2>=0.741006  <d2Omega>=0.405548  <d4Omega>=-0.464812  <d2(sp^2)>=-1.496985
+
+Eq.78 terms: 1=-0.003168 2=-0.021414 3=-0.002771 4=-0.019362 5=-0.042194
+
+PREDICTED Theta^{1}(3) = -0.088909
+MEASURED  Theta^{1}(3) = -0.070704  (R^2=0.0298)
+relative error = 0.2575
+
+wrote /home/rec1/Desktop/AI_Safety/ICML_reproduce/ntk-feynman-diagrams-SOlPHMdSY3/results/eq78_scale1.json
